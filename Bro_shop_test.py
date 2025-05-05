@@ -1146,7 +1146,17 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 return
 
             session_data["answers"]["color_count"] = user_message
-            session_data["answers"]["back_name"] = "なし"
+            # ===== ★ ここから追記 ★ ====================================
+            # 「背中のみ」のときは背ネーム選択に進ませる
+            if session_data["answers"]["print_position"] == "背中のみ":
+                session_data["step"] = 8                      # 次へ
+                line_bot_api.reply_message(
+                    event.reply_token,
+                    flex_back_name()                         # ⑧の Flex
+                )
+                return                                        # ここで抜ける
+            # ===== ★ 追記ここまで ★ ====================================
+                session_data["answers"]["back_name"] = "なし"
 
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
