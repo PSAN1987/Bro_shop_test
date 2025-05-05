@@ -697,6 +697,7 @@ def flex_color_count_single():
     color_choices = list(COLOR_COST_MAP_SINGLE.keys())
     buttons_bubbles = []
     for c in color_choices:
+        label = c.strip()          # 前後空白を除去
         buttons_bubbles.append({
             "type": "button",
             "style": "primary",
@@ -704,11 +705,11 @@ def flex_color_count_single():
             "height": "sm",
             "action": {
                 "type": "message",
-                "label": c,
-                "text": c
+                "label": label,
+                "text": label       # ← 辞書キーと 1 文字も違わない値を送信
             }
         })
-
+        
     flex_body = {
         "type": "bubble",
         "hero": {
@@ -888,7 +889,7 @@ def flex_inquiry():
 def handle_postback(event):
     if event.postback.data == "WEB_ORDER":
         uid  = event.source.user_id
-        url  = f"https://graffitees-line-bot.onrender.com/web_order_form?uid={uid}"
+        url  = f"https://bro-shop-test.onrender.com/web_order_form?uid={uid}"
 
         flex = {
             "type": "bubble",
@@ -1012,7 +1013,7 @@ def send_catalog_info(event: MessageEvent):
         "https://www.tiktok.com/@graffitees_045\n\n"
         "フォロー後、下記のフォームからお申込みください👇\n"
         "📩 カタログ申込みフォーム\n"
-        "https://graffitees-line-bot.onrender.com/catalog_form\n"
+        "https://bro-shop-test.onrender.com/catalog_form\n"
         "⚠️ 注意：サブアカウントや重複申込みはご遠慮ください。\n\n"
         "【カタログ発送時期】\n"
         "📅 2025年4月中旬より郵送で発送予定です。\n\n"
@@ -1163,7 +1164,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             total_price, unit_price = calculate_estimate(est_data)
             quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
             order_url = (
-                "https://graffitees-line-bot.onrender.com/"
+                "https://bro-shop-test.onrender.com/"
                 f"web_order_form?uid={user_id}"
             )
             reply_text = (
