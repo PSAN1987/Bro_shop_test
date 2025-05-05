@@ -1739,7 +1739,7 @@ def mark_order_confirmed(order_no: str, *, cancel: bool = False) -> bool:
     except ValueError:
         return False
 
-    ws.format(f"A{row_idx}:AZ{row_idx}", {              # A〜AZ くらいまで
+    ws.format(f"A{row_idx}:DA{row_idx}", {              # A〜DA くらいまで
         "backgroundColor": { "red": rgb[0], "green": rgb[1], "blue": rgb[2] }
     })
     return True
