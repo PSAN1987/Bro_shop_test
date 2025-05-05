@@ -17,7 +17,7 @@ import requests
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
-    MessageEvent, TextMessage, TextSendMessage, FlexSendMessage, PostbackEvent
+    MessageEvent, TextMessage, TextSendMessage, FlexSendMessage, PostbackEvent, PostbackAction
 )
 
 app = Flask(__name__)
@@ -875,6 +875,27 @@ def flex_inquiry():
 # -----------------------
 @handler.add(PostbackEvent)
 def handle_postback(event):
+    data = event.postback.data or ""
+
+    # --- 注文確定 --------------------------------------------------
+    if data.startswith("CONFIRM_ORDER:"):
+        order_no = data.split(":",1)[1]
+        mark_order_confirmed(order_no)          # ← 次で定義
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=f"注文番号 {order_no} を確定しました！")
+        )
+        return
+
+    # --- 今は注文しない -------------------------------------------
+    if data.startswith("CANCEL_ORDER:"):
+        order_no = data.split(":",1)[1]
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="ご注文は保留のままとなりました。")
+        )
+        return
+    
     if event.postback.data == "WEB_ORDER":
         uid  = event.source.user_id
         url  = f"https://bro-shop-test.onrender.com/web_order_form?uid={uid}"
@@ -1443,9 +1464,8 @@ def submit_web_order_form():
     # ユーザーへプッシュ
     uid = form_data.get("lineUserId")
     if uid:
-        summary_msg = make_order_summary(order_no, form_data, est)
-        line_bot_api.push_message(uid, TextSendMessage(text=summary_msg))
-
+        flex_msg = build_order_confirm_flex(order_no, make_order_summary(order_no, form_data, est))
+        line_bot_api.push_message(uid, flex_msg)
     return "フォーム送信ありがとうございました！", 200
 
 def write_to_spreadsheet_for_web_order(data: dict):
@@ -1636,6 +1656,87 @@ def make_order_summary(order_no: str,
         f"{price_break_down}\n\n"
         "担当スタッフより追って詳細をご連絡いたしますので少々お待ちください。"
     )
+
+def build_order_confirm_flex(order_no: str,
+                             summary_text: str) -> FlexSendMessage:
+    """
+    - order_no      … make_order_summary() で使った注文番号
+    - summary_text  … make_order_summary() で生成した全文
+                      （2000 文字以内ならそのまま入れて OK）
+    """
+    bubble = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "md",
+            "contents": [
+                {
+                    # ▼ wrap=True を必ず付けると長文でも折り返してくれます
+                    "type": "text",
+                    "text": summary_text,
+                    "wrap": True,
+                    "size": "sm",
+                    "color": "#000000"
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#00B900",          # グリーン
+                    "action": {
+                        "type": "postback",
+                        "label": "注文確定",
+                        "data": f"CONFIRM_ORDER:{order_no}"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "secondary",
+                    "action": {
+                        "type": "postback",
+                        "label": "今は注文しない",
+                        "data": f"CANCEL_ORDER:{order_no}"
+                    }
+                }
+            ]
+        }
+    }
+
+    # FlexSendMessage に詰めて返す
+    return FlexSendMessage(
+        alt_text="ご注文内容の確認",
+        contents=bubble
+    )
+
+def mark_order_confirmed(order_no: str):
+    """注文番号が一致する行を黄色マーカーにする"""
+    gc = get_gspread_client()
+    sh = gc.open_by_key(SPREADSHEET_KEY)
+    ws = get_or_create_worksheet(sh, "WebOrderRequests")
+
+    # ヘッダー行から「注文番号」列を探す
+    header = ws.row_values(1)
+    try:
+        col_idx = header.index("注文番号") + 1   # 1-origin
+    except ValueError:
+        return                                  # 見つからなければ終了
+
+    # 列全体を検索
+    cell = ws.find(order_no, in_column=col_idx)
+    if not cell:
+        return
+
+    row = cell.row
+    # A列〜最後まで背景色を変更（薄い黄色例）
+    ws.format(f"A{row}:{gspread.utils.rowcol_to_a1(row=row, col=len(header))}",
+              {"backgroundColor": {"red": 1, "green": 1, "blue": 0.6}})
 
 # -----------------------
 # 動作確認用
