@@ -880,19 +880,20 @@ def handle_postback(event):
     # --- 注文確定 --------------------------------------------------
     if data.startswith("CONFIRM_ORDER:"):
         order_no = data.split(":",1)[1]
-        mark_order_confirmed(order_no)          # ← 次で定義
+        ok = mark_order_confirmed(order_no)          # ← 次で定義
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=f"注文番号 {order_no} を確定しました！")
+            TextSendMessage(text=f"注文番号 {order_no} を確定しました！担当スタッフから追って納期などの詳細をご連絡します。")
         )
         return
 
     # --- 今は注文しない -------------------------------------------
     if data.startswith("CANCEL_ORDER:"):
         order_no = data.split(":",1)[1]
+        ok = mark_order_confirmed(order_no, cancel=True) 
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="ご注文は保留のままとなりました。")
+            TextSendMessage(text="ご注文は保留のままとなりました。別の商品にて再検討される場合はカンタン見積もしくはWEBフォームから再開してください。")
         )
         return
     
@@ -1654,7 +1655,7 @@ def make_order_summary(order_no: str,
         # f"{back_name}\n\n"
         "【価格内訳（1枚あたり）】\n"
         f"{price_break_down}\n\n"
-        "担当スタッフより追って詳細をご連絡いたしますので少々お待ちください。"
+        "※納期は注文確定後に担当スタッフから連絡をします。"
     )
 
 def build_order_confirm_flex(order_no: str,
@@ -1689,7 +1690,7 @@ def build_order_confirm_flex(order_no: str,
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#00B900",          # グリーン
+                    "color": "#fc9cc2",          # ピンク
                     "action": {
                         "type": "postback",
                         "label": "注文確定",
@@ -1715,28 +1716,33 @@ def build_order_confirm_flex(order_no: str,
         contents=bubble
     )
 
-def mark_order_confirmed(order_no: str):
-    """注文番号が一致する行を黄色マーカーにする"""
+PALE_GREEN = (0.85, 1.0, 0.85)   # 確定時
+WHITE      = (1.0,  1.0, 1.0)    # キャンセル時
+
+def mark_order_confirmed(order_no: str, *, cancel: bool = False) -> bool:
+    """
+    確定 (=淡い緑)／キャンセル (=白) の 2 役をこなす。
+      cancel=True で白へ塗り戻す
+      戻り値 True: 成功 / False: order_no が見つからない
+    """
+    rgb = WHITE if cancel else PALE_GREEN               # ← ここだけ分岐
+
     gc = get_gspread_client()
     sh = gc.open_by_key(SPREADSHEET_KEY)
     ws = get_or_create_worksheet(sh, "WebOrderRequests")
 
-    # ヘッダー行から「注文番号」列を探す
-    header = ws.row_values(1)
+    ORDER_NO_COL = WEB_ORDER_COLUMN_KEYS.index("orderNo") + 1
+    col_vals = ws.col_values(ORDER_NO_COL)
+
     try:
-        col_idx = header.index("注文番号") + 1   # 1-origin
+        row_idx = col_vals.index(order_no) + 1          # 1-origin
     except ValueError:
-        return                                  # 見つからなければ終了
+        return False
 
-    # 列全体を検索
-    cell = ws.find(order_no, in_column=col_idx)
-    if not cell:
-        return
-
-    row = cell.row
-    # A列〜最後まで背景色を変更（薄い黄色例）
-    ws.format(f"A{row}:{gspread.utils.rowcol_to_a1(row=row, col=len(header))}",
-              {"backgroundColor": {"red": 1, "green": 1, "blue": 0.6}})
+    ws.format(f"A{row_idx}:AZ{row_idx}", {              # A〜AZ くらいまで
+        "backgroundColor": { "red": rgb[0], "green": rgb[1], "blue": rgb[2] }
+    })
+    return True
 
 # -----------------------
 # 動作確認用
