@@ -285,7 +285,7 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
         estimate_data['quantity'],
         estimate_data['print_position'],
         estimate_data['color_count'],
-        estimate_data['back_name'],
+        estimate_data.get('back_name', ''), 
         f"¥{total_price:,}",
         f"¥{unit_price:,}"
     ]
