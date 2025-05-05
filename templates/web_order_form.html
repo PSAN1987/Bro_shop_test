@@ -127,6 +127,10 @@
   text-decoration:none;
   }
   .catalog-btn:hover{opacity:.8;}
+  .full-color-select{
+    display:none !important;   /* ← これだけ */
+  }
+  .hidden-opt { display:none; }   /* ← ★これを追加するだけ */
   </style>
 </head>
 <body>
@@ -245,7 +249,7 @@
       </div>
 
               <!-- デザイン番号 -->
-              <div class="sub-group">
+              <div class="sub-group" id="designGroup1">
                 <label for="designCode1">デザイン (例: D-001)
                   <!-- ▼ 追加 ▼ -->
                   <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=18"
@@ -388,10 +392,10 @@
       <label for="useDate">使用日 <span style="color:red;">(必須)</span></label>
       <input type="date" id="useDate" name="useDate" required />
     </div>
-    <div class="form-group">
-      <label for="applicationDate">申込日 (任意)</label>
-      <input type="date" id="applicationDate" name="applicationDate" />
-    </div>
+    <div class="form-group hidden-opt">
+        <label for="applicationDate">申込日 (任意)</label>
+         <input type="date" id="applicationDate" name="applicationDate">
+       </div>
 
     <!-- ▼ 学割特典 ▼ -->
     <div class="form-group">
@@ -409,13 +413,13 @@
       <label for="schoolName">学校名 <span style="color:red;">(必須)</span></label>
       <input type="text" id="schoolName" name="schoolName" required />
     </div>
-    <div class="form-group">
-      <label for="lineName">LINEの名前 (任意)</label>
-      <input type="text" id="lineName" name="lineName" />
+    <div class="form-group hidden-opt">
+        <label for="lineName">LINEの名前 (任意)</label>
+        <input type="text" id="lineName" name="lineName">
     </div>
-    <div class="form-group">
-      <label for="classGroupName">クラス・団体名 <span style="color:red;">(必須)</span></label>
-      <input type="text" id="classGroupName" name="classGroupName" required />
+    <div class="form-group hidden-opt">
+       <label for="classGroupName">クラス・団体名 (任意)</label>
+       <input type="text" id="classGroupName" name="classGroupName">
     </div>
 
     <!-- ▼ 郵便番号 (必須) & 学校(お届け)住所 ▼ -->
@@ -438,9 +442,9 @@
       </label>
       <input type="text" id="addresseeName" name="addresseeName" required />
     </div>
-    <div class="form-group">
-      <label for="schoolTel">学校TEL <span style="color:red;">(必須)</span></label>
-      <input type="text" id="schoolTel" name="schoolTel" required />
+    <div class="form-group hidden-opt">
+        <label for="schoolTel">学校TEL (任意)</label>
+        <input type="text" id="schoolTel" name="schoolTel">
     </div>
 
     <!-- ▼ 代表者情報 ▼ -->
@@ -452,9 +456,9 @@
       <label for="representativeTel">代表者TEL <span style="color:red;">(必須)</span></label>
       <input type="text" id="representativeTel" name="representativeTel" required />
     </div>
-    <div class="form-group">
-      <label for="representativeEmail">代表者メール (任意)</label>
-      <input type="email" id="representativeEmail" name="representativeEmail" />
+    <div class="form-group hidden-opt">
+       <label for="representativeEmail">代表者メール (任意)</label>
+       <input type="email" id="representativeEmail" name="representativeEmail">
     </div>
 
     <!-- ▼ デザイン確認方法 ▼ -->
@@ -782,15 +786,18 @@ const nameNumGroup = [
     nameNumGroup.includes(sel.value));
     const box = document.getElementById(`nameNumberPrintColorBox${idx}`);
     const normalGroup = document.getElementById(`normalPrintGroup${idx}`);
+    const designGroup = document.getElementById(`designGroup${idx}`);   // ★追加
 
     if(isNameNumber){
       // ネーム系が選択されたら → ネーム＆番号を表示、通常プリントは隠す
       box.classList.remove("hidden");
       if(normalGroup) normalGroup.classList.add("hidden");
+      if(designGroup) designGroup.classList.add("hidden");            // ★追加
     } else {
       // ネーム系が解除されたら → ネーム＆番号を隠し、通常プリントを表示
       box.classList.add("hidden");
       if(normalGroup) normalGroup.classList.remove("hidden");
+      if(designGroup) designGroup.classList.remove("hidden");         // ★追加
     }
   }
 
@@ -936,7 +943,7 @@ const nameNumGroup = [
             <option value="7">7</option>
           </select>
         </div>
-                  <div class="sub-group">
+                  <div class="sub-group" id="designGroup${idx}">
             <label for="designCode${idx}">デザイン (例: D-001)
             <!-- ▼ 追加 ▼ -->
             <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=18"
@@ -1193,6 +1200,8 @@ function initFirstColor(idx){
     // ❶ ボックスの表示を切替え
     document.getElementById(`nameNumberPrintColorBox${idx}`).classList.add("hidden");
     document.getElementById(`normalPrintGroup${idx}`).classList.remove("hidden");
+    const dg = document.getElementById(`designGroup${idx}`);            // ★追加
+    if(dg) dg.classList.remove("hidden");                               // ★追加
 
     // ❷ ネーム・番号系が入っている色選択をクリア
     const nameNumGroup = ["ネーム＆背番号セット","ネーム(大)","ネーム(小)","番号(大)","番号(小)"];
