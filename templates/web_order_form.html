@@ -127,9 +127,6 @@
   text-decoration:none;
   }
   .catalog-btn:hover{opacity:.8;}
-  .full-color-select{
-    display:none !important;   /* ← これだけ */
-  }
   .hidden-opt { display:none; }   /* ← ★これを追加するだけ */
   </style>
 </head>
@@ -397,9 +394,9 @@
          <input type="date" id="applicationDate" name="applicationDate">
        </div>
 
-    <!-- ▼ 学割特典 ▼ -->
+    <!-- ▼ 割引特典 ▼ -->
     <div class="form-group">
-      <label for="discountOption">利用する学割特典 <span style="color:red;">(必須)</span></label>
+      <label for="discountOption">利用する割引特典 <span style="color:red;">(必須)</span></label>
       <select id="discountOption" name="discountOption" required>
         <option value="">選択してください</option>
         <option value="早割">早割</option>
@@ -1094,7 +1091,7 @@ const nameNumGroup = [
   }
 
   // 使える最大色数（1色目 + 追加2色 ＝ 3色まで）
-const MAX_COLORS = 1;
+const MAX_COLORS = 3;
 
 /**
  * `idx`   … プリント箇所番号 (1〜)
