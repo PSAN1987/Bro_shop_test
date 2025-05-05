@@ -1206,6 +1206,14 @@ function initFirstColor(idx){
     // ❸ UI の整合をとる（※色変更ハンドラを呼び出し）
     handlePrintColorChange(idx);
   }
+    /* いちばん下のスクリプトの中で追記するだけ */
+    window.addEventListener('pageshow', () => {
+    /* いま画面に残っている選択値を手がかりに
+       子セレクトの候補を作り直す                                */
+    setProductNoOptions();   // ← productName が選択済みなら品番候補を復元
+    setColorNameOptions();   // ← productNo が選択済みならカラー名候補を復元
+    setColorNoOptions();     // ← colorName が選択済みならカラーNo候補を復元
+  });
 </script>
 </body>
 </html>
