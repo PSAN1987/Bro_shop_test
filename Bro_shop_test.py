@@ -527,8 +527,9 @@ def flex_budget():
 
 def flex_item_select():
     """
-    step = 4 で送る「❹商品名」ヘッダーつき 2×2 画像グリッド（1 バブル構成）
-    画像をタップすると該当する商品名テキストを送信する
+    step = 4 で送る「❹商品名」選択用のカルーセル（4 バブル構成）
+    ─ 各バブルに 1 商品ずつ画像を配置
+    ─ 画像をタップすると商品名テキストを送信
     """
     items = [
         ("ゲームシャツ",           "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
@@ -537,67 +538,54 @@ def flex_item_select():
         ("ドライポロシャツ",        "https://catalog-bot-zf1t.onrender.com/dry_polo.png"),
     ]
 
-    # 画像コンポーネントを作成（1 行 2 列 × 2 段 = 4 画像）
-    image_boxes = []
-    for i in range(0, len(items), 2):
-        row_contents = []
-        for name, url in items[i:i + 2]:
-            row_contents.append({
-                "type": "image",
-                "url": url,
-                "size": "full",
-                "aspectRatio": "1:1",
-                "aspectMode": "cover",
-                "action": {
-                    "type": "message",
-                    "label": name,
-                    "text": name                # ← タップするとこのテキストが送信される
-                }
-            })
-        # 横並び 2 枚の行を追加
-        image_boxes.append({
-            "type": "box",
-            "layout": "horizontal",
-            "spacing": "sm",
-            "contents": row_contents
+    bubbles = []
+    for name, url in items:
+        bubbles.append({
+            "type": "bubble",
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "spacing": "md",
+                "contents": [
+                    {   # ❹商品名（ヘッダー）
+                        "type": "text",
+                        "text": "❹商品名",
+                        "weight": "bold",
+                        "size": "lg",
+                        "align": "center"
+                    },
+                    {   # 商品画像（タップで商品名送信）
+                        "type": "image",
+                        "url": url,
+                        "size": "full",
+                        "aspectRatio": "1:1",
+                        "aspectMode": "cover",
+                        "action": {
+                            "type": "message",
+                            "label": name,
+                            "text": name
+                        }
+                    },
+                    {   # 商品名キャプション
+                        "type": "text",
+                        "text": name,
+                        "size": "sm",
+                        "align": "center",
+                        "wrap": True
+                    }
+                ]
+            }
         })
 
-    bubble = {
-        "type": "bubble",
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "md",
-            "contents": [
-                {   # ❹商品名（ヘッダー）
-                    "type": "text",
-                    "text": "❹商品名",
-                    "weight": "bold",
-                    "size": "lg",
-                    "align": "center"
-                },
-                {   # 説明テキスト
-                    "type": "text",
-                    "text": "ご希望の商品を選択してください。",
-                    "size": "sm",
-                    "align": "center",
-                    "wrap": True
-                },
-                {   # 画像グリッド（2 行）
-                    "type": "box",
-                    "layout": "vertical",
-                    "spacing": "sm",
-                    "contents": image_boxes
-                }
-            ]
-        }
+    carousel = {
+        "type": "carousel",
+        "contents": bubbles
     }
 
     return FlexSendMessage(
         alt_text="商品を選択してください",
-        contents=bubble
+        contents=carousel
     )
-
 
 def flex_quantity():
     quantities = ["20～29枚", "30～39枚", "40～49枚", "50～99枚", "100枚以上"]
@@ -1214,7 +1202,10 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
             quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
-
+            order_url = (
+                "https://bro-shop-test.onrender.com/"
+                f"web_order_form?uid={user_id}"
+            )
             reply_text = (
                 f"概算のお見積りが完了しました。\n\n"
                 f"見積番号: {quote_number}\n"
@@ -1228,6 +1219,9 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"背ネーム・番号: {est_data['back_name']}\n\n"
                 f"【合計金額】¥{total_price:,}\n"
                 f"【1枚あたり】¥{unit_price:,}\n"
+                "\n"
+                "▼ご注文はこちら（WEBフォーム）\n"
+                f"{order_url}"
             )
             line_bot_api.reply_message(
                 event.reply_token,
