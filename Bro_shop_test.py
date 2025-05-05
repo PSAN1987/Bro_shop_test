@@ -527,9 +527,8 @@ def flex_budget():
 
 def flex_item_select():
     """
-    step = 4 で送る「❹商品名」選択用のカルーセル（4 バブル構成）
-    ─ 各バブルに 1 商品ずつ画像を配置
-    ─ 画像をタップすると商品名テキストを送信
+    4 商品を 4 バブルで表示。
+    画像は aspectMode:"fit" でオリジナル比率を保ったまま表示。
     """
     items = [
         ("ゲームシャツ",           "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
@@ -557,9 +556,9 @@ def flex_item_select():
                     {   # 商品画像（タップで商品名送信）
                         "type": "image",
                         "url": url,
-                        "size": "full",
-                        "aspectRatio": "1:1",
-                        "aspectMode": "cover",
+                        "size": "full",      # 幅いっぱい
+                        "aspectMode": "fit",  # ← 画像比率をそのまま表示
+                        # aspectRatio: 未指定だと LINE 側が自動でスペースを確保しつつ fit で収める
                         "action": {
                             "type": "message",
                             "label": name,
@@ -586,6 +585,7 @@ def flex_item_select():
         alt_text="商品を選択してください",
         contents=carousel
     )
+
 
 def flex_quantity():
     quantities = ["20～29枚", "30～39枚", "40～49枚", "50～99枚", "100枚以上"]
