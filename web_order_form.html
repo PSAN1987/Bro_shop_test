@@ -483,9 +483,13 @@
       </select>
     </div>
 
-    <div class="submit-btn">
-      <button type="submit">送信</button>
-    </div>
+<div class="submit-btn">
+  <!-- 管理者用：必須チェックなし -->
+  <button type="submit" name="submit_mode" value="draft" style="background-color:#777;">下書き保存</button>
+  
+  <!-- ユーザー用：通常の必須チェックあり -->
+  <button type="submit" name="submit_mode" value="final">確定</button>
+</div>
   </form>
 </div>
 
