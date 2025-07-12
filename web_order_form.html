@@ -140,6 +140,7 @@
   </p>
   <!-- 送信先: /submit_web_order_form  /  POST で送る -->
   <form id="orderForm" action="/submit_web_order_form" method="post">
+    <input type="hidden" name="quote_no" value="{{ quote_no }}">
     <input type="hidden" name="lineUserId" id="lineUserId">
     <!-- CSRF 用ワンタイムトークン -->
     <input type="hidden" name="form_token" value="{{ token }}">
