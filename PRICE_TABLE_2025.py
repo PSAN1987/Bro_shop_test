@@ -1,4 +1,4 @@
-PRICE_TABLE_STUDENT = [
+PRICE_TABLE = [
     # ゲームシャツ
     {
         "item": "ゲームシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
