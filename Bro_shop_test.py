@@ -830,6 +830,7 @@ def flex_back_name():
     return FlexSendMessage(alt_text="背ネーム・番号を選択してください", contents=flex_body)
 
 
+
 # -----------------------
 # お問い合わせ時に返信するFlex Message
 # -----------------------
@@ -871,6 +872,58 @@ def flex_inquiry():
     }
     return FlexSendMessage(alt_text="お問い合わせ情報", contents=contents)
 
+
+# -----------------------
+# デザイン相談に誘導するFlex Message
+# -----------------------
+
+def flex_consultation_options():
+    flex = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": "ご希望の相談方法をお選びください",
+                    "wrap": True,
+                    "weight": "bold",
+                    "size": "md"
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#fc9cc2",
+                    "action": {
+                        "type": "postback",
+                        "label": "デザイン相談",
+                        "data": "CONSULT_DESIGN"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "secondary",
+                    "action": {
+                        "type": "postback",
+                        "label": "個別相談",
+                        "data": "CONSULT_PERSONAL"
+                    }
+                }
+            ]
+        }
+    }
+    return FlexSendMessage(alt_text="相談方法を選択してください", contents=flex)
+
+
 # -----------------------
 # 0) ハンドラ側でキャッチして動的 URL を返す
 # -----------------------
@@ -878,6 +931,14 @@ def flex_inquiry():
 def handle_postback(event):
     data = event.postback.data or ""
 
+    # --- デザイン相談 or 個別相談 選択時の応答 ---------------
+    if data in ["CONSULT_DESIGN", "CONSULT_PERSONAL"]:
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="オペレータから個別連絡させていただきます。少々お待ちください。")
+        )
+        return
+    
     # --- 注文確定 --------------------------------------------------
     if data.startswith("CONFIRM_ORDER:"):
         order_no = data.split(":",1)[1]
@@ -1207,7 +1268,10 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             )
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=reply_text)
+                    [
+                        TextSendMessage(text=reply_text),
+                        flex_consultation_options()
+                    ]
             )
             del user_estimate_sessions[user_id]
 
@@ -1258,7 +1322,10 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             )
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text=reply_text)
+                    [
+                        TextSendMessage(text=reply_text),
+                        flex_consultation_options()
+                    ]
             )
             del user_estimate_sessions[user_id]
         else:
