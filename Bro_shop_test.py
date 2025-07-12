@@ -76,11 +76,11 @@ def get_or_create_worksheet(sheet, title):
             ]])
         elif title == "簡易見積":
             # 属性カラムを追加したため、A1:M1 で13列に拡張
-            ws.update('A1:M1', [[
+            ws.update('A1:N1', [[
                 "日時", "見積番号", "ユーザーID", "属性",
                 "使用日(割引区分)", "予算", "商品名", "枚数",
                 "プリント位置", "色数", "背ネーム",
-                "合計金額", "単価"
+                "合計金額", "単価","WebフォームURL"
             ]])
         elif title == "WebOrderRequests":
             headers = [
@@ -269,6 +269,7 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
     worksheet = get_or_create_worksheet(sh, "簡易見積")
 
     quote_number = str(int(time.time()))  # 見積番号を UNIX時間 で仮生成
+    order_url = f"https://bro-shop-test.onrender.com/web_order_form?quote_no={quote_number}&uid={user_id}"
 
     # 日本時間の現在時刻
     jst = pytz.timezone('Asia/Tokyo')
@@ -286,9 +287,9 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
         estimate_data['print_position'],
         estimate_data['color_count'],
         estimate_data.get('back_name', ''), 
-        f"¥{total_price:,}",
-        f"¥{unit_price:,}"
-    ]
+       f"¥{unit_price:,}",
+       order_url
+       ]
     worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
     return quote_number
@@ -1497,44 +1498,72 @@ def submit_catalog_form():
 
 @app.route("/web_order_form")
 def show_web_order_form():
+    quote_no = request.args.get("quote_no")
+    uid = request.args.get("uid")
     token = str(uuid.uuid4())
     session["web_order_form_token"] = token
     liff_id = os.getenv("WEB_ORDER_LIFF_ID")
+
+    # 簡易見積シートから初期情報を読み込む
+    initial_data = {}
+    if quote_no:
+        gc = get_gspread_client()
+        sh = gc.open_by_key(SPREADSHEET_KEY)
+        ws = get_or_create_worksheet(sh, "簡易見積")
+        quote_col = ws.col_values(2)
+        try:
+            idx = quote_col.index(quote_no) + 1
+            row = ws.row_values(idx)
+            initial_data = {
+                "productName": row[6],
+                "quantity": row[7],
+                "print_position": row[8],
+                "color_count": row[9],
+                "back_name": row[10],
+                # 必要に応じて拡張
+            }
+        except ValueError:
+            pass
+
     return render_template(
         "web_order_form.html",
         token=token,
-        liff_id=liff_id
+        liff_id=liff_id,
+        initial_data=initial_data,
+        quote_no=quote_no
     )
 
 @app.route("/submit_web_order_form", methods=["POST"])
 def submit_web_order_form():
-    # フォームデータ辞書を作成 (未入力は空文字 "")
     form_data = {k: request.form.get(k, "").strip() for k in request.form}
 
-    # 見積計算
     est = calculate_web_order_estimate(form_data)
-    unit_price  = est["unit_price"]
+    unit_price = est["unit_price"]
     total_price = est["total_price"]
 
-    # 注文番号などを辞書に追加
+    # 注文番号生成
     jst = pytz.timezone('Asia/Tokyo')
     order_no = datetime.now(jst).strftime("%Y%m%d%H%M%S")
-
-    # タイムスタンプも同様に追加
     now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
-    form_data["timestamp"]  = now_jst_str
-    form_data["orderNo"]    = order_no
-    form_data["unitPrice"]  = unit_price
+
+    # 追記フィールド
+    form_data["timestamp"] = now_jst_str
+    form_data["orderNo"] = order_no
+    form_data["unitPrice"] = unit_price
     form_data["totalPrice"] = total_price
 
-    # スプレッドシート保存
+    # ✅ ここで quote_no（見積番号）も取得（hiddenでフォーム送信されている前提）
+    quote_no = request.form.get("quote_no", "").strip()
+
+    # スプレッドシートに注文を記録
     write_to_spreadsheet_for_web_order(form_data)
 
-    # ユーザーへプッシュ
+    # ユーザーに注文確認Flex送信
     uid = form_data.get("lineUserId")
     if uid:
         flex_msg = build_order_confirm_flex(order_no, make_order_summary(order_no, form_data, est))
         line_bot_api.push_message(uid, flex_msg)
+
     return "フォーム送信ありがとうございました！", 200
 
 def write_to_spreadsheet_for_web_order(data: dict):

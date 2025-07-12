@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>WEBフォーム注文</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: sans-serif;
+      background-color: #ffeef2; /* 淡いピンク */
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 1em;
+      background-color: #fff;
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+      color: #d15b8f;
+    }
+    .form-group {
+      margin-bottom: 1em;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3em;
+      font-weight: bold;
+    }
+    .form-group select,
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="date"],
+    .form-group input[type="email"] {
+      width: 100%;
+      padding: 0.5em;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .size-inputs {
+      display: block;
+      flex-wrap: wrap;
+      gap: 1em;
+    }
+    .size-inputs .sub-group {
+      flex: 1;
+      min-width: 100px;
+    }
+    .sub-group { margin-bottom: 0.5em; }
+    .hidden { display: none; }
+    .submit-btn {
+      text-align: center;
+      margin-top: 2em;
+    }
+    .submit-btn button {
+      background-color: #d15b8f;
+      color: #fff;
+      border: none;
+      padding: 1em 2em;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    .submit-btn button:hover {
+      opacity: 0.8;
+    }
+    fieldset {
+      border: 1px solid #ccc;
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+    legend { font-weight: bold; }
+    .inline-flex {
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .mt1 { margin-top: 1em; }
+    .mb1 { margin-bottom: 1em; }
+  /* 既存 <style> 内の末尾などに追記 */
+    .back-btn{
+    background:#777;
+    color:#fff;
+    border:none;
+    padding:.4em .9em;
+    border-radius:4px;
+    font-size:.9em;
+    cursor:pointer;
+    margin-top:.5em;
+  }
+  .back-btn:hover{ opacity:.8; }
+  /* 既存 <style> の末尾などに追加 ------------------------------ */
+    .del-btn{
+    background:#e74c3c;   /* 赤 */
+    color:#fff;
+    border:none;
+    padding:.4em .9em;
+    border-radius:4px;
+    font-size:.9em;
+    cursor:pointer;
+    margin-left:.5em;
+  }
+  .del-btn:hover{ opacity:.85; }
+  .add-color-btn{
+  margin-top:.4em;
+  background:#d15b8f;
+  color:#fff;
+  border:none;
+  padding:.3em .9em;
+  border-radius:4px;
+  font-size:.85em;
+  cursor:pointer;
+  }
+  .add-color-btn:disabled{opacity:.4;cursor:default;}
+  .color-box select{margin-bottom:.4em;width:100%;}
+  .full-color-select{display:block;width:100%;margin-top:.4em;}
+  .catalog-btn{
+  display:inline-block;
+  padding:.55em 1.6em;
+  background:#4a8fd8;
+  color:#fff;
+  font-size:.9em;
+  border-radius:4px;
+  text-decoration:none;
+  }
+  .catalog-btn:hover{opacity:.8;}
+  .hidden-opt { display:none; }   /* ← ★これを追加するだけ */
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>WEBフォーム注文</h1>
+  <p style="text-align:center; margin:-0.5em 0 1.2em;">
+    <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=1"
+       target="_blank"
+       class="catalog-btn">カタログ参照</a>
+  </p>
+  <!-- 送信先: /submit_web_order_form  /  POST で送る -->
+  <form id="orderForm" action="/submit_web_order_form" method="post">
+    <input type="hidden" name="lineUserId" id="lineUserId">
+    <!-- CSRF 用ワンタイムトークン -->
+    <input type="hidden" name="form_token" value="{{ token }}">
+
+    <!-- ▼ 製品選択（商品名 → 品番 → 商品カラー → カラーNo）▼ -->
+    <div class="form-group">
+      <label for="productNameSelect">商品名 <span style="color:red;">(必須)</span></label>
+      <!-- ▼ 追加 ▼ -->
+      <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=4"
+        target="_blank"
+        style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
+      <!-- ▲ 追加 ▲ -->
+      <select id="productNameSelect" name="productName" required>
+        <option value="">選択してください</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="productNoSelect">品番 <span style="color:red;">(必須)</span></label>
+      <select id="productNoSelect" name="productNo" required>
+        <option value="">選択してください</option>
+      </select>
+    </div>
+
+    <!-- 商品カラーを先に選ぶ -->
+    <div class="form-group">
+      <label for="colorNameSelect">商品カラー <span style="color:red;">(必須)</span></label>
+      <select id="colorNameSelect" name="colorName" required>
+        <option value="">選択してください</option>
+      </select>
+    </div>
+
+    <!-- その後にカラーNoを選択 -->
+    <div class="form-group">
+      <label for="colorNoSelect">カラーNo <span style="color:red;">(必須)</span></label>
+      <select id="colorNoSelect" name="colorNo" required>
+        <option value="">選択してください</option>
+      </select>
+    </div>
+
+    <!-- ▼ サイズ毎の枚数入力 ▼ -->
+    <div class="form-group">
+      <label>サイズ毎の枚数 <span style="color:red;">(必須)</span></label>
+      <div class="size-inputs">
+        <div class="sub-group">
+          <label for="size150">150</label>
+          <input type="number" id="size150" name="size150" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+        <div class="sub-group">
+          <label for="sizeSS">SS(160)</label>
+          <input type="number" id="sizeSS" name="sizeSS" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+        <div class="sub-group">
+          <label for="sizeS">S</label>
+          <input type="number" id="sizeS" name="sizeS" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+        <div class="sub-group">
+          <label for="sizeM">M</label>
+          <input type="number" id="sizeM" name="sizeM" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+        <div class="sub-group">
+          <label for="sizeL">L(F)</label>
+          <input type="number" id="sizeL" name="sizeL" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+        <div class="sub-group">
+          <label for="sizeXL">LL(XL)</label>
+          <input type="number" id="sizeXL" name="sizeXL" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+        <div class="sub-group">
+          <label for="sizeXXL">3L(XXL)</label>
+          <input type="number" id="sizeXXL" name="sizeXXL" value="0" min="0" required oninput="calculateTotal()">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="totalQuantity">合計枚数</label>
+      <input type="number" id="totalQuantity" name="totalQuantity" value="0" readonly>
+    </div>
+
+    <!-- ▼ プリント位置のイメージ画像 ▼ -->
+    <div class="form-group">
+      <label>プリント位置イメージ</label>
+      <img src="https://catalog-bot-zf1t.onrender.com/PRINT_LOCATION.png" alt="プリント位置イメージ" style="max-width:90%;">
+    </div>
+
+    <!-- ▼ 1ヵ所目のプリント設定（必須）▼ -->
+    <fieldset id="printLocation1">
+      <legend>1ヵ所目のプリント設定 (必須)</legend>
+
+      <!-- プリント位置No -->
+      <div class="sub-group">
+        <label for="printPositionNo1">プリント位置No.</label>
+        <select id="printPositionNo1" name="printPositionNo1" required>
+          <option value="">選択</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+        </select>
+      </div>
+
+              <!-- デザイン番号 -->
+              <div class="sub-group" id="designGroup1">
+                <label for="designCode1">デザイン (例: D-001)
+                  <!-- ▼ 追加 ▼ -->
+                  <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=18"
+                    target="_blank"
+                    style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
+                  <!-- ▲ 追加 ▲ -->
+                </label>
+                <div style="display:flex; gap:0.3em;">
+                  <span>D-</span>
+                  <input type="text" id="designCode1" name="designCode1" maxlength="3" style="width:4em;" placeholder="3桁">
+                </div>
+      </div>
+      <!-- ネーム＆番号プリントカラーオプション (プリントカラーでネーム系選択時に表示) -->
+      <div id="nameNumberPrintColorBox1" class="sub-group hidden" style="border:1px solid #ccc; padding:0.5em;">
+        <strong>ネーム・番号プリントカラーオプション</strong>
+        <!-- ← 戻るボタンをここに -->
+        <button type="button"
+                class="back-btn"
+                onclick="backToNormalPrint(1)">
+        ← 通常のプリント設定に戻る
+        </button>        
+        <div class="inline-flex mt1 mb1">
+          <label><input type="radio" name="nameNumberPrintType1" value="single" checked onclick="toggleEdgeColor(1)"> 単色</label>
+          <label><input type="radio" name="nameNumberPrintType1" value="edge" onclick="toggleEdgeColor(1)"> フチ付き</label>
+        </div>
+        <!-- 単色 -->
+        <div id="singleColorSelectArea1" class="sub-group">
+          <label>単色カラー</label>
+          <select id="singleColor1" name="singleColor1"></select>
+        </div>
+        <!-- フチ付き -->
+        <div id="edgeColorSelectArea1" class="sub-group hidden">
+          <label>フチ付きタイプ</label>
+          <select id="edgeType1" name="edgeType1" onchange="changeEdgeType(1)">
+            <option value="">選択してください</option>
+            <option value="FT-1">FT-1 (文字色ブラック、フチ色1ブラック)</option>
+            <option value="FT-2">FT-2 (文字色ホワイト、フチ色1ブラック)</option>
+            <option value="FT-3">FT-3 (文字色レッド、フチ色1ブラック)</option>
+            <option value="FT-4">FT-4 (文字色パープル、フチ色1イエロー)</option>
+            <option value="FT-5">FT-5 (文字色ブラック、フチ色1ホワイト、フチ色2ブラック)</option>
+            <option value="FT-6">FT-6 (文字色レッド、フチ色1ホワイト、フチ色2ブラック)</option>
+            <option value="FT-7">FT-7 (文字色ブルー、フチ色1ホワイト、フチ色2ブルー)</option>
+            <option value="FT-8">FT-8 (文字色ブルー、フチ色1ホワイト、フチ色2レッド)</option>
+            <option value="custom">カスタム</option>
+          </select>
+          <div id="edgeColorCustomArea1" class="hidden" style="margin-top:0.5em;">
+            <label>文字色</label>
+            <select id="edgeCustomTextColor1" name="edgeCustomTextColor1"></select>
+            <label>フチ色1</label>
+            <select id="edgeCustomEdgeColor1" name="edgeCustomEdgeColor1"></select>
+            <label>フチ色2 (任意)</label>
+            <select id="edgeCustomEdgeColor2_1" name="edgeCustomEdgeColor2_1"></select>
+          </div>
+        </div>
+        <!-- フォント -->
+        <div class="sub-group mt1">
+          <label>フォント選択</label>
+          <div class="inline-flex mb1">
+            <label><input type="radio" name="fontType1" value="E" checked> 英数字対応 (E-)</label>
+            <label><input type="radio" name="fontType1" value="J"> 日本語対応 (J-)</label>
+          </div>
+          <div class="inline-flex">
+            <span id="fontPrefix1">E-</span>
+            <input type="text" id="fontNumber1" name="fontNumber1" maxlength="2" style="width:3em;" placeholder="00">
+          </div>
+        </div>
+      </div><!-- /nameNumberPrintColorBox1 -->
+
+      <!-- ▼▼▼ ここから通常プリントカラー・デザイン等をまとめる ▼▼▼ -->
+      <div id="normalPrintGroup1">
+        <!-- 通常のプリントカラー・オプション (1色目, 2色目, 3色目, フルカラー) -->
+        <div class="sub-group">
+            <label>プリントカラー・オプション
+            <!-- ▼ 追加 ▼ -->
+            <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=20"
+              target="_blank"
+              style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
+            <!-- ▲ 追加 ▲ -->
+            </label>
+            <!-- 色セレクトをまとめて置くコンテナ -->
+            <div id="printColorBox1" class="color-box"></div>
+            <!-- 追加ボタン -->
+            <button type="button"
+                    class="add-color-btn"
+                    onclick="addColorSelect(1)">
+              ＋色を追加
+            </button>
+          <!-- フルカラー -->
+          <select name="fullColorSize1" class="full-color-select">
+            <option value="">フルカラーの場合はこちらを選択</option>
+            <option value="S">フルカラー(小)</option>
+            <option value="M">フルカラー(中)</option>
+            <option value="L">フルカラー(大)</option>
+          </select>
+        </div>
+
+        <!-- デザインサイズ -->
+        <div class="sub-group">
+          <label>デザインサイズ</label>
+          <select name="designSize1" id="designSize1" onchange="toggleCustomSize(1)">
+            <option value="max">プリント位置最大</option>
+            <option value="custom">任意のサイズ</option>
+          </select>
+          <div id="customSizeInput1" class="hidden">
+            <label>X(cm)</label>
+            <input type="number" name="designSizeX1" min="0" step="0.1" style="width:5em;">
+            <label>Y(cm)</label>
+            <input type="number" name="designSizeY1" min="0" step="0.1" style="width:5em;">
+          </div>
+        </div>
+      </div>
+      <!-- ▲▲▲ normalPrintGroup1 終了 ▲▲▲ -->
+    </fieldset>
+
+    <!-- ▼ 追加プリント箇所を動的に生成する領域 & 追加ボタン ▼ -->
+    <div id="additionalPrintLocations"></div>
+
+    <div style="margin-bottom:2em;">
+      <button type="button"
+              onclick="addPrintLocation()"
+              style="
+                background-color: #d15b8f;
+                color: #fff;
+                border: none;
+                padding: 1em 2em;
+                border-radius: 4px;
+                font-size: 1em;
+                cursor: pointer;
+              ">
+        + プリント箇所を追加
+      </button>
+    </div>
+
+    <!-- ▼ 希望お届け日・使用日・申込日 ▼ -->
+    <div class="form-group">
+      <label for="deliveryDate">希望お届け日 <span style="color:red;">(必須)</span></label>
+      <input type="date" id="deliveryDate" name="deliveryDate" required />
+    </div>
+    <div class="form-group">
+      <label for="useDate">使用日 <span style="color:red;">(必須)</span></label>
+      <input type="date" id="useDate" name="useDate" required />
+    </div>
+    <div class="form-group hidden-opt">
+        <label for="applicationDate">申込日 (任意)</label>
+         <input type="date" id="applicationDate" name="applicationDate">
+       </div>
+
+    <!-- ▼ 割引特典 ▼ -->
+    <div class="form-group">
+      <label for="discountOption">利用する割引特典 <span style="color:red;">(必須)</span></label>
+      <select id="discountOption" name="discountOption" required>
+        <option value="">選択してください</option>
+        <option value="早割">早割</option>
+        <option value="いっしょ割">いっしょ割</option>
+        <option value="リピータ割">リピータ割</option>
+      </select>
+    </div>
+
+    <!-- ▼ 学校名/LINEの名前/クラス・団体名 ▼ -->
+    <div class="form-group">
+      <label for="schoolName">学校名 <span style="color:red;">(必須)</span></label>
+      <input type="text" id="schoolName" name="schoolName" required />
+    </div>
+    <div class="form-group hidden-opt">
+        <label for="lineName">LINEの名前 (任意)</label>
+        <input type="text" id="lineName" name="lineName">
+    </div>
+    <div class="form-group hidden-opt">
+       <label for="classGroupName">クラス・団体名 (任意)</label>
+       <input type="text" id="classGroupName" name="classGroupName">
+    </div>
+
+    <!-- ▼ 郵便番号 (必須) & 学校(お届け)住所 ▼ -->
+    <div class="form-group">
+      <label for="zipCode">お届け先の郵便番号 <span style="color:red;">(必須)</span></label>
+      <input type="text" id="zipCode" name="zipCode" placeholder="例: 123-4567" required onblur="autoFillAddress()" />
+    </div>
+    <div class="form-group">
+      <label for="address1">住所1 (都道府県・市区町村等)</label>
+      <input type="text" id="address1" name="address1" />
+    </div>
+    <div class="form-group">
+      <label for="address2">住所2 (番地以下) <span style="color:red;">(必須)</span></label>
+      <input type="text" id="address2" name="address2" required />
+    </div>
+    <div class="form-group">
+      <label for="addresseeName">
+        お届け先宛名 <span style="color:red;">(必須)</span><br>
+        <small>※学校お届けの場合はご担任名を入力ください</small>
+      </label>
+      <input type="text" id="addresseeName" name="addresseeName" required />
+    </div>
+    <div class="form-group hidden-opt">
+        <label for="schoolTel">学校TEL (任意)</label>
+        <input type="text" id="schoolTel" name="schoolTel">
+    </div>
+
+    <!-- ▼ 代表者情報 ▼ -->
+    <div class="form-group">
+      <label for="representativeName">代表者 <span style="color:red;">(必須)</span></label>
+      <input type="text" id="representativeName" name="representativeName" required />
+    </div>
+    <div class="form-group">
+      <label for="representativeTel">代表者TEL <span style="color:red;">(必須)</span></label>
+      <input type="text" id="representativeTel" name="representativeTel" required />
+    </div>
+    <div class="form-group hidden-opt">
+       <label for="representativeEmail">代表者メール (任意)</label>
+       <input type="email" id="representativeEmail" name="representativeEmail">
+    </div>
+
+    <!-- ▼ デザイン確認方法 ▼ -->
+    <div class="form-group">
+      <label for="designCheckMethod">デザイン確認方法 <span style="color:red;">(必須)</span></label>
+      <select id="designCheckMethod" name="designCheckMethod" required>
+        <option value="">選択してください</option>
+        <option value="LINE代表者">LINE代表者</option>
+        <option value="LINEご担任(保護者)">LINEご担任(保護者)</option>
+        <option value="メール代表者">メール代表者</option>
+        <option value="メールご担任(保護者)">メールご担任(保護者)</option>
+      </select>
+    </div>
+
+    <!-- ▼ お支払い方法 ▼ -->
+    <div class="form-group">
+      <label for="paymentMethod">お支払い方法 <span style="color:red;">(必須)</span></label>
+      <select id="paymentMethod" name="paymentMethod" required>
+        <option value="">選択してください</option>
+        <option value="代金引換">代金引換(ヤマト運輸/現金のみ)</option>
+        <option value="コンビニ・郵便振替">コンビニ・郵便振替(後払い)</option>
+        <option value="銀行振込(後払い)">銀行振込(後払い)</option>
+        <option value="銀行振込(先払い)">銀行振込(先払い)</option>
+      </select>
+    </div>
+
+    <div class="submit-btn">
+      <button type="submit">送信</button>
+    </div>
+  </form>
+</div>
+
+<script>
+    // Flask側から productName をJSに渡す
+  const initialProductName = "{{ initial_data.productName | default('') }}";
+  
+  /**********************************************
+   * 1) 製品テーブル（ご提示いただいたデータをすべて統合）
+   **********************************************/
+  const productTable = [
+    // 5927-01 ゲームシャツ
+    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9816", colorName: "ホワイト/ホワイト/ブラック" },
+    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9887", colorName: "レッド/ホワイト/ブラック" },
+    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9889", colorName: "アイビーグリーン/ホワイト/ブラック" },
+    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9888", colorName: "コバルトブルー/ホワイト/ブラック" },
+    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9856", colorName: "ブラック/ホワイト/ブラック" },
+
+    // 5982-01 ストライプドライベースボールシャツ / ドライベースボールシャツ
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "1002", colorName: "ホワイト/ブラック" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "1095", colorName: "ホワイト/マリンブルー" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2001", colorName: "ブラック/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2002", colorName: "ブラック/ブラック" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6901", colorName: "ラベンダー/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6001", colorName: "ターコイズブルー/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "4801", colorName: "マリンブルー/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "4001", colorName: "ネイビー/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2602", colorName: "カナリアイエロー/ブラック" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6402", colorName: "オレンジ/ブラック" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6601", colorName: "トロピカルピンク/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5602", colorName: "レッド/ブラック" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5801", colorName: "バーガンディ/ホワイト" },
+    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5001", colorName: "アイビーグリーン/ホワイト" },
+
+    // 300-ACT ドライTシャツ
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "001", colorName: "ホワイト" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "153", colorName: "シルバーグレー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "002", colorName: "グレー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "187", colorName: "ダークグレー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "005", colorName: "ブラック" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "133", colorName: "ライトブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "033", colorName: "サックス" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "034", colorName: "ターコイズブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "198", colorName: "ミディアムブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "032", colorName: "ロイヤルブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "171", colorName: "ジャパンブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "097", colorName: "インディゴ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "027", colorName: "メロン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "026", colorName: "ミントグリーン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "096", colorName: "ミントブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "024", colorName: "ライトグリーン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "155", colorName: "ライム" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "194", colorName: "ブライトグリーン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "025", colorName: "グリーン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "138", colorName: "アイビーグリーン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "128", colorName: "オリーブ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "037", colorName: "アーミーグリーン" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "167", colorName: "メトロブルー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "031", colorName: "ネイビー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "455", colorName: "ライトベージュ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "134", colorName: "ライトイエロー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "020", colorName: "イエロー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "165", colorName: "デイジー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "015", colorName: "オレンジ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "038", colorName: "サンセットオレンジ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "132", colorName: "ライトピンク" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "011", colorName: "ピンク" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "146", colorName: "ホットピンク" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "010", colorName: "レッド" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "035", colorName: "ガーネットレッド" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "112", colorName: "バーガンディ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "188", colorName: "ライトパープル" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "019", colorName: "ラベンダー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "014", colorName: "パープル" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "236", colorName: "コヨーテ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "047", colorName: "蛍光イエロー" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "048", colorName: "蛍光オレンジ" },
+    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "049", colorName: "蛍光ピンク" },
+
+    // 302-ADP ドライポロシャツ
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "001", colorName: "ホワイト" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "002", colorName: "グレー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "187", colorName: "ダークグレー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "005", colorName: "ブラック" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "133", colorName: "ライトブルー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "033", colorName: "サックス" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "034", colorName: "ターコイズ" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "032", colorName: "ロイヤルブルー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "171", colorName: "ジャパンブルー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "167", colorName: "メトロブルー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "031", colorName: "ネイビー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "134", colorName: "ライトイエロー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "020", colorName: "イエロー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "165", colorName: "デイジー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "015", colorName: "オレンジ" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "038", colorName: "サンセットオレンジ" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "132", colorName: "ライトピンク" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "011", colorName: "ピンク" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "146", colorName: "ホットピンク" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "010", colorName: "レッド" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "035", colorName: "ガーネットレッド" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "112", colorName: "バーガンディ" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "024", colorName: "ライトグリーン" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "155", colorName: "ライム" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "025", colorName: "グリーン" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "037", colorName: "アーミーグリーン" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "026", colorName: "ミントグリーン" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "096", colorName: "ミントブルー" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "188", colorName: "ライトパープル" },
+    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "014", colorName: "パープル" },
+  ];
+
+  /**********************************************
+   * (B) プリントカラー・オプション（全色 + 属性）
+   **********************************************/
+  const printColorOptions = [
+    { name: "ネーム＆背番号セット", attribute: "ネーム＆背番号セット" },
+    { name: "ネーム(大)", attribute: "ネーム(大)" },
+    { name: "ネーム(小)", attribute: "ネーム(小)" },
+    { name: "番号(大)", attribute: "番号(大)" },
+    { name: "番号(小)", attribute: "番号(小)" },
+
+    { name: "ホワイト", attribute: "レギュラーインク" },
+    { name: "ライトグレー", attribute: "レギュラーインク" },
+    { name: "ダークグレー", attribute: "レギュラーインク" },
+    { name: "ブラック", attribute: "レギュラーインク" },
+    { name: "サックス", attribute: "レギュラーインク" },
+    { name: "ブルー", attribute: "レギュラーインク" },
+    { name: "ネイビー", attribute: "レギュラーインク" },
+    { name: "ライトピンク", attribute: "レギュラーインク" },
+    { name: "ローズピンク", attribute: "レギュラーインク" },
+    { name: "ホットピンク", attribute: "レギュラーインク" },
+    { name: "レッド", attribute: "レギュラーインク" },
+    { name: "ワインレッド", attribute: "レギュラーインク" },
+    { name: "ミントグリーン", attribute: "レギュラーインク" },
+    { name: "エメラルドグリーン", attribute: "レギュラーインク" },
+    { name: "パステルイエロー", attribute: "レギュラーインク" },
+    { name: "イエロー", attribute: "レギュラーインク" },
+    { name: "ゴールドイエロー", attribute: "レギュラーインク" },
+    { name: "オレンジ", attribute: "レギュラーインク" },
+    { name: "イエローグリーン", attribute: "レギュラーインク" },
+    { name: "グリーン", attribute: "レギュラーインク" },
+    { name: "ダークグリーン", attribute: "レギュラーインク" },
+    { name: "ライトパープル", attribute: "レギュラーインク" },
+    { name: "パープル", attribute: "レギュラーインク" },
+    { name: "クリーム", attribute: "レギュラーインク" },
+    { name: "ライトブラウン", attribute: "レギュラーインク" },
+    { name: "ダークブラウン", attribute: "レギュラーインク" },
+    { name: "シルバー", attribute: "レギュラーインク" },
+    { name: "ゴールド", attribute: "レギュラーインク" },
+
+    { name: "グリッターシルバー", attribute: "オプションインク" },
+    { name: "グリッターゴールド", attribute: "オプションインク" },
+    { name: "グリッターブラック", attribute: "オプションインク" },
+    { name: "グリッターイエロー", attribute: "オプションインク" },
+    { name: "グリッターピンク", attribute: "オプションインク" },
+    { name: "グリッターレッド", attribute: "オプションインク" },
+    { name: "グリッターグリーン", attribute: "オプションインク" },
+    { name: "グリッターブルー", attribute: "オプションインク" },
+    { name: "グリッターパープル", attribute: "オプションインク" },
+
+    { name: "蛍光イエロー", attribute: "オプションインク" },
+    { name: "蛍光オレンジ", attribute: "オプションインク" },
+    { name: "蛍光ピンク", attribute: "オプションインク" },
+    { name: "蛍光グリーン", attribute: "オプションインク" }
+  ];
+
+  /**********************************************
+ * ネーム＆番号系カラー判定用リスト ←★追加
+ **********************************************/
+const nameNumGroup = [
+  "ネーム＆背番号セット",
+  "ネーム(大)",
+  "ネーム(小)",
+  "番号(大)",
+  "番号(小)"
+];
+
+  /**********************************************
+   * (C) ネーム・番号用の「単色」と「フチ付き」カスタムで使う色一覧
+   **********************************************/
+  const nameNumberSingleColors = [
+    "ホワイト","グレー","ネイビー","ブラック","ライトブルー","ブルー","イエロー","オレンジ",
+    "ピンク","ホットピンク","レッド","パープル","ライトグリーン","グリーン","シルバー","ゴールド",
+    "グリッターシルバー","グリッターゴールド","グリッターピンク","グリッターピンク"
+  ];
+  const nameNumberEdgeColors = [
+    "ホワイト","グレー","ネイビー","ブラック","ライトブルー","ブルー","イエロー","オレンジ",
+    "ピンク","ホットピンク","レッド","パープル","ライトグリーン","グリーン"
+  ];
+
+  // 各セレクト要素
+  const productNameSelect = document.getElementById("productNameSelect");
+  const productNoSelect   = document.getElementById("productNoSelect");
+  const colorNameSelect   = document.getElementById("colorNameSelect");
+  const colorNoSelect     = document.getElementById("colorNoSelect");
+
+  /**********************************************
+   * 商品名 → 品番 → 商品カラー → カラーNo
+   **********************************************/
+  function setProductNameOptions() {
+    const names = Array.from(new Set(productTable.map(i=>i.productName)));
+    productNameSelect.innerHTML = '<option value="">選択してください</option>';
+    names.forEach(n => {
+      const opt = document.createElement("option");
+      opt.value = n;
+      opt.textContent = n;
+      productNameSelect.appendChild(opt);
+    });
+  }
+
+  function setProductNoOptions() {
+    const selectedName = productNameSelect.value;
+    productNoSelect.innerHTML   = '<option value="">選択してください</option>';
+    colorNameSelect.innerHTML   = '<option value="">選択してください</option>';
+    colorNoSelect.innerHTML     = '<option value="">選択してください</option>';
+    if (!selectedName) return;
+
+    const nos = Array.from(
+      new Set(
+        productTable.filter(i=> i.productName === selectedName).map(i=> i.productNo)
+      )
+    );
+    nos.forEach(n=>{
+      const opt = document.createElement("option");
+      opt.value = n;
+      opt.textContent = n;
+      productNoSelect.appendChild(opt);
+    });
+    // ★ ここから初期値の選択を反映 ----------------
+  const initial = "{{ initial_data.productName | default('') }}";
+  if (initial) {
+    productNameSelect.value = initial;
+    setProductNoOptions();  // 品番を連動して更新
+  }
+}
+
+  function setColorNameOptions() {
+    const selectedName = productNameSelect.value;
+    const selectedNo   = productNoSelect.value;
+    colorNameSelect.innerHTML = '<option value="">選択してください</option>';
+    colorNoSelect.innerHTML   = '<option value="">選択してください</option>';
+    if(!selectedName || !selectedNo) return;
+
+    const cNames = Array.from(
+      new Set(
+        productTable
+          .filter(i=> i.productName===selectedName && i.productNo===selectedNo)
+          .map(i=> i.colorName)
+      )
+    );
+    cNames.forEach(cn => {
+      const opt = document.createElement("option");
+      opt.value = cn;
+      opt.textContent = cn;
+      colorNameSelect.appendChild(opt);
+    });
+  }
+
+  function setColorNoOptions() {
+    const selectedName    = productNameSelect.value;
+    const selectedNo      = productNoSelect.value;
+    const selectedCname   = colorNameSelect.value;
+    colorNoSelect.innerHTML = '<option value="">選択してください</option>';
+    if(!selectedName || !selectedNo || !selectedCname) return;
+
+    const matches = productTable.filter(i=>
+      i.productName===selectedName && i.productNo===selectedNo && i.colorName===selectedCname
+    );
+    matches.forEach(m => {
+      const opt = document.createElement("option");
+      opt.value = m.colorNo;
+      opt.textContent = m.colorNo;
+      colorNoSelect.appendChild(opt);
+    });
+    // 候補が1つだけなら自動選択
+    if(matches.length === 1) colorNoSelect.selectedIndex = 1;
+  }
+
+  /**********************************************
+   * プリントカラーセレクト(1色目/2色目/3色目)を生成
+   **********************************************/
+  function populatePrintColorSelects(baseId) {
+    ["1","2","3"].forEach(num=>{
+      const selId = baseId + num;  // 例: "printColorOption1_1"
+      const sel = document.getElementById(selId);
+      if(!sel) return;
+      sel.innerHTML = `<option value="">${num}色目を選択</option>`;
+      printColorOptions.forEach(col=>{
+        const opt = document.createElement("option");
+        opt.value = col.name;
+        opt.textContent = col.name + (col.attribute==="オプションインク" ? " (オプション)" : "");
+        sel.appendChild(opt);
+      });
+    });
+  }
+
+  /**********************************************
+   * 「ネーム＆背番号系」選択時の表示切り替え
+   **********************************************/
+  function handlePrintColorChange(idx){
+    const selects = document.querySelectorAll(
+      `#printColorBox${idx} select`);
+    const isNameNumber = [...selects].some(sel=>
+    nameNumGroup.includes(sel.value));
+    const box = document.getElementById(`nameNumberPrintColorBox${idx}`);
+    const normalGroup = document.getElementById(`normalPrintGroup${idx}`);
+    const designGroup = document.getElementById(`designGroup${idx}`);   // ★追加
+
+    if(isNameNumber){
+      // ネーム系が選択されたら → ネーム＆番号を表示、通常プリントは隠す
+      box.classList.remove("hidden");
+      if(normalGroup) normalGroup.classList.add("hidden");
+      if(designGroup) designGroup.classList.add("hidden");            // ★追加
+    } else {
+      // ネーム系が解除されたら → ネーム＆番号を隠し、通常プリントを表示
+      box.classList.add("hidden");
+      if(normalGroup) normalGroup.classList.remove("hidden");
+      if(designGroup) designGroup.classList.remove("hidden");         // ★追加
+    }
+  }
+
+  /**********************************************
+   * 単色 or フチ付き の切り替え
+   **********************************************/
+  function toggleEdgeColor(idx) {
+    const radios = document.getElementsByName("nameNumberPrintType"+idx);
+    let selected = "single";
+    radios.forEach(r=>{ if(r.checked) selected=r.value; });
+    const singleDiv = document.getElementById("singleColorSelectArea"+idx);
+    const edgeDiv   = document.getElementById("edgeColorSelectArea"+idx);
+    if(selected==="single"){
+      singleDiv.classList.remove("hidden");
+      edgeDiv.classList.add("hidden");
+    } else {
+      singleDiv.classList.add("hidden");
+      edgeDiv.classList.remove("hidden");
+    }
+  }
+
+  /**********************************************
+   * フチ付きタイプを変更 (定型 or custom)
+   **********************************************/
+  function changeEdgeType(idx) {
+    const sel = document.getElementById("edgeType"+idx);
+    const val = sel.value;
+    const customArea = document.getElementById("edgeColorCustomArea"+idx);
+    const textColor = document.getElementById("edgeCustomTextColor"+idx);
+    const edge1 = document.getElementById("edgeCustomEdgeColor"+idx);
+    const edge2 = document.getElementById("edgeCustomEdgeColor2_"+idx);
+
+    if(val==="custom"){
+      customArea.classList.remove("hidden");
+      textColor.value="";
+      edge1.value="";
+      edge2.value="";
+    } else {
+      customArea.classList.add("hidden");
+      switch(val){
+        case "FT-1":
+          textColor.value="ブラック"; edge1.value="ブラック"; edge2.value="";
+          break;
+        case "FT-2":
+          textColor.value="ホワイト"; edge1.value="ブラック"; edge2.value="";
+          break;
+        case "FT-3":
+          textColor.value="レッド"; edge1.value="ブラック"; edge2.value="";
+          break;
+        case "FT-4":
+          textColor.value="パープル"; edge1.value="イエロー"; edge2.value="";
+          break;
+        case "FT-5":
+          textColor.value="ブラック"; edge1.value="ホワイト"; edge2.value="ブラック";
+          break;
+        case "FT-6":
+          textColor.value="レッド"; edge1.value="ホワイト"; edge2.value="ブラック";
+          break;
+        case "FT-7":
+          textColor.value="ブルー"; edge1.value="ホワイト"; edge2.value="ブルー";
+          break;
+        case "FT-8":
+          textColor.value="ブルー"; edge1.value="ホワイト"; edge2.value="レッド";
+          break;
+      }
+    }
+  }
+
+  /**********************************************
+   * フォント(英数字 or 日本語)の切り替え
+   **********************************************/
+  function handleFontRadio(idx) {
+    const eRadio = document.querySelector(`input[name="fontType${idx}"][value="E"]`);
+    const prefix = document.getElementById("fontPrefix"+idx);
+    if(eRadio && eRadio.checked){
+      prefix.textContent = "E-";
+    } else {
+      prefix.textContent = "J-";
+    }
+  }
+
+  /**********************************************
+   * デザインサイズ (max or custom)
+   **********************************************/
+  function toggleCustomSize(idx){
+    const sel = document.getElementById("designSize"+idx);
+    const cDiv = document.getElementById("customSizeInput"+idx);
+    if(sel.value==="custom"){
+      cDiv.classList.remove("hidden");
+    } else {
+      cDiv.classList.add("hidden");
+    }
+  }
+
+  /**********************************************
+   * 合計枚数計算
+   **********************************************/
+  function calculateTotal(){
+    const sizeIds = ["size150","sizeSS","sizeS","sizeM","sizeL","sizeXL","sizeXXL"];
+    let total=0;
+    sizeIds.forEach(id=>{
+      const val = parseInt(document.getElementById(id).value)||0;
+      total+=val;
+    });
+    document.getElementById("totalQuantity").value = total;
+  }
+
+  /**********************************************
+   * 追加プリント箇所を動的に増やす
+   **********************************************/
+  let printLocationCount = 1;  // 最初は1箇所目がある
+  function addPrintLocation(){
+    if(printLocationCount>=4){
+      alert("最大4ヵ所までです。");
+      return;
+    }
+    printLocationCount++;
+    const idx = printLocationCount; // 2,3,4
+
+    // テンプレート: 通常のプリントカラー・デザインなどを
+    // <div id="normalPrintGroup${idx}"> ... </div> でまとめる。
+    const html = `
+      <fieldset id="printLocation${idx}">
+        <legend style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${idx}ヵ所目のプリント設定</span>
+        <!-- 削除ボタン -->
+<button type="button"
+           class="del-btn"
+            onclick="removePrintLocation(${idx})">
+      ✕ 削除
+    </button>
+  </legend>
+        <div class="sub-group">
+          <label for="printPositionNo${idx}">プリント位置No.</label>
+          <select id="printPositionNo${idx}" name="printPositionNo${idx}">
+            <option value="">選択</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </div>
+                  <div class="sub-group" id="designGroup${idx}">
+            <label for="designCode${idx}">デザイン (例: D-001)
+            <!-- ▼ 追加 ▼ -->
+            <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=18"
+              target="_blank"
+              style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
+            <!-- ▲ 追加 ▲ -->
+              </label>
+            <div style="display:flex; gap:0.3em;">
+              <span>D-</span>
+              <input type="text" id="designCode${idx}" name="designCode${idx}" maxlength="3" style="width:4em;" placeholder="3桁">
+            </div>
+        </div>
+        <!-- ネーム＆番号プリントカラーオプション -->
+        <div id="nameNumberPrintColorBox${idx}" class="sub-group hidden" style="border:1px solid #ccc; padding:0.5em;">
+          <strong>ネーム・番号プリントカラーオプション</strong>
+          <button type="button"
+           class="back-btn"
+           onclick="backToNormalPrint(${idx})">
+           ← 通常のプリント設定に戻る
+          </button>
+          <div class="inline-flex mt1 mb1">
+            <label><input type="radio" name="nameNumberPrintType${idx}" value="single" checked onclick="toggleEdgeColor(${idx})"> 単色</label>
+            <label><input type="radio" name="nameNumberPrintType${idx}" value="edge" onclick="toggleEdgeColor(${idx})"> フチ付き</label>
+          </div>
+          <div id="singleColorSelectArea${idx}" class="sub-group">
+            <label>単色カラー</label>
+            <select id="singleColor${idx}" name="singleColor${idx}"></select>
+          </div>
+          <div id="edgeColorSelectArea${idx}" class="sub-group hidden">
+            <label>フチ付きタイプ</label>
+            <select id="edgeType${idx}" name="edgeType${idx}" onchange="changeEdgeType(${idx})">
+              <option value="">選択してください</option>
+              <option value="FT-1">FT-1 (文字色ブラック、フチ色1ブラック)</option>
+              <option value="FT-2">FT-2 (文字色ホワイト、フチ色1ブラック)</option>
+              <option value="FT-3">FT-3 (文字色レッド、フチ色1ブラック)</option>
+              <option value="FT-4">FT-4 (文字色パープル、フチ色1イエロー)</option>
+              <option value="FT-5">FT-5 (文字色ブラック、フチ色1ホワイト、フチ色2ブラック)</option>
+              <option value="FT-6">FT-6 (文字色レッド、フチ色1ホワイト, フチ色2ブラック)</option>
+              <option value="FT-7">FT-7 (文字色ブルー、フチ色1ホワイト、フチ色2ブルー)</option>
+              <option value="FT-8">FT-8 (文字色ブルー、フチ色1ホワイト、フチ色2レッド)</option>
+              <option value="custom">カスタム</option>
+            </select>
+            <div id="edgeColorCustomArea${idx}" class="hidden" style="margin-top:0.5em;">
+              <label>文字色</label>
+              <select id="edgeCustomTextColor${idx}" name="edgeCustomTextColor${idx}"></select>
+              <label>フチ色1</label>
+              <select id="edgeCustomEdgeColor${idx}" name="edgeCustomEdgeColor${idx}"></select>
+              <label>フチ色2 (任意)</label>
+              <select id="edgeCustomEdgeColor2_${idx}" name="edgeCustomEdgeColor2_${idx}"></select>
+            </div>
+          </div>
+          <div class="sub-group mt1">
+            <label>フォント選択</label>
+            <div class="inline-flex mb1">
+              <label><input type="radio" name="fontType${idx}" value="E" checked> 英数字対応 (E-)</label>
+              <label><input type="radio" name="fontType${idx}" value="J"> 日本語対応 (J-)</label>
+            </div>
+            <div class="inline-flex">
+              <span id="fontPrefix${idx}">E-</span>
+              <input type="text" id="fontNumber${idx}" name="fontNumber${idx}" maxlength="2" style="width:3em;" placeholder="00">
+            </div>
+          </div>
+        </div>
+
+        <!-- ▼▼▼ ここで normalPrintGroup${idx} を追加 ▼▼▼ -->
+        <div id="normalPrintGroup${idx}">
+          <div class="sub-group">
+          <label>
+            プリントカラー・オプション
+            <!-- ▼ ここを追加 ▼ -->
+            <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=13"
+              target="_blank"
+              style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
+            <!-- ▲ 追加ここまで ▲ -->
+          </label>
+            <!-- ★ 新しい color-box とボタン -->
+            <div id="printColorBox${idx}" class="color-box"></div>
+
+            <button type="button"
+                    class="add-color-btn"
+                    onclick="addColorSelect(${idx})">
+              ＋色を追加
+          　</button>
+            <select name="fullColorSize${idx}" class="full-color-select">
+              <option value="">フルカラーの場合はこちらを選択</option>
+              <option value="S">フルカラー(小)</option>
+              <option value="M">フルカラー(中)</option>
+              <option value="L">フルカラー(大)</option>
+            </select>
+          </div>
+          <div class="sub-group">
+            <label>デザインサイズ</label>
+            <select name="designSize${idx}" id="designSize${idx}" onchange="toggleCustomSize(${idx})">
+              <option value="max">プリント位置最大</option>
+              <option value="custom">任意のサイズ</option>
+            </select>
+            <div id="customSizeInput${idx}" class="hidden">
+              <label>X(cm)</label>
+              <input type="number" name="designSizeX${idx}" min="0" step="0.1" style="width:5em;">
+              <label>Y(cm)</label>
+              <input type="number" name="designSizeY${idx}" min="0" step="0.1" style="width:5em;">
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    `;
+    const container = document.getElementById("additionalPrintLocations");
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    container.appendChild(div);
+
+    // ネーム＆番号プリントの単色/フチ付き用カラー選択肢をセット
+    fillNameNumberColors(`singleColor${idx}`, nameNumberSingleColors);
+    fillNameNumberColors(`edgeCustomTextColor${idx}`, nameNumberEdgeColors);
+    fillNameNumberColors(`edgeCustomEdgeColor${idx}`, nameNumberEdgeColors);
+    fillNameNumberColors(`edgeCustomEdgeColor2_${idx}`, nameNumberEdgeColors);
+
+    // フォント選択ラジオを監視
+    const fontRadios = document.getElementsByName(`fontType${idx}`);
+    fontRadios.forEach(r=>{
+      r.addEventListener("change",()=>handleFontRadio(idx));
+    });
+  // 追加箇所
+  initFirstColor(idx);
+  }
+    /* 既存 <script> 内のどこか（addPrintLocation などの下）に追加 */
+      function removePrintLocation(idx){
+    if(!confirm("このプリント箇所を削除しますか？")) return;
+
+    const fs = document.getElementById(`printLocation${idx}`);
+    if(fs){
+      fs.parentNode.removeChild(fs);
+      // 現在のプリント箇所数を再カウントして変数を更新
+      printLocationCount = document.querySelectorAll('fieldset[id^="printLocation"]').length;
+    }
+  }
+  
+  function fillNameNumberColors(selectId, colorArray){
+    const el = document.getElementById(selectId);
+    if(!el) return;
+    el.innerHTML = '<option value="">選択してください</option>';
+    colorArray.forEach(c=>{
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      el.appendChild(opt);
+    });
+  }
+
+  // 使える最大色数（1色目 + 追加2色 ＝ 3色まで）
+const MAX_COLORS = 3;
+
+/**
+ * `idx`   … プリント箇所番号 (1〜)
+ * `no`    … 何色目か (1〜MAX_COLORS)
+ */
+function buildColorSelect(idx, no){
+  const sel = document.createElement('select');
+  sel.name  = `printColorOption${idx}_${no}`;
+  sel.id    = `printColorOption${idx}_${no}`;
+  sel.onchange = ()=>handlePrintColorChange(idx);
+
+  sel.innerHTML = `<option value="">${no}色目を選択</option>`;
+  printColorOptions.forEach(col=>{
+    const opt = document.createElement('option');
+    opt.value = col.name;
+    opt.textContent =
+      col.name + (col.attribute==="オプションインク" ? " (オプション)" : "");
+    sel.appendChild(opt);
+  });
+  return sel;
+}
+
+function initFirstColor(idx){
+  const box = document.getElementById(`printColorBox${idx}`);
+  box.innerHTML = '';                        // 念のため空に
+  box.appendChild(buildColorSelect(idx,1));  // 1 色目
+}
+
+/**
+ * idx … プリント箇所番号
+ */
+ function addColorSelect(idx){
+  const box  = document.getElementById(`printColorBox${idx}`);
+  const next = box.children.length + 1;        // 何色目になるか
+
+  if(next > MAX_COLORS) return;               // 3 色を超えたら無視
+  box.appendChild(buildColorSelect(idx, next));
+
+  // 3 色入ったらボタンを無効化
+  if(next === MAX_COLORS){
+    document.querySelector(`#printLocation${idx} .add-color-btn`).disabled = true;
+  }
+}
+  /**********************************************
+   * 郵便番号 → 住所1 自動入力
+   **********************************************/
+  function autoFillAddress(){
+    const zip = document.getElementById("zipCode").value.trim();
+    if(!zip) return;
+    fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode=' + encodeURIComponent(zip))
+      .then(response => response.json())
+      .then(data => {
+        if(data.status === 200 && data.results && data.results.length > 0) {
+          const result = data.results[0];
+          const fullAddress = result.address1 + result.address2 + result.address3;
+          document.getElementById("address1").value = fullAddress;
+        } else {
+          alert("該当する住所が見つかりませんでした。");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("住所検索に失敗しました。");
+      });
+  }
+
+  /**********************************************
+   * ページ読み込み時の初期処理
+   **********************************************/
+  window.addEventListener("DOMContentLoaded",()=>{
+    // 商品名リストを初期化
+    setProductNameOptions();
+    // 1 ヶ所目
+    initFirstColor(1);
+    // ネーム＆番号プリントの単色/フチ付き用カラー選択肢(1ヵ所目)
+    fillNameNumberColors("singleColor1", nameNumberSingleColors);
+    fillNameNumberColors("edgeCustomTextColor1", nameNumberEdgeColors);
+    fillNameNumberColors("edgeCustomEdgeColor1", nameNumberEdgeColors);
+    fillNameNumberColors("edgeCustomEdgeColor2_1", nameNumberEdgeColors);
+
+    // フォント選択ラジオ(1ヵ所目)
+    const fontRadios1 = document.getElementsByName("fontType1");
+    fontRadios1.forEach(r=>{
+      r.addEventListener("change",()=>handleFontRadio(1));
+    });
+
+    // 商品名/品番/商品カラー の選択イベント
+    productNameSelect.addEventListener("change", setProductNoOptions);
+    productNoSelect.addEventListener("change", setColorNameOptions);
+    colorNameSelect.addEventListener("change", setColorNoOptions);
+  });
+
+  // ?uid=xxxxxxxx をパラメータから取得し、hiddenにセット
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const uid = params.get('uid');
+    if (uid) {
+      document.getElementById('lineUserId').value = uid;
+    }
+  })();
+    /* 既存 JS の下に追記 ------------------------------------- */
+    function backToNormalPrint(idx){
+    // ❶ ボックスの表示を切替え
+    document.getElementById(`nameNumberPrintColorBox${idx}`).classList.add("hidden");
+    document.getElementById(`normalPrintGroup${idx}`).classList.remove("hidden");
+    const dg = document.getElementById(`designGroup${idx}`);            // ★追加
+    if(dg) dg.classList.remove("hidden");                               // ★追加
+
+    // ❷ ネーム・番号系が入っている色選択をクリア
+    const nameNumGroup = ["ネーム＆背番号セット","ネーム(大)","ネーム(小)","番号(大)","番号(小)"];
+    ["1","2","3"].forEach(n=>{
+      const sel = document.getElementById(`printColorOption${idx}_${n}`);
+      if(sel && nameNumGroup.includes(sel.value)){
+        sel.value = "";
+      }
+    });
+
+    // ❸ UI の整合をとる（※色変更ハンドラを呼び出し）
+    handlePrintColorChange(idx);
+  }
+    /* いちばん下のスクリプトの中で追記するだけ */
+    window.addEventListener('pageshow', () => {
+    /* いま画面に残っている選択値を手がかりに
+       子セレクトの候補を作り直す                                */
+    setProductNoOptions();   // ← productName が選択済みなら品番候補を復元
+    setColorNameOptions();   // ← productNo が選択済みならカラー名候補を復元
+    setColorNoOptions();     // ← colorName が選択済みならカラーNo候補を復元
+    /* ★ ここを追加 ― size が残っていれば再集計、残っていなければ 0 のまま */
+    calculateTotal();
+  });
+</script>
+</body>
+</html>
