@@ -237,7 +237,7 @@ def write_to_spreadsheet_for_catalog(form_data: dict):
 # -----------------------
 # 簡易見積用データ構造
 # -----------------------
-from PRICE_TABLE_2025 import PRICE_TABLE, COLOR_COST_MAP,COLOR_ATTR_MAP,SPECIAL_SINGLE_COLOR_FEE,FULLCOLOR_SIZE_FEE, BACK_NAME_FEE, OPTION_INK_EXTRA
+from PRICE_TABLE_2025 import PRICE_TABLE, PRICE_TABLE_GENERAL, COLOR_COST_MAP,COLOR_ATTR_MAP,SPECIAL_SINGLE_COLOR_FEE,FULLCOLOR_SIZE_FEE, BACK_NAME_FEE, OPTION_INK_EXTRA
 from collections import defaultdict
 
 # ▼▼▼ 新規: プリント位置が「前のみ/背中のみ」のときの色数選択肢および対応コスト
@@ -323,7 +323,7 @@ def calculate_estimate(estimate_data):
     # 属性に応じて PRICE_TABLE を切り替える
     user_type = estimate_data.get("user_type")
     if user_type == "学生":
-        table = PRICE_TABLE_STUDENT
+        table = PRICE_TABLE
     else:
         table = PRICE_TABLE_GENERAL
 
