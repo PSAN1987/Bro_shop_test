@@ -132,7 +132,7 @@ def get_or_create_worksheet(sheet, title):
     "郵便番号", "住所1", "住所2", "お届け先宛名", "学校TEL",
     "代表者", "代表者TEL", "代表者メール",
     "デザイン確認方法", "お支払い方法",
-    "注文番号", "単価", "合計金額"
+    "注文番号", "見積番号", "単価", "合計金額"
 ]
             # ❶ 必要な列数を確保（あとで行追加時に不足すると困るため）
             ws.resize(rows=2000, cols=len(headers))
@@ -194,7 +194,7 @@ WEB_ORDER_COLUMN_KEYS = [
     "representativeName", "representativeTel", "representativeEmail",
     "designCheckMethod", "paymentMethod",
 
-    "orderNo", "unitPrice", "totalPrice"
+    "orderNo", "quote_no","unitPrice", "totalPrice"
 ]
 
 def build_web_order_row_values(data: dict) -> list:
@@ -1536,35 +1536,41 @@ def show_web_order_form():
 @app.route("/submit_web_order_form", methods=["POST"])
 def submit_web_order_form():
     form_data = {k: request.form.get(k, "").strip() for k in request.form}
+    submit_mode = request.form.get("submit_mode", "final")  # default = final
 
-    est = calculate_web_order_estimate(form_data)
-    unit_price = est["unit_price"]
-    total_price = est["total_price"]
+    # バリデーションは "final" の場合だけ厳しく行う
+    if submit_mode == "final":
+        required_fields = ["productName", "colorName", "sizeM", "deliveryDate", "schoolName", "representativeName", ...]  # 必須項目を列挙
+        for field in required_fields:
+            if not form_data.get(field):
+                return f"必須項目が未入力です：{field}", 400
 
-    # 注文番号生成
+    # 見積番号・日付・注文番号など
     jst = pytz.timezone('Asia/Tokyo')
-    order_no = datetime.now(jst).strftime("%Y%m%d%H%M%S")
     now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
+    order_no = datetime.now(jst).strftime("%Y%m%d%H%M%S")
 
-    # 追記フィールド
     form_data["timestamp"] = now_jst_str
     form_data["orderNo"] = order_no
-    form_data["unitPrice"] = unit_price
-    form_data["totalPrice"] = total_price
+    form_data["submit_mode"] = submit_mode  # ← これでステータスを保存しておける
 
-    # ✅ ここで quote_no（見積番号）も取得（hiddenでフォーム送信されている前提）
-    quote_no = request.form.get("quote_no", "").strip()
+    # 金額は常に再計算
+    est = calculate_web_order_estimate(form_data)
+    form_data["unitPrice"] = est["unit_price"]
+    form_data["totalPrice"] = est["total_price"]
 
-    # スプレッドシートに注文を記録
+    # 保存（上書き or append 処理は既存の write_to_spreadsheet_for_web_order に任せてOK）
     write_to_spreadsheet_for_web_order(form_data)
 
-    # ユーザーに注文確認Flex送信
-    uid = form_data.get("lineUserId")
-    if uid:
-        flex_msg = build_order_confirm_flex(order_no, make_order_summary(order_no, form_data, est))
-        line_bot_api.push_message(uid, flex_msg)
+    # 注文モードならユーザーにPush通知
+    if submit_mode == "final":
+        uid = form_data.get("lineUserId")
+        if uid:
+            flex_msg = build_order_confirm_flex(order_no, make_order_summary(order_no, form_data, est))
+            line_bot_api.push_message(uid, flex_msg)
 
-    return "フォーム送信ありがとうございました！", 200
+    return "保存が完了しました。" if submit_mode == "draft" else "注文を受け付けました！", 200
+
 
 def write_to_spreadsheet_for_web_order(data: dict):
     gc = get_gspread_client()
