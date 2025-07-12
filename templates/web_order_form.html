@@ -140,6 +140,7 @@
   </p>
   <!-- 送信先: /submit_web_order_form  /  POST で送る -->
   <form id="orderForm" action="/submit_web_order_form" method="post">
+    <input type="hidden" name="quote_no" value="{{ quote_no }}">
     <input type="hidden" name="lineUserId" id="lineUserId">
     <!-- CSRF 用ワンタイムトークン -->
     <input type="hidden" name="form_token" value="{{ token }}">
@@ -482,13 +483,35 @@
       </select>
     </div>
 
-    <div class="submit-btn">
-      <button type="submit">送信</button>
-    </div>
+<div class="submit-btn">
+  <!-- 管理者用：必須チェックなし -->
+  <button type="submit" id="draftSubmit" name="submit_mode" value="draft" style="background-color:#777;">下書き保存</button>
+  
+  <!-- ユーザー用：通常の必須チェックあり -->
+  <button type="submit" name="submit_mode" value="final">確定</button>
+</div>
   </form>
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const draftBtn = document.getElementById('draftSubmit');
+    const form = document.getElementById('orderForm');
+
+    if (draftBtn && form) {
+      draftBtn.addEventListener('click', function (e) {
+        // すべての required 属性を一時的に外す
+        const requiredElements = form.querySelectorAll('[required]');
+        requiredElements.forEach(el => el.removeAttribute('required'));
+
+        // 必須属性を外した状態で送信
+        form.submit();
+      });
+    }
+  });
+    // Flask側から productName をJSに渡す
+  const initialProductName = "{{ initial_data.productName | default('') }}";
+  
   /**********************************************
    * 1) 製品テーブル（ご提示いただいたデータをすべて統合）
    **********************************************/
@@ -711,7 +734,13 @@ const nameNumGroup = [
       opt.textContent = n;
       productNoSelect.appendChild(opt);
     });
+    // ★ ここから初期値の選択を反映 ----------------
+  const initial = "{{ initial_data.productName | default('') }}";
+  if (initial) {
+    productNameSelect.value = initial;
+    setProductNoOptions();  // 品番を連動して更新
   }
+}
 
   function setColorNameOptions() {
     const selectedName = productNameSelect.value;
