@@ -294,11 +294,8 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
     return quote_number
 
 
-def find_price_row(item_name, discount_type, quantity):
-    """
-    PRICE_TABLE から該当する行を探し返す。該当しない場合は None
-    """
-    for row in PRICE_TABLE:
+def find_price_row_from_table(table, item_name, discount_type, quantity):
+    for row in table:
         if (row["item"] == item_name
             and row["discount_type"] == discount_type
             and row["min_qty"] <= quantity <= row["max_qty"]):
@@ -307,12 +304,9 @@ def find_price_row(item_name, discount_type, quantity):
 
 
 def calculate_estimate(estimate_data):
-    """
-    入力された見積データから合計金額と単価を計算して返す
-    """
     item_name = estimate_data['item']
     discount_type = estimate_data['discount_type']
-    # 枚数選択肢を実数化
+
     quantity_map = {
         "20～29枚": 20,
         "30～39枚": 30,
@@ -326,9 +320,16 @@ def calculate_estimate(estimate_data):
     color_choice = estimate_data['color_count']
     back_name = estimate_data.get('back_name', "")
 
-    row = find_price_row(item_name, discount_type, quantity)
+    # 属性に応じて PRICE_TABLE を切り替える
+    user_type = estimate_data.get("user_type")
+    if user_type == "学生":
+        table = PRICE_TABLE_STUDENT
+    else:
+        table = PRICE_TABLE_GENERAL
+
+    row = find_price_row_from_table(table, item_name, discount_type, quantity)
     if row is None:
-        return 0, 0  # 該当無し
+        return 0, 0
 
     base_price = row["unit_price"]
 
