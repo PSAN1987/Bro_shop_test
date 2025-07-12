@@ -485,7 +485,7 @@
 
 <div class="submit-btn">
   <!-- 管理者用：必須チェックなし -->
-  <button type="submit" name="submit_mode" value="draft" style="background-color:#777;">下書き保存</button>
+  <button type="submit" id="draftSubmit" name="submit_mode" value="draft" style="background-color:#777;">下書き保存</button>
   
   <!-- ユーザー用：通常の必須チェックあり -->
   <button type="submit" name="submit_mode" value="final">確定</button>
@@ -494,6 +494,21 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const draftBtn = document.getElementById('draftSubmit');
+    const form = document.getElementById('orderForm');
+
+    if (draftBtn && form) {
+      draftBtn.addEventListener('click', function (e) {
+        // すべての required 属性を一時的に外す
+        const requiredElements = form.querySelectorAll('[required]');
+        requiredElements.forEach(el => el.removeAttribute('required'));
+
+        // 必須属性を外した状態で送信
+        form.submit();
+      });
+    }
+  });
     // Flask側から productName をJSに渡す
   const initialProductName = "{{ initial_data.productName | default('') }}";
   
