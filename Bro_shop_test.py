@@ -1284,7 +1284,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             f"枚数: {est_data['quantity']}\n"
             f"プリント位置: {est_data['print_position']}\n"
             f"色数: {est_data['color_count']}\n"
-            f"背ネーム・番号: {est_data.get('back_name')}\n\n"
+            f"背ネーム・番号: {est_data.get('back_name', 'なし')}\n\n"
             f"【合計金額】¥{total_price:,}\n"
             f"【1枚あたり】¥{unit_price:,}\n"
             "\n"
