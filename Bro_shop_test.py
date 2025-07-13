@@ -1525,75 +1525,98 @@ def submit_catalog_form():
 def show_web_order_form():
     quote_no = request.args.get("quote_no")
     uid = request.args.get("uid")
-    token = str(uuid.uuid4())
-    session["web_order_form_token"] = token
-    liff_id = os.getenv("WEB_ORDER_LIFF_ID")
-
-    # 簡易見積シートから初期情報を読み込む
     initial_data = {}
-    if quote_no:
-        gc = get_gspread_client()
-        sh = gc.open_by_key(SPREADSHEET_KEY)
-        ws = get_or_create_worksheet(sh, "簡易見積")
-        quote_col = ws.col_values(2)
-        try:
-            idx = quote_col.index(quote_no) + 1
-            row = ws.row_values(idx)
-            initial_data = {
-                "productName": row[6],
-                "quantity": row[7],
-                "print_position": row[8],
-                "color_count": row[9],
-                "back_name": row[10],
-                # 必要に応じて拡張
-            }
-        except ValueError:
-            pass
 
+    gc = get_gspread_client()
+    sh = gc.open_by_key(SPREADSHEET_KEY)
+
+    # ▼ ① WebOrderRequests から最新の下書きデータを探す
+    try:
+        ws_order = get_or_create_worksheet(sh, "WebOrderRequests")
+        quote_col = ws_order.col_values(WEB_ORDER_COLUMN_KEYS.index("quote_no") + 1)
+        if quote_no in quote_col:
+            idx = quote_col.index(quote_no) + 1
+            row = ws_order.row_values(idx)
+            initial_data = dict(zip(WEB_ORDER_COLUMN_KEYS, row))
+    except Exception as e:
+        print(f"WebOrderRequests から取得失敗: {e}")
+
+    # ▼ ② もし WebOrderRequests になければ簡易見積から fallback する（任意）
+    if not initial_data and quote_no:
+        try:
+            ws_estimate = get_or_create_worksheet(sh, "簡易見積")
+            estimate_col = ws_estimate.col_values(1)  # 見積番号列
+            if quote_no in estimate_col:
+                idx = estimate_col.index(quote_no) + 1
+                row = ws_estimate.row_values(idx)
+                initial_data = {
+                    "productName": row[6],
+                    "quantity": row[7],
+                    "print_position": row[8],
+                    "color_count": row[9],
+                    "back_name": row[10],
+                }
+        except Exception as e:
+            print(f"簡易見積からの読み込みも失敗: {e}")
+
+    # ▼ render_template に渡す
     return render_template(
         "web_order_form.html",
-        token=token,
-        liff_id=liff_id,
+        token=str(uuid.uuid4()),
+        liff_id=os.getenv("WEB_ORDER_LIFF_ID"),
         initial_data=initial_data,
         quote_no=quote_no
     )
 
+
+@app.route("/submit_web_order_form", methods=["POST"])
 @app.route("/submit_web_order_form", methods=["POST"])
 def submit_web_order_form():
     form_data = {k: request.form.get(k, "").strip() for k in request.form}
     submit_mode = request.form.get("submit_mode", "final")  # default = final
 
-    # バリデーションは "final" の場合だけ厳しく行う
+    # --- ✅ 注文番号の扱い（初回だけ生成） ---
+    order_no = form_data.get("orderNo")
+    if not order_no:
+        jst = pytz.timezone('Asia/Tokyo')
+        order_no = datetime.now(jst).strftime("%Y%m%d%H%M%S")
+    form_data["orderNo"] = order_no
+
+    # --- ✅ タイムスタンプとステータスの保存 ---
+    jst = pytz.timezone('Asia/Tokyo')
+    now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
+    form_data["timestamp"] = now_jst_str
+    form_data["submit_mode"] = submit_mode  # ← 下書き or 確定ステータス保持
+
+    # --- ✅ バリデーション（確定時のみ） ---
     if submit_mode == "final":
-        required_fields = ["productName", "colorName", "sizeM", "deliveryDate", "schoolName", "representativeName", ...]  # 必須項目を列挙
+        required_fields = [
+            "productName", "colorName", "sizeM", "deliveryDate",
+            "schoolName", "representativeName", "representativeTel",
+            "zipCode", "address2", "addresseeName", "discountOption",
+            "designCheckMethod", "paymentMethod"
+        ]
         for field in required_fields:
             if not form_data.get(field):
                 return f"必須項目が未入力です：{field}", 400
 
-    # 見積番号・日付・注文番号など
-    jst = pytz.timezone('Asia/Tokyo')
-    now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
-    order_no = datetime.now(jst).strftime("%Y%m%d%H%M%S")
-
-    form_data["timestamp"] = now_jst_str
-    form_data["orderNo"] = order_no
-    form_data["submit_mode"] = submit_mode  # ← これでステータスを保存しておける
-
-    # 金額は常に再計算
+    # --- ✅ 金額再計算（常に実行） ---
     est = calculate_web_order_estimate(form_data)
     form_data["unitPrice"] = est["unit_price"]
     form_data["totalPrice"] = est["total_price"]
 
-    # 保存（上書き or append 処理は既存の write_to_spreadsheet_for_web_order に任せてOK）
+    # --- ✅ スプレッドシート保存（新規 or 上書き） ---
     write_to_spreadsheet_for_web_order(form_data)
 
-    # 注文モードならユーザーにPush通知
+    # --- ✅ 通知（注文確定時のみ） ---
     if submit_mode == "final":
         uid = form_data.get("lineUserId")
         if uid:
-            flex_msg = build_order_confirm_flex(order_no, make_order_summary(order_no, form_data, est))
+            summary = make_order_summary(order_no, form_data, est)
+            flex_msg = build_order_confirm_flex(order_no, summary)
             line_bot_api.push_message(uid, flex_msg)
 
+    # --- ✅ レスポンス返却 ---
     return "保存が完了しました。" if submit_mode == "draft" else "注文を受け付けました！", 200
 
 
