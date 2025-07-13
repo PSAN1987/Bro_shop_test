@@ -495,6 +495,12 @@
 </div>
 
 <script>
+    const initialData = {
+    productName: "{{ initial_data.productName or '' }}",
+    productNo: "{{ initial_data.productNo or '' }}",
+    colorName: "{{ initial_data.colorName or '' }}",
+    colorNo: "{{ initial_data.colorNo or '' }}"
+  };
     document.addEventListener('DOMContentLoaded', function () {
     const draftBtn = document.getElementById('draftSubmit');
     const form = document.getElementById('orderForm');
@@ -1212,6 +1218,14 @@ function initFirstColor(idx){
     productNameSelect.addEventListener("change", setProductNoOptions);
     productNoSelect.addEventListener("change", setColorNameOptions);
     colorNameSelect.addEventListener("change", setColorNoOptions);
+    setProductNameOptions();
+    productNameSelect.value = initialData.productName;
+    setProductNoOptions();
+    productNoSelect.value = initialData.productNo;
+    setColorNameOptions();
+    colorNameSelect.value = initialData.colorName;
+    setColorNoOptions();
+    colorNoSelect.value = initialData.colorNo;
   });
 
   // ?uid=xxxxxxxx をパラメータから取得し、hiddenにセット
