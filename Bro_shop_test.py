@@ -933,10 +933,35 @@ def handle_postback(event):
     data = event.postback.data or ""
 
     # --- デザイン相談 or 個別相談 選択時の応答 ---------------
-    if data in ["CONSULT_DESIGN", "CONSULT_PERSONAL"]:
+    if data == "CONSULT_DESIGN":
+        message = (
+            "有人チャットに接続いたします。\n"
+            "ご検討中のデザインがございましたら、画像やイラストなどの資料をお送りくださいませ。\n\n"
+            "※当ショップの営業時間は【10:00～19:00】でございます。\n"
+            "営業時間外にいただいたお問い合わせにつきましては、確認でき次第、順次ご対応させていただきます。\n"
+            "何卒ご理解賜りますようお願い申し上げます。\n\n"
+            "その他ご要望やご不明点がございましたら、お気軽にメッセージをお送りくださいませ。\n"
+            "どうぞよろしくお願いいたします。"
+        )
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="オペレータから個別連絡させていただきます。少々お待ちください。")
+            TextSendMessage(text=message)
+        )
+        return
+
+    if data == "CONSULT_PERSONAL":
+        message = (
+            "スタッフによるチャット対応を開始いたします。\n"
+            "ご検討中の商品について、金額やデザインに関するご質問がございましたら、こちらからお気軽にご相談ください。\n\n"
+            "※当ショップの営業時間は【10:00～19:00】です。\n"
+            "営業時間外にいただいたお問い合わせにつきましては、確認でき次第、順次ご対応させていただきます。\n"
+            "あらかじめご了承くださいませ。\n\n"
+            "そのほか、ご要望やご不明点がございましたら、メッセージにてお知らせください。\n"
+            "よろしくお願いいたします。"
+        )
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=message)
         )
         return
     
@@ -1264,8 +1289,8 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"【合計金額】¥{total_price:,}\n"
                 f"【1枚あたり】¥{unit_price:,}\n"
                 "\n"
-                "▼ご注文はこちら（WEBフォーム）\n"
-                f"{order_url}"
+                "上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
+                "\その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。n"
             )
             line_bot_api.reply_message(
                 event.reply_token,
@@ -1318,8 +1343,8 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"【合計金額】¥{total_price:,}\n"
                 f"【1枚あたり】¥{unit_price:,}\n"
                 "\n"
-                "▼ご注文はこちら（WEBフォーム）\n"
-                f"{order_url}"
+                "上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
+                "\その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。n"
             )
             line_bot_api.reply_message(
                 event.reply_token,
