@@ -144,6 +144,7 @@
     <input type="hidden" name="lineUserId" id="lineUserId">
     <!-- CSRF 用ワンタイムトークン -->
     <input type="hidden" name="form_token" value="{{ token }}">
+    <input type="hidden" name="orderNo" value="{{ initial_data.orderNo or '' }}">  <!-- ✅ この行を追加 -->
 
     <!-- ▼ 製品選択（商品名 → 品番 → 商品カラー → カラーNo）▼ -->
     <div class="form-group">
