@@ -1266,8 +1266,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 )
                 return                                        # ここで抜ける
             # ===== ★ 追記ここまで ★ ====================================
-                session_data["answers"]["back_name"] = "なし"
-
+            
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
             quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
@@ -1276,22 +1275,23 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"web_order_form?uid={user_id}"
             )
             reply_text = (
-                f"概算のお見積りが完了しました。\n\n"
-                f"見積番号: {quote_number}\n"
-                f"属性: {est_data['user_type']}\n"
-                f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
-                f"予算: {est_data['budget']}\n"
-                f"商品: {est_data['item']}\n"
-                f"枚数: {est_data['quantity']}\n"
-                f"プリント位置: {est_data['print_position']}\n"
-                f"色数: {est_data['color_count']}\n"
-                f"背ネーム・番号: なし\n\n"
-                f"【合計金額】¥{total_price:,}\n"
-                f"【1枚あたり】¥{unit_price:,}\n"
-                "\n"
-                "上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
-                "\その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。n"
-            )
+            f"概算のお見積りが完了しました。\n\n"
+            f"見積番号: {quote_number}\n"
+            f"属性: {est_data['user_type']}\n"
+            f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
+            f"予算: {est_data['budget']}\n"
+            f"商品: {est_data['item']}\n"
+            f"枚数: {est_data['quantity']}\n"
+            f"プリント位置: {est_data['print_position']}\n"
+            f"色数: {est_data['color_count']}\n"
+            f"背ネーム・番号: {est_data.get('back_name')}\n\n"
+            f"【合計金額】¥{total_price:,}\n"
+            f"【1枚あたり】¥{unit_price:,}\n"
+            "\n"
+            "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
+            "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
+        )
+
             line_bot_api.reply_message(
                 event.reply_token,
                     [
