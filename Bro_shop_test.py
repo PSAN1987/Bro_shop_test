@@ -1343,8 +1343,8 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"【合計金額】¥{total_price:,}\n"
                 f"【1枚あたり】¥{unit_price:,}\n"
                 "\n"
-                "上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
-                "\その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。n"
+                "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
+                "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
             )
             line_bot_api.reply_message(
                 event.reply_token,
