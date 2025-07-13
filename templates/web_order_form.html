@@ -499,7 +499,32 @@
     productName: "{{ initial_data.productName or '' }}",
     productNo: "{{ initial_data.productNo or '' }}",
     colorName: "{{ initial_data.colorName or '' }}",
-    colorNo: "{{ initial_data.colorNo or '' }}"
+    colorNo: "{{ initial_data.colorNo or '' }}",
+    size150: "{{ initial_data.size150 or 0 }}",
+    sizeSS: "{{ initial_data.sizeSS or 0 }}",
+    sizeS: "{{ initial_data.sizeS or 0 }}",
+    sizeM: "{{ initial_data.sizeM or 0 }}",
+    sizeL: "{{ initial_data.sizeL or 0 }}",
+    sizeXL: "{{ initial_data.sizeXL or 0 }}",
+    sizeXXL: "{{ initial_data.sizeXXL or 0 }}",
+    totalQuantity: "{{ initial_data.totalQuantity or 0 }}",
+    deliveryDate: "{{ initial_data.deliveryDate or '' }}",
+    useDate: "{{ initial_data.useDate or '' }}",
+    applicationDate: "{{ initial_data.applicationDate or '' }}",
+    discountOption: "{{ initial_data.discountOption or '' }}",
+    schoolName: "{{ initial_data.schoolName or '' }}",
+    lineName: "{{ initial_data.lineName or '' }}",
+    classGroupName: "{{ initial_data.classGroupName or '' }}",
+    zipCode: "{{ initial_data.zipCode or '' }}",
+    address1: "{{ initial_data.address1 or '' }}",
+    address2: "{{ initial_data.address2 or '' }}",
+    addresseeName: "{{ initial_data.addresseeName or '' }}",
+    schoolTel: "{{ initial_data.schoolTel or '' }}",
+    representativeName: "{{ initial_data.representativeName or '' }}",
+    representativeTel: "{{ initial_data.representativeTel or '' }}",
+    representativeEmail: "{{ initial_data.representativeEmail or '' }}",
+    designCheckMethod: "{{ initial_data.designCheckMethod or '' }}",
+    paymentMethod: "{{ initial_data.paymentMethod or '' }}",
   };
     document.addEventListener('DOMContentLoaded', function () {
     const draftBtn = document.getElementById('draftSubmit');
@@ -1197,75 +1222,87 @@ function initFirstColor(idx){
   /**********************************************
    * ページ読み込み時の初期処理
    **********************************************/
-  window.addEventListener("DOMContentLoaded",()=>{
-    // 商品名リストを初期化
-    setProductNameOptions();
-    // 1 ヶ所目
-    initFirstColor(1);
-    // ネーム＆番号プリントの単色/フチ付き用カラー選択肢(1ヵ所目)
-    fillNameNumberColors("singleColor1", nameNumberSingleColors);
-    fillNameNumberColors("edgeCustomTextColor1", nameNumberEdgeColors);
-    fillNameNumberColors("edgeCustomEdgeColor1", nameNumberEdgeColors);
-    fillNameNumberColors("edgeCustomEdgeColor2_1", nameNumberEdgeColors);
+  window.addEventListener("DOMContentLoaded", function () {
+  // 商品連動選択
+  setProductNameOptions();
+  productNameSelect.value = initialData.productName;
+  setProductNoOptions();
+  productNoSelect.value = initialData.productNo;
+  setColorNameOptions();
+  colorNameSelect.value = initialData.colorName;
+  setColorNoOptions();
+  colorNoSelect.value = initialData.colorNo;
 
-    // フォント選択ラジオ(1ヵ所目)
-    const fontRadios1 = document.getElementsByName("fontType1");
-    fontRadios1.forEach(r=>{
-      r.addEventListener("change",()=>handleFontRadio(1));
-    });
+  // サイズ・日付など
+  document.getElementById("size150").value = initialData.size150;
+  document.getElementById("sizeSS").value = initialData.sizeSS;
+  document.getElementById("sizeS").value = initialData.sizeS;
+  document.getElementById("sizeM").value = initialData.sizeM;
+  document.getElementById("sizeL").value = initialData.sizeL;
+  document.getElementById("sizeXL").value = initialData.sizeXL;
+  document.getElementById("sizeXXL").value = initialData.sizeXXL;
+  document.getElementById("totalQuantity").value = initialData.totalQuantity;
 
-    // 商品名/品番/商品カラー の選択イベント
-    productNameSelect.addEventListener("change", setProductNoOptions);
-    productNoSelect.addEventListener("change", setColorNameOptions);
-    colorNameSelect.addEventListener("change", setColorNoOptions);
-    setProductNameOptions();
-    productNameSelect.value = initialData.productName;
-    setProductNoOptions();
-    productNoSelect.value = initialData.productNo;
-    setColorNameOptions();
-    colorNameSelect.value = initialData.colorName;
-    setColorNoOptions();
-    colorNoSelect.value = initialData.colorNo;
+  document.getElementById("deliveryDate").value = initialData.deliveryDate;
+  document.getElementById("useDate").value = initialData.useDate;
+  document.getElementById("applicationDate").value = initialData.applicationDate;
+  document.getElementById("discountOption").value = initialData.discountOption;
+  document.getElementById("schoolName").value = initialData.schoolName;
+  document.getElementById("lineName").value = initialData.lineName;
+  document.getElementById("classGroupName").value = initialData.classGroupName;
+  document.getElementById("zipCode").value = initialData.zipCode;
+  document.getElementById("address1").value = initialData.address1;
+  document.getElementById("address2").value = initialData.address2;
+  document.getElementById("addresseeName").value = initialData.addresseeName;
+  document.getElementById("schoolTel").value = initialData.schoolTel;
+  document.getElementById("representativeName").value = initialData.representativeName;
+  document.getElementById("representativeTel").value = initialData.representativeTel;
+  document.getElementById("representativeEmail").value = initialData.representativeEmail;
+  document.getElementById("designCheckMethod").value = initialData.designCheckMethod;
+  document.getElementById("paymentMethod").value = initialData.paymentMethod;
+
+  // 合計枚数
+  calculateTotal();
+
+  // イベント（商品選択）
+  productNameSelect.addEventListener("change", setProductNoOptions);
+  productNoSelect.addEventListener("change", setColorNameOptions);
+  colorNameSelect.addEventListener("change", setColorNoOptions);
+
+  // フォント選択ラジオ(1ヵ所目)
+  const fontRadios1 = document.getElementsByName("fontType1");
+  fontRadios1.forEach(r=>{
+    r.addEventListener("change",()=>handleFontRadio(1));
   });
 
-  // ?uid=xxxxxxxx をパラメータから取得し、hiddenにセット
-  (function () {
-    const params = new URLSearchParams(window.location.search);
-    const uid = params.get('uid');
-    if (uid) {
-      document.getElementById('lineUserId').value = uid;
-    }
-  })();
-    /* 既存 JS の下に追記 ------------------------------------- */
-    function backToNormalPrint(idx){
-    // ❶ ボックスの表示を切替え
-    document.getElementById(`nameNumberPrintColorBox${idx}`).classList.add("hidden");
-    document.getElementById(`normalPrintGroup${idx}`).classList.remove("hidden");
-    const dg = document.getElementById(`designGroup${idx}`);            // ★追加
-    if(dg) dg.classList.remove("hidden");                               // ★追加
-
-    // ❷ ネーム・番号系が入っている色選択をクリア
-    const nameNumGroup = ["ネーム＆背番号セット","ネーム(大)","ネーム(小)","番号(大)","番号(小)"];
-    ["1","2","3"].forEach(n=>{
-      const sel = document.getElementById(`printColorOption${idx}_${n}`);
-      if(sel && nameNumGroup.includes(sel.value)){
-        sel.value = "";
-      }
+  // draft時の必須外し
+  const draftBtn = document.getElementById('draftSubmit');
+  const form = document.getElementById('orderForm');
+  if (draftBtn && form) {
+    draftBtn.addEventListener('click', function (e) {
+      const requiredElements = form.querySelectorAll('[required]');
+      requiredElements.forEach(el => el.removeAttribute('required'));
+      form.submit();
     });
-
-    // ❸ UI の整合をとる（※色変更ハンドラを呼び出し）
-    handlePrintColorChange(idx);
   }
-    /* いちばん下のスクリプトの中で追記するだけ */
-    window.addEventListener('pageshow', () => {
-    /* いま画面に残っている選択値を手がかりに
-       子セレクトの候補を作り直す                                */
-    setProductNoOptions();   // ← productName が選択済みなら品番候補を復元
-    setColorNameOptions();   // ← productNo が選択済みならカラー名候補を復元
-    setColorNoOptions();     // ← colorName が選択済みならカラーNo候補を復元
-    /* ★ ここを追加 ― size が残っていれば再集計、残っていなければ 0 のまま */
-    calculateTotal();
-  });
+});
+
+/* ページ戻る時にも値保持 */
+window.addEventListener('pageshow', () => {
+  setProductNoOptions();
+  setColorNameOptions();
+  setColorNoOptions();
+  calculateTotal();
+});
+
+/* hiddenのlineUserId自動セット */
+(function () {
+  const params = new URLSearchParams(window.location.search);
+  const uid = params.get('uid');
+  if (uid) {
+    document.getElementById('lineUserId').value = uid;
+  }
+})();
 </script>
 </body>
 </html>
