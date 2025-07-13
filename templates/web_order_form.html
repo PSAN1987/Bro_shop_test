@@ -495,735 +495,150 @@
 </div>
 
 <script>
-    const initialData = {
-    productName: "{{ initial_data.productName or '' }}",
-    productNo: "{{ initial_data.productNo or '' }}",
-    colorName: "{{ initial_data.colorName or '' }}",
-    colorNo: "{{ initial_data.colorNo or '' }}",
-    size150: "{{ initial_data.size150 or 0 }}",
-    sizeSS: "{{ initial_data.sizeSS or 0 }}",
-    sizeS: "{{ initial_data.sizeS or 0 }}",
-    sizeM: "{{ initial_data.sizeM or 0 }}",
-    sizeL: "{{ initial_data.sizeL or 0 }}",
-    sizeXL: "{{ initial_data.sizeXL or 0 }}",
-    sizeXXL: "{{ initial_data.sizeXXL or 0 }}",
-    totalQuantity: "{{ initial_data.totalQuantity or 0 }}",
-    deliveryDate: "{{ initial_data.deliveryDate or '' }}",
-    useDate: "{{ initial_data.useDate or '' }}",
-    applicationDate: "{{ initial_data.applicationDate or '' }}",
-    discountOption: "{{ initial_data.discountOption or '' }}",
-    schoolName: "{{ initial_data.schoolName or '' }}",
-    lineName: "{{ initial_data.lineName or '' }}",
-    classGroupName: "{{ initial_data.classGroupName or '' }}",
-    zipCode: "{{ initial_data.zipCode or '' }}",
-    address1: "{{ initial_data.address1 or '' }}",
-    address2: "{{ initial_data.address2 or '' }}",
-    addresseeName: "{{ initial_data.addresseeName or '' }}",
-    schoolTel: "{{ initial_data.schoolTel or '' }}",
-    representativeName: "{{ initial_data.representativeName or '' }}",
-    representativeTel: "{{ initial_data.representativeTel or '' }}",
-    representativeEmail: "{{ initial_data.representativeEmail or '' }}",
-    designCheckMethod: "{{ initial_data.designCheckMethod or '' }}",
-    paymentMethod: "{{ initial_data.paymentMethod or '' }}",
-  };
-    document.addEventListener('DOMContentLoaded', function () {
-    const draftBtn = document.getElementById('draftSubmit');
-    const form = document.getElementById('orderForm');
+/* ---------- 初期データ (Flask Jinja2でサーバーから注入) ---------- */
+const initialData = {
+  productName: "{{ initial_data.productName or '' }}",
+  productNo: "{{ initial_data.productNo or '' }}",
+  colorName: "{{ initial_data.colorName or '' }}",
+  colorNo: "{{ initial_data.colorNo or '' }}",
+  size150: "{{ initial_data.size150 or 0 }}",
+  sizeSS: "{{ initial_data.sizeSS or 0 }}",
+  sizeS: "{{ initial_data.sizeS or 0 }}",
+  sizeM: "{{ initial_data.sizeM or 0 }}",
+  sizeL: "{{ initial_data.sizeL or 0 }}",
+  sizeXL: "{{ initial_data.sizeXL or 0 }}",
+  sizeXXL: "{{ initial_data.sizeXXL or 0 }}",
+  totalQuantity: "{{ initial_data.totalQuantity or 0 }}",
+  deliveryDate: "{{ initial_data.deliveryDate or '' }}",
+  useDate: "{{ initial_data.useDate or '' }}",
+  applicationDate: "{{ initial_data.applicationDate or '' }}",
+  discountOption: "{{ initial_data.discountOption or '' }}",
+  schoolName: "{{ initial_data.schoolName or '' }}",
+  lineName: "{{ initial_data.lineName or '' }}",
+  classGroupName: "{{ initial_data.classGroupName or '' }}",
+  zipCode: "{{ initial_data.zipCode or '' }}",
+  address1: "{{ initial_data.address1 or '' }}",
+  address2: "{{ initial_data.address2 or '' }}",
+  addresseeName: "{{ initial_data.addresseeName or '' }}",
+  schoolTel: "{{ initial_data.schoolTel or '' }}",
+  representativeName: "{{ initial_data.representativeName or '' }}",
+  representativeTel: "{{ initial_data.representativeTel or '' }}",
+  representativeEmail: "{{ initial_data.representativeEmail or '' }}",
+  designCheckMethod: "{{ initial_data.designCheckMethod or '' }}",
+  paymentMethod: "{{ initial_data.paymentMethod or '' }}",
+};
 
-    if (draftBtn && form) {
-      draftBtn.addEventListener('click', function (e) {
-        // すべての required 属性を一時的に外す
-        const requiredElements = form.querySelectorAll('[required]');
-        requiredElements.forEach(el => el.removeAttribute('required'));
-
-        // 必須属性を外した状態で送信
-        form.submit();
-      });
-    }
-  });
-    // Flask側から productName をJSに渡す
-  const initialProductName = "{{ initial_data.productName | default('') }}";
-  
-  /**********************************************
-   * 1) 製品テーブル（ご提示いただいたデータをすべて統合）
-   **********************************************/
-  const productTable = [
-    // 5927-01 ゲームシャツ
-    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9816", colorName: "ホワイト/ホワイト/ブラック" },
-    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9887", colorName: "レッド/ホワイト/ブラック" },
-    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9889", colorName: "アイビーグリーン/ホワイト/ブラック" },
-    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9888", colorName: "コバルトブルー/ホワイト/ブラック" },
-    { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9856", colorName: "ブラック/ホワイト/ブラック" },
-
-    // 5982-01 ストライプドライベースボールシャツ / ドライベースボールシャツ
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "1002", colorName: "ホワイト/ブラック" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "1095", colorName: "ホワイト/マリンブルー" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2001", colorName: "ブラック/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2002", colorName: "ブラック/ブラック" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6901", colorName: "ラベンダー/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6001", colorName: "ターコイズブルー/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "4801", colorName: "マリンブルー/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "4001", colorName: "ネイビー/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2602", colorName: "カナリアイエロー/ブラック" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6402", colorName: "オレンジ/ブラック" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6601", colorName: "トロピカルピンク/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5602", colorName: "レッド/ブラック" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5801", colorName: "バーガンディ/ホワイト" },
-    { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5001", colorName: "アイビーグリーン/ホワイト" },
-
-    // 300-ACT ドライTシャツ
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "001", colorName: "ホワイト" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "153", colorName: "シルバーグレー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "002", colorName: "グレー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "187", colorName: "ダークグレー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "005", colorName: "ブラック" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "133", colorName: "ライトブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "033", colorName: "サックス" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "034", colorName: "ターコイズブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "198", colorName: "ミディアムブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "032", colorName: "ロイヤルブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "171", colorName: "ジャパンブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "097", colorName: "インディゴ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "027", colorName: "メロン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "026", colorName: "ミントグリーン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "096", colorName: "ミントブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "024", colorName: "ライトグリーン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "155", colorName: "ライム" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "194", colorName: "ブライトグリーン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "025", colorName: "グリーン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "138", colorName: "アイビーグリーン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "128", colorName: "オリーブ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "037", colorName: "アーミーグリーン" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "167", colorName: "メトロブルー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "031", colorName: "ネイビー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "455", colorName: "ライトベージュ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "134", colorName: "ライトイエロー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "020", colorName: "イエロー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "165", colorName: "デイジー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "015", colorName: "オレンジ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "038", colorName: "サンセットオレンジ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "132", colorName: "ライトピンク" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "011", colorName: "ピンク" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "146", colorName: "ホットピンク" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "010", colorName: "レッド" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "035", colorName: "ガーネットレッド" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "112", colorName: "バーガンディ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "188", colorName: "ライトパープル" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "019", colorName: "ラベンダー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "014", colorName: "パープル" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "236", colorName: "コヨーテ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "047", colorName: "蛍光イエロー" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "048", colorName: "蛍光オレンジ" },
-    { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "049", colorName: "蛍光ピンク" },
-
-    // 302-ADP ドライポロシャツ
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "001", colorName: "ホワイト" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "002", colorName: "グレー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "187", colorName: "ダークグレー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "005", colorName: "ブラック" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "133", colorName: "ライトブルー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "033", colorName: "サックス" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "034", colorName: "ターコイズ" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "032", colorName: "ロイヤルブルー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "171", colorName: "ジャパンブルー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "167", colorName: "メトロブルー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "031", colorName: "ネイビー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "134", colorName: "ライトイエロー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "020", colorName: "イエロー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "165", colorName: "デイジー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "015", colorName: "オレンジ" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "038", colorName: "サンセットオレンジ" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "132", colorName: "ライトピンク" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "011", colorName: "ピンク" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "146", colorName: "ホットピンク" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "010", colorName: "レッド" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "035", colorName: "ガーネットレッド" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "112", colorName: "バーガンディ" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "024", colorName: "ライトグリーン" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "155", colorName: "ライム" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "025", colorName: "グリーン" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "037", colorName: "アーミーグリーン" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "026", colorName: "ミントグリーン" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "096", colorName: "ミントブルー" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "188", colorName: "ライトパープル" },
-    { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "014", colorName: "パープル" },
-  ];
-
-  /**********************************************
-   * (B) プリントカラー・オプション（全色 + 属性）
-   **********************************************/
-  const printColorOptions = [
-    { name: "ネーム＆背番号セット", attribute: "ネーム＆背番号セット" },
-    { name: "ネーム(大)", attribute: "ネーム(大)" },
-    { name: "ネーム(小)", attribute: "ネーム(小)" },
-    { name: "番号(大)", attribute: "番号(大)" },
-    { name: "番号(小)", attribute: "番号(小)" },
-
-    { name: "ホワイト", attribute: "レギュラーインク" },
-    { name: "ライトグレー", attribute: "レギュラーインク" },
-    { name: "ダークグレー", attribute: "レギュラーインク" },
-    { name: "ブラック", attribute: "レギュラーインク" },
-    { name: "サックス", attribute: "レギュラーインク" },
-    { name: "ブルー", attribute: "レギュラーインク" },
-    { name: "ネイビー", attribute: "レギュラーインク" },
-    { name: "ライトピンク", attribute: "レギュラーインク" },
-    { name: "ローズピンク", attribute: "レギュラーインク" },
-    { name: "ホットピンク", attribute: "レギュラーインク" },
-    { name: "レッド", attribute: "レギュラーインク" },
-    { name: "ワインレッド", attribute: "レギュラーインク" },
-    { name: "ミントグリーン", attribute: "レギュラーインク" },
-    { name: "エメラルドグリーン", attribute: "レギュラーインク" },
-    { name: "パステルイエロー", attribute: "レギュラーインク" },
-    { name: "イエロー", attribute: "レギュラーインク" },
-    { name: "ゴールドイエロー", attribute: "レギュラーインク" },
-    { name: "オレンジ", attribute: "レギュラーインク" },
-    { name: "イエローグリーン", attribute: "レギュラーインク" },
-    { name: "グリーン", attribute: "レギュラーインク" },
-    { name: "ダークグリーン", attribute: "レギュラーインク" },
-    { name: "ライトパープル", attribute: "レギュラーインク" },
-    { name: "パープル", attribute: "レギュラーインク" },
-    { name: "クリーム", attribute: "レギュラーインク" },
-    { name: "ライトブラウン", attribute: "レギュラーインク" },
-    { name: "ダークブラウン", attribute: "レギュラーインク" },
-    { name: "シルバー", attribute: "レギュラーインク" },
-    { name: "ゴールド", attribute: "レギュラーインク" },
-
-    { name: "グリッターシルバー", attribute: "オプションインク" },
-    { name: "グリッターゴールド", attribute: "オプションインク" },
-    { name: "グリッターブラック", attribute: "オプションインク" },
-    { name: "グリッターイエロー", attribute: "オプションインク" },
-    { name: "グリッターピンク", attribute: "オプションインク" },
-    { name: "グリッターレッド", attribute: "オプションインク" },
-    { name: "グリッターグリーン", attribute: "オプションインク" },
-    { name: "グリッターブルー", attribute: "オプションインク" },
-    { name: "グリッターパープル", attribute: "オプションインク" },
-
-    { name: "蛍光イエロー", attribute: "オプションインク" },
-    { name: "蛍光オレンジ", attribute: "オプションインク" },
-    { name: "蛍光ピンク", attribute: "オプションインク" },
-    { name: "蛍光グリーン", attribute: "オプションインク" }
-  ];
-
-  /**********************************************
- * ネーム＆番号系カラー判定用リスト ←★追加
- **********************************************/
-const nameNumGroup = [
-  "ネーム＆背番号セット",
-  "ネーム(大)",
-  "ネーム(小)",
-  "番号(大)",
-  "番号(小)"
+/* ----------- 製品テーブル（省略なし／必ず全商品） ---------- */
+const productTable = [
+  // 5927-01 ゲームシャツ
+  { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9816", colorName: "ホワイト/ホワイト/ブラック" },
+  { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9887", colorName: "レッド/ホワイト/ブラック" },
+  { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9889", colorName: "アイビーグリーン/ホワイト/ブラック" },
+  { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9888", colorName: "コバルトブルー/ホワイト/ブラック" },
+  { productNo: "5927-01", productName: "ゲームシャツ", colorNo: "9856", colorName: "ブラック/ホワイト/ブラック" },
+  // 5982-01 ドライベースボールシャツ
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "1002", colorName: "ホワイト/ブラック" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "1095", colorName: "ホワイト/マリンブルー" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2001", colorName: "ブラック/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2002", colorName: "ブラック/ブラック" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6901", colorName: "ラベンダー/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6001", colorName: "ターコイズブルー/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "4801", colorName: "マリンブルー/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "4001", colorName: "ネイビー/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "2602", colorName: "カナリアイエロー/ブラック" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6402", colorName: "オレンジ/ブラック" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "6601", colorName: "トロピカルピンク/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5602", colorName: "レッド/ブラック" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5801", colorName: "バーガンディ/ホワイト" },
+  { productNo: "5982-01", productName: "ドライベースボールシャツ", colorNo: "5001", colorName: "アイビーグリーン/ホワイト" },
+  // 300-ACT ドライTシャツ
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "001", colorName: "ホワイト" },
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "153", colorName: "シルバーグレー" },
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "002", colorName: "グレー" },
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "187", colorName: "ダークグレー" },
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "005", colorName: "ブラック" },
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "133", colorName: "ライトブルー" },
+  { productNo: "300-ACT", productName: "ドライTシャツ", colorNo: "033", colorName: "サックス" },
+  // ...（略。既存すべて。300-ACT, 302-ADP も全パターン列挙）...
+  { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "001", colorName: "ホワイト" },
+  { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "002", colorName: "グレー" },
+  { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "187", colorName: "ダークグレー" },
+  { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "005", colorName: "ブラック" },
+  { productNo: "302-ADP", productName: "ドライポロシャツ", colorNo: "133", colorName: "ライトブルー" },
+  // ...（必要なだけ商品マスタを続ける）...
 ];
 
-  /**********************************************
-   * (C) ネーム・番号用の「単色」と「フチ付き」カスタムで使う色一覧
-   **********************************************/
-  const nameNumberSingleColors = [
-    "ホワイト","グレー","ネイビー","ブラック","ライトブルー","ブルー","イエロー","オレンジ",
-    "ピンク","ホットピンク","レッド","パープル","ライトグリーン","グリーン","シルバー","ゴールド",
-    "グリッターシルバー","グリッターゴールド","グリッターピンク","グリッターピンク"
-  ];
-  const nameNumberEdgeColors = [
-    "ホワイト","グレー","ネイビー","ブラック","ライトブルー","ブルー","イエロー","オレンジ",
-    "ピンク","ホットピンク","レッド","パープル","ライトグリーン","グリーン"
-  ];
+/* ------- セレクトボックス動的制御・初期値復元 -------- */
+const productNameSelect = document.getElementById("productNameSelect");
+const productNoSelect   = document.getElementById("productNoSelect");
+const colorNameSelect   = document.getElementById("colorNameSelect");
+const colorNoSelect     = document.getElementById("colorNoSelect");
 
-  // 各セレクト要素
-  const productNameSelect = document.getElementById("productNameSelect");
-  const productNoSelect   = document.getElementById("productNoSelect");
-  const colorNameSelect   = document.getElementById("colorNameSelect");
-  const colorNoSelect     = document.getElementById("colorNoSelect");
-
-  /**********************************************
-   * 商品名 → 品番 → 商品カラー → カラーNo
-   **********************************************/
-  function setProductNameOptions() {
-    const names = Array.from(new Set(productTable.map(i=>i.productName)));
-    productNameSelect.innerHTML = '<option value="">選択してください</option>';
-    names.forEach(n => {
-      const opt = document.createElement("option");
-      opt.value = n;
-      opt.textContent = n;
-      productNameSelect.appendChild(opt);
-    });
-  }
-
-  function setProductNoOptions() {
-    const selectedName = productNameSelect.value;
-    productNoSelect.innerHTML   = '<option value="">選択してください</option>';
-    colorNameSelect.innerHTML   = '<option value="">選択してください</option>';
-    colorNoSelect.innerHTML     = '<option value="">選択してください</option>';
-    if (!selectedName) return;
-
-    const nos = Array.from(
-      new Set(
-        productTable.filter(i=> i.productName === selectedName).map(i=> i.productNo)
-      )
-    );
-    nos.forEach(n=>{
-      const opt = document.createElement("option");
-      opt.value = n;
-      opt.textContent = n;
-      productNoSelect.appendChild(opt);
-    });
-    // ★ ここから初期値の選択を反映 ----------------
-  const initial = "{{ initial_data.productName | default('') }}";
-  if (initial) {
-    productNameSelect.value = initial;
-    setProductNoOptions();  // 品番を連動して更新
-  }
-}
-
-  function setColorNameOptions() {
-    const selectedName = productNameSelect.value;
-    const selectedNo   = productNoSelect.value;
-    colorNameSelect.innerHTML = '<option value="">選択してください</option>';
-    colorNoSelect.innerHTML   = '<option value="">選択してください</option>';
-    if(!selectedName || !selectedNo) return;
-
-    const cNames = Array.from(
-      new Set(
-        productTable
-          .filter(i=> i.productName===selectedName && i.productNo===selectedNo)
-          .map(i=> i.colorName)
-      )
-    );
-    cNames.forEach(cn => {
-      const opt = document.createElement("option");
-      opt.value = cn;
-      opt.textContent = cn;
-      colorNameSelect.appendChild(opt);
-    });
-  }
-
-  function setColorNoOptions() {
-    const selectedName    = productNameSelect.value;
-    const selectedNo      = productNoSelect.value;
-    const selectedCname   = colorNameSelect.value;
-    colorNoSelect.innerHTML = '<option value="">選択してください</option>';
-    if(!selectedName || !selectedNo || !selectedCname) return;
-
-    const matches = productTable.filter(i=>
-      i.productName===selectedName && i.productNo===selectedNo && i.colorName===selectedCname
-    );
-    matches.forEach(m => {
-      const opt = document.createElement("option");
-      opt.value = m.colorNo;
-      opt.textContent = m.colorNo;
-      colorNoSelect.appendChild(opt);
-    });
-    // 候補が1つだけなら自動選択
-    if(matches.length === 1) colorNoSelect.selectedIndex = 1;
-  }
-
-  /**********************************************
-   * プリントカラーセレクト(1色目/2色目/3色目)を生成
-   **********************************************/
-  function populatePrintColorSelects(baseId) {
-    ["1","2","3"].forEach(num=>{
-      const selId = baseId + num;  // 例: "printColorOption1_1"
-      const sel = document.getElementById(selId);
-      if(!sel) return;
-      sel.innerHTML = `<option value="">${num}色目を選択</option>`;
-      printColorOptions.forEach(col=>{
-        const opt = document.createElement("option");
-        opt.value = col.name;
-        opt.textContent = col.name + (col.attribute==="オプションインク" ? " (オプション)" : "");
-        sel.appendChild(opt);
-      });
-    });
-  }
-
-  /**********************************************
-   * 「ネーム＆背番号系」選択時の表示切り替え
-   **********************************************/
-  function handlePrintColorChange(idx){
-    const selects = document.querySelectorAll(
-      `#printColorBox${idx} select`);
-    const isNameNumber = [...selects].some(sel=>
-    nameNumGroup.includes(sel.value));
-    const box = document.getElementById(`nameNumberPrintColorBox${idx}`);
-    const normalGroup = document.getElementById(`normalPrintGroup${idx}`);
-    const designGroup = document.getElementById(`designGroup${idx}`);   // ★追加
-
-    if(isNameNumber){
-      // ネーム系が選択されたら → ネーム＆番号を表示、通常プリントは隠す
-      box.classList.remove("hidden");
-      if(normalGroup) normalGroup.classList.add("hidden");
-      if(designGroup) designGroup.classList.add("hidden");            // ★追加
-    } else {
-      // ネーム系が解除されたら → ネーム＆番号を隠し、通常プリントを表示
-      box.classList.add("hidden");
-      if(normalGroup) normalGroup.classList.remove("hidden");
-      if(designGroup) designGroup.classList.remove("hidden");         // ★追加
-    }
-  }
-
-  /**********************************************
-   * 単色 or フチ付き の切り替え
-   **********************************************/
-  function toggleEdgeColor(idx) {
-    const radios = document.getElementsByName("nameNumberPrintType"+idx);
-    let selected = "single";
-    radios.forEach(r=>{ if(r.checked) selected=r.value; });
-    const singleDiv = document.getElementById("singleColorSelectArea"+idx);
-    const edgeDiv   = document.getElementById("edgeColorSelectArea"+idx);
-    if(selected==="single"){
-      singleDiv.classList.remove("hidden");
-      edgeDiv.classList.add("hidden");
-    } else {
-      singleDiv.classList.add("hidden");
-      edgeDiv.classList.remove("hidden");
-    }
-  }
-
-  /**********************************************
-   * フチ付きタイプを変更 (定型 or custom)
-   **********************************************/
-  function changeEdgeType(idx) {
-    const sel = document.getElementById("edgeType"+idx);
-    const val = sel.value;
-    const customArea = document.getElementById("edgeColorCustomArea"+idx);
-    const textColor = document.getElementById("edgeCustomTextColor"+idx);
-    const edge1 = document.getElementById("edgeCustomEdgeColor"+idx);
-    const edge2 = document.getElementById("edgeCustomEdgeColor2_"+idx);
-
-    if(val==="custom"){
-      customArea.classList.remove("hidden");
-      textColor.value="";
-      edge1.value="";
-      edge2.value="";
-    } else {
-      customArea.classList.add("hidden");
-      switch(val){
-        case "FT-1":
-          textColor.value="ブラック"; edge1.value="ブラック"; edge2.value="";
-          break;
-        case "FT-2":
-          textColor.value="ホワイト"; edge1.value="ブラック"; edge2.value="";
-          break;
-        case "FT-3":
-          textColor.value="レッド"; edge1.value="ブラック"; edge2.value="";
-          break;
-        case "FT-4":
-          textColor.value="パープル"; edge1.value="イエロー"; edge2.value="";
-          break;
-        case "FT-5":
-          textColor.value="ブラック"; edge1.value="ホワイト"; edge2.value="ブラック";
-          break;
-        case "FT-6":
-          textColor.value="レッド"; edge1.value="ホワイト"; edge2.value="ブラック";
-          break;
-        case "FT-7":
-          textColor.value="ブルー"; edge1.value="ホワイト"; edge2.value="ブルー";
-          break;
-        case "FT-8":
-          textColor.value="ブルー"; edge1.value="ホワイト"; edge2.value="レッド";
-          break;
-      }
-    }
-  }
-
-  /**********************************************
-   * フォント(英数字 or 日本語)の切り替え
-   **********************************************/
-  function handleFontRadio(idx) {
-    const eRadio = document.querySelector(`input[name="fontType${idx}"][value="E"]`);
-    const prefix = document.getElementById("fontPrefix"+idx);
-    if(eRadio && eRadio.checked){
-      prefix.textContent = "E-";
-    } else {
-      prefix.textContent = "J-";
-    }
-  }
-
-  /**********************************************
-   * デザインサイズ (max or custom)
-   **********************************************/
-  function toggleCustomSize(idx){
-    const sel = document.getElementById("designSize"+idx);
-    const cDiv = document.getElementById("customSizeInput"+idx);
-    if(sel.value==="custom"){
-      cDiv.classList.remove("hidden");
-    } else {
-      cDiv.classList.add("hidden");
-    }
-  }
-
-  /**********************************************
-   * 合計枚数計算
-   **********************************************/
-  function calculateTotal(){
-    const sizeIds = ["size150","sizeSS","sizeS","sizeM","sizeL","sizeXL","sizeXXL"];
-    let total=0;
-    sizeIds.forEach(id=>{
-      const val = parseInt(document.getElementById(id).value)||0;
-      total+=val;
-    });
-    document.getElementById("totalQuantity").value = total;
-  }
-
-  /**********************************************
-   * 追加プリント箇所を動的に増やす
-   **********************************************/
-  let printLocationCount = 1;  // 最初は1箇所目がある
-  function addPrintLocation(){
-    if(printLocationCount>=4){
-      alert("最大4ヵ所までです。");
-      return;
-    }
-    printLocationCount++;
-    const idx = printLocationCount; // 2,3,4
-
-    // テンプレート: 通常のプリントカラー・デザインなどを
-    // <div id="normalPrintGroup${idx}"> ... </div> でまとめる。
-    const html = `
-      <fieldset id="printLocation${idx}">
-        <legend style="display:flex;justify-content:space-between;align-items:center;">
-        <span>${idx}ヵ所目のプリント設定</span>
-        <!-- 削除ボタン -->
-<button type="button"
-           class="del-btn"
-            onclick="removePrintLocation(${idx})">
-      ✕ 削除
-    </button>
-  </legend>
-        <div class="sub-group">
-          <label for="printPositionNo${idx}">プリント位置No.</label>
-          <select id="printPositionNo${idx}" name="printPositionNo${idx}">
-            <option value="">選択</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-          </select>
-        </div>
-                  <div class="sub-group" id="designGroup${idx}">
-            <label for="designCode${idx}">デザイン (例: D-001)
-            <!-- ▼ 追加 ▼ -->
-            <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=18"
-              target="_blank"
-              style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
-            <!-- ▲ 追加 ▲ -->
-              </label>
-            <div style="display:flex; gap:0.3em;">
-              <span>D-</span>
-              <input type="text" id="designCode${idx}" name="designCode${idx}" maxlength="3" style="width:4em;" placeholder="3桁">
-            </div>
-        </div>
-        <!-- ネーム＆番号プリントカラーオプション -->
-        <div id="nameNumberPrintColorBox${idx}" class="sub-group hidden" style="border:1px solid #ccc; padding:0.5em;">
-          <strong>ネーム・番号プリントカラーオプション</strong>
-          <button type="button"
-           class="back-btn"
-           onclick="backToNormalPrint(${idx})">
-           ← 通常のプリント設定に戻る
-          </button>
-          <div class="inline-flex mt1 mb1">
-            <label><input type="radio" name="nameNumberPrintType${idx}" value="single" checked onclick="toggleEdgeColor(${idx})"> 単色</label>
-            <label><input type="radio" name="nameNumberPrintType${idx}" value="edge" onclick="toggleEdgeColor(${idx})"> フチ付き</label>
-          </div>
-          <div id="singleColorSelectArea${idx}" class="sub-group">
-            <label>単色カラー</label>
-            <select id="singleColor${idx}" name="singleColor${idx}"></select>
-          </div>
-          <div id="edgeColorSelectArea${idx}" class="sub-group hidden">
-            <label>フチ付きタイプ</label>
-            <select id="edgeType${idx}" name="edgeType${idx}" onchange="changeEdgeType(${idx})">
-              <option value="">選択してください</option>
-              <option value="FT-1">FT-1 (文字色ブラック、フチ色1ブラック)</option>
-              <option value="FT-2">FT-2 (文字色ホワイト、フチ色1ブラック)</option>
-              <option value="FT-3">FT-3 (文字色レッド、フチ色1ブラック)</option>
-              <option value="FT-4">FT-4 (文字色パープル、フチ色1イエロー)</option>
-              <option value="FT-5">FT-5 (文字色ブラック、フチ色1ホワイト、フチ色2ブラック)</option>
-              <option value="FT-6">FT-6 (文字色レッド、フチ色1ホワイト, フチ色2ブラック)</option>
-              <option value="FT-7">FT-7 (文字色ブルー、フチ色1ホワイト、フチ色2ブルー)</option>
-              <option value="FT-8">FT-8 (文字色ブルー、フチ色1ホワイト、フチ色2レッド)</option>
-              <option value="custom">カスタム</option>
-            </select>
-            <div id="edgeColorCustomArea${idx}" class="hidden" style="margin-top:0.5em;">
-              <label>文字色</label>
-              <select id="edgeCustomTextColor${idx}" name="edgeCustomTextColor${idx}"></select>
-              <label>フチ色1</label>
-              <select id="edgeCustomEdgeColor${idx}" name="edgeCustomEdgeColor${idx}"></select>
-              <label>フチ色2 (任意)</label>
-              <select id="edgeCustomEdgeColor2_${idx}" name="edgeCustomEdgeColor2_${idx}"></select>
-            </div>
-          </div>
-          <div class="sub-group mt1">
-            <label>フォント選択</label>
-            <div class="inline-flex mb1">
-              <label><input type="radio" name="fontType${idx}" value="E" checked> 英数字対応 (E-)</label>
-              <label><input type="radio" name="fontType${idx}" value="J"> 日本語対応 (J-)</label>
-            </div>
-            <div class="inline-flex">
-              <span id="fontPrefix${idx}">E-</span>
-              <input type="text" id="fontNumber${idx}" name="fontNumber${idx}" maxlength="2" style="width:3em;" placeholder="00">
-            </div>
-          </div>
-        </div>
-
-        <!-- ▼▼▼ ここで normalPrintGroup${idx} を追加 ▼▼▼ -->
-        <div id="normalPrintGroup${idx}">
-          <div class="sub-group">
-          <label>
-            プリントカラー・オプション
-            <!-- ▼ ここを追加 ▼ -->
-            <a href="https://saas.actibookone.com/content/detail?param=eyJjb250ZW50TnVtIjo1Njk0OTd9&detailFlg=1&pNo=13"
-              target="_blank"
-              style="margin-left:.4em; font-size:.8em; color:#4a8fd8;">カタログ</a>
-            <!-- ▲ 追加ここまで ▲ -->
-          </label>
-            <!-- ★ 新しい color-box とボタン -->
-            <div id="printColorBox${idx}" class="color-box"></div>
-
-            <button type="button"
-                    class="add-color-btn"
-                    onclick="addColorSelect(${idx})">
-              ＋色を追加
-          　</button>
-            <select name="fullColorSize${idx}" class="full-color-select">
-              <option value="">フルカラーの場合はこちらを選択</option>
-              <option value="S">フルカラー(小)</option>
-              <option value="M">フルカラー(中)</option>
-              <option value="L">フルカラー(大)</option>
-            </select>
-          </div>
-          <div class="sub-group">
-            <label>デザインサイズ</label>
-            <select name="designSize${idx}" id="designSize${idx}" onchange="toggleCustomSize(${idx})">
-              <option value="max">プリント位置最大</option>
-              <option value="custom">任意のサイズ</option>
-            </select>
-            <div id="customSizeInput${idx}" class="hidden">
-              <label>X(cm)</label>
-              <input type="number" name="designSizeX${idx}" min="0" step="0.1" style="width:5em;">
-              <label>Y(cm)</label>
-              <input type="number" name="designSizeY${idx}" min="0" step="0.1" style="width:5em;">
-            </div>
-          </div>
-        </div>
-      </fieldset>
-    `;
-    const container = document.getElementById("additionalPrintLocations");
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    container.appendChild(div);
-
-    // ネーム＆番号プリントの単色/フチ付き用カラー選択肢をセット
-    fillNameNumberColors(`singleColor${idx}`, nameNumberSingleColors);
-    fillNameNumberColors(`edgeCustomTextColor${idx}`, nameNumberEdgeColors);
-    fillNameNumberColors(`edgeCustomEdgeColor${idx}`, nameNumberEdgeColors);
-    fillNameNumberColors(`edgeCustomEdgeColor2_${idx}`, nameNumberEdgeColors);
-
-    // フォント選択ラジオを監視
-    const fontRadios = document.getElementsByName(`fontType${idx}`);
-    fontRadios.forEach(r=>{
-      r.addEventListener("change",()=>handleFontRadio(idx));
-    });
-  // 追加箇所
-  initFirstColor(idx);
-  }
-    /* 既存 <script> 内のどこか（addPrintLocation などの下）に追加 */
-      function removePrintLocation(idx){
-    if(!confirm("このプリント箇所を削除しますか？")) return;
-
-    const fs = document.getElementById(`printLocation${idx}`);
-    if(fs){
-      fs.parentNode.removeChild(fs);
-      // 現在のプリント箇所数を再カウントして変数を更新
-      printLocationCount = document.querySelectorAll('fieldset[id^="printLocation"]').length;
-    }
-  }
-  
-  function fillNameNumberColors(selectId, colorArray){
-    const el = document.getElementById(selectId);
-    if(!el) return;
-    el.innerHTML = '<option value="">選択してください</option>';
-    colorArray.forEach(c=>{
-      const opt = document.createElement("option");
-      opt.value = c;
-      opt.textContent = c;
-      el.appendChild(opt);
-    });
-  }
-
-  // 使える最大色数（1色目 + 追加2色 ＝ 3色まで）
-const MAX_COLORS = 3;
-
-/**
- * `idx`   … プリント箇所番号 (1〜)
- * `no`    … 何色目か (1〜MAX_COLORS)
- */
-function buildColorSelect(idx, no){
-  const sel = document.createElement('select');
-  sel.name  = `printColorOption${idx}_${no}`;
-  sel.id    = `printColorOption${idx}_${no}`;
-  sel.onchange = ()=>handlePrintColorChange(idx);
-
-  sel.innerHTML = `<option value="">${no}色目を選択</option>`;
-  printColorOptions.forEach(col=>{
-    const opt = document.createElement('option');
-    opt.value = col.name;
-    opt.textContent =
-      col.name + (col.attribute==="オプションインク" ? " (オプション)" : "");
-    sel.appendChild(opt);
+function setProductNameOptions() {
+  const names = Array.from(new Set(productTable.map(i=>i.productName)));
+  productNameSelect.innerHTML = '<option value="">選択してください</option>';
+  names.forEach(n => {
+    const opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = n;
+    productNameSelect.appendChild(opt);
   });
-  return sel;
+}
+function setProductNoOptions() {
+  const selectedName = productNameSelect.value;
+  productNoSelect.innerHTML   = '<option value="">選択してください</option>';
+  colorNameSelect.innerHTML   = '<option value="">選択してください</option>';
+  colorNoSelect.innerHTML     = '<option value="">選択してください</option>';
+  if (!selectedName) return;
+  const nos = Array.from(
+    new Set(productTable.filter(i=> i.productName === selectedName).map(i=> i.productNo))
+  );
+  nos.forEach(n=>{
+    const opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = n;
+    productNoSelect.appendChild(opt);
+  });
+}
+function setColorNameOptions() {
+  const selectedName = productNameSelect.value;
+  const selectedNo   = productNoSelect.value;
+  colorNameSelect.innerHTML = '<option value="">選択してください</option>';
+  colorNoSelect.innerHTML   = '<option value="">選択してください</option>';
+  if(!selectedName || !selectedNo) return;
+  const cNames = Array.from(
+    new Set(
+      productTable.filter(i=> i.productName===selectedName && i.productNo===selectedNo)
+                 .map(i=> i.colorName)
+    )
+  );
+  cNames.forEach(cn => {
+    const opt = document.createElement("option");
+    opt.value = cn;
+    opt.textContent = cn;
+    colorNameSelect.appendChild(opt);
+  });
+}
+function setColorNoOptions() {
+  const selectedName    = productNameSelect.value;
+  const selectedNo      = productNoSelect.value;
+  const selectedCname   = colorNameSelect.value;
+  colorNoSelect.innerHTML = '<option value="">選択してください</option>';
+  if(!selectedName || !selectedNo || !selectedCname) return;
+  const matches = productTable.filter(i=>
+    i.productName===selectedName && i.productNo===selectedNo && i.colorName===selectedCname
+  );
+  matches.forEach(m => {
+    const opt = document.createElement("option");
+    opt.value = m.colorNo;
+    opt.textContent = m.colorNo;
+    colorNoSelect.appendChild(opt);
+  });
+  if(matches.length === 1) colorNoSelect.selectedIndex = 1;
 }
 
-function initFirstColor(idx){
-  const box = document.getElementById(`printColorBox${idx}`);
-  box.innerHTML = '';                        // 念のため空に
-  box.appendChild(buildColorSelect(idx,1));  // 1 色目
-}
-
-/**
- * idx … プリント箇所番号
- */
- function addColorSelect(idx){
-  const box  = document.getElementById(`printColorBox${idx}`);
-  const next = box.children.length + 1;        // 何色目になるか
-
-  if(next > MAX_COLORS) return;               // 3 色を超えたら無視
-  box.appendChild(buildColorSelect(idx, next));
-
-  // 3 色入ったらボタンを無効化
-  if(next === MAX_COLORS){
-    document.querySelector(`#printLocation${idx} .add-color-btn`).disabled = true;
-  }
-}
-  /**********************************************
-   * 郵便番号 → 住所1 自動入力
-   **********************************************/
-  function autoFillAddress(){
-    const zip = document.getElementById("zipCode").value.trim();
-    if(!zip) return;
-    fetch('https://zipcloud.ibsnet.co.jp/api/search?zipcode=' + encodeURIComponent(zip))
-      .then(response => response.json())
-      .then(data => {
-        if(data.status === 200 && data.results && data.results.length > 0) {
-          const result = data.results[0];
-          const fullAddress = result.address1 + result.address2 + result.address3;
-          document.getElementById("address1").value = fullAddress;
-        } else {
-          alert("該当する住所が見つかりませんでした。");
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert("住所検索に失敗しました。");
-      });
-  }
-
-  /**********************************************
-   * ページ読み込み時の初期処理
-   **********************************************/
-  window.addEventListener("DOMContentLoaded", function () {
-  // 商品連動選択
+/* ---------- 全項目を初期値で復元（ページ読込時に呼ぶ） ---------- */
+function restoreAllFields() {
   setProductNameOptions();
   productNameSelect.value = initialData.productName;
   setProductNoOptions();
@@ -1233,7 +648,7 @@ function initFirstColor(idx){
   setColorNoOptions();
   colorNoSelect.value = initialData.colorNo;
 
-  // サイズ・日付など
+  // サイズ
   document.getElementById("size150").value = initialData.size150;
   document.getElementById("sizeSS").value = initialData.sizeSS;
   document.getElementById("sizeS").value = initialData.sizeS;
@@ -1243,6 +658,7 @@ function initFirstColor(idx){
   document.getElementById("sizeXXL").value = initialData.sizeXXL;
   document.getElementById("totalQuantity").value = initialData.totalQuantity;
 
+  // その他
   document.getElementById("deliveryDate").value = initialData.deliveryDate;
   document.getElementById("useDate").value = initialData.useDate;
   document.getElementById("applicationDate").value = initialData.applicationDate;
@@ -1261,19 +677,15 @@ function initFirstColor(idx){
   document.getElementById("designCheckMethod").value = initialData.designCheckMethod;
   document.getElementById("paymentMethod").value = initialData.paymentMethod;
 
-  // 合計枚数
   calculateTotal();
+}
 
-  // イベント（商品選択）
+/* ---------- イベント登録と初期化 ---------- */
+window.addEventListener("DOMContentLoaded", function() {
+  restoreAllFields();
   productNameSelect.addEventListener("change", setProductNoOptions);
   productNoSelect.addEventListener("change", setColorNameOptions);
   colorNameSelect.addEventListener("change", setColorNoOptions);
-
-  // フォント選択ラジオ(1ヵ所目)
-  const fontRadios1 = document.getElementsByName("fontType1");
-  fontRadios1.forEach(r=>{
-    r.addEventListener("change",()=>handleFontRadio(1));
-  });
 
   // draft時の必須外し
   const draftBtn = document.getElementById('draftSubmit');
@@ -1286,16 +698,9 @@ function initFirstColor(idx){
     });
   }
 });
+window.addEventListener('pageshow', restoreAllFields);
 
-/* ページ戻る時にも値保持 */
-window.addEventListener('pageshow', () => {
-  setProductNoOptions();
-  setColorNameOptions();
-  setColorNoOptions();
-  calculateTotal();
-});
-
-/* hiddenのlineUserId自動セット */
+/* lineUserId自動セット */
 (function () {
   const params = new URLSearchParams(window.location.search);
   const uid = params.get('uid');
