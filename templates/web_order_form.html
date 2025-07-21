@@ -1216,21 +1216,14 @@ function initFirstColor(idx){
    * ページ読み込み時の初期処理
    **********************************************/
 window.addEventListener("DOMContentLoaded", function () {
-  // 商品名option生成・値セット
   setProductNameOptions();
-  productNameSelect.value = initialData.productName;
-
-  // 品番option生成・値セット
+  document.getElementById("productNameSelect").value = initialData.productName;
   setProductNoOptions();
-  productNoSelect.value = initialData.productNo;
-
-  // カラー名option生成・値セット
+  document.getElementById("productNoSelect").value = initialData.productNo;
   setColorNameOptions();
-  colorNameSelect.value = initialData.colorName;
-
-  // カラーNo option生成・値セット
+  document.getElementById("colorNameSelect").value = initialData.colorName;
   setColorNoOptions();
-  colorNoSelect.value = initialData.colorNo;
+  document.getElementById("colorNoSelect").value = initialData.colorNo;
 
   // プリント位置No（1箇所目だけの場合）
   if (initialData.printPositionNo1) {
