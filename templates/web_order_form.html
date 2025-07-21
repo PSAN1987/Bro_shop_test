@@ -749,31 +749,24 @@ const nameNumGroup = [
   }
 
   function setProductNoOptions() {
-    const selectedName = productNameSelect.value;
-    productNoSelect.innerHTML   = '<option value="">選択してください</option>';
-    colorNameSelect.innerHTML   = '<option value="">選択してください</option>';
-    colorNoSelect.innerHTML     = '<option value="">選択してください</option>';
-    if (!selectedName) return;
+  const selectedName = productNameSelect.value;
+  productNoSelect.innerHTML   = '<option value="">選択してください</option>';
+  colorNameSelect.innerHTML   = '<option value="">選択してください</option>';
+  colorNoSelect.innerHTML     = '<option value="">選択してください</option>';
+  if (!selectedName) return;
 
-    const nos = Array.from(
-      new Set(
-        productTable.filter(i=> i.productName === selectedName).map(i=> i.productNo)
-      )
-    );
-    nos.forEach(n=>{
-      const opt = document.createElement("option");
-      opt.value = n;
-      opt.textContent = n;
-      productNoSelect.appendChild(opt);
-    });
-    // ★ ここから初期値の選択を反映 ----------------
-  const initial = "{{ initial_data.productName | default('') }}";
-  if (initial) {
-    productNameSelect.value = initial;
-    setProductNoOptions();  // 品番を連動して更新
-  }
+  const nos = Array.from(
+    new Set(
+      productTable.filter(i=> i.productName === selectedName).map(i=> i.productNo)
+    )
+  );
+  nos.forEach(n=>{
+    const opt = document.createElement("option");
+    opt.value = n;
+    opt.textContent = n;
+    productNoSelect.appendChild(opt);
+  });
 }
-
   function setColorNameOptions() {
     const selectedName = productNameSelect.value;
     const selectedNo   = productNoSelect.value;
@@ -1222,18 +1215,19 @@ function initFirstColor(idx){
   /**********************************************
    * ページ読み込み時の初期処理
    **********************************************/
-  window.addEventListener("DOMContentLoaded", function () {
-  // 商品連動選択
+window.addEventListener("DOMContentLoaded", function () {
+  // 選択肢（option）のみをすべて一旦生成（値はまだ入れない）
   setProductNameOptions();
-  productNameSelect.value = initialData.productName;
   setProductNoOptions();
-  productNoSelect.value = initialData.productNo;
   setColorNameOptions();
-  colorNameSelect.value = initialData.colorName;
   setColorNoOptions();
-  colorNoSelect.value = initialData.colorNo;
 
-  // サイズ・日付など
+  // すべての select / input の値を一括でセット
+  productNameSelect.value = initialData.productName;
+  productNoSelect.value   = initialData.productNo;
+  colorNameSelect.value   = initialData.colorName;
+  colorNoSelect.value     = initialData.colorNo;
+
   document.getElementById("size150").value = initialData.size150;
   document.getElementById("sizeSS").value = initialData.sizeSS;
   document.getElementById("sizeS").value = initialData.sizeS;
@@ -1264,16 +1258,33 @@ function initFirstColor(idx){
   // 合計枚数
   calculateTotal();
 
-  // イベント（商品選択）
-  productNameSelect.addEventListener("change", setProductNoOptions);
-  productNoSelect.addEventListener("change", setColorNameOptions);
-  colorNameSelect.addEventListener("change", setColorNoOptions);
+  // 商品名、品番、カラー名変更時のイベントハンドラ
+  productNameSelect.addEventListener("change", function() {
+    setProductNoOptions();
+    productNoSelect.value = "";
+    setColorNameOptions();
+    colorNameSelect.value = "";
+    setColorNoOptions();
+    colorNoSelect.value = "";
+  });
+
+  productNoSelect.addEventListener("change", function() {
+    setColorNameOptions();
+    colorNameSelect.value = "";
+    setColorNoOptions();
+    colorNoSelect.value = "";
+  });
+
+  colorNameSelect.addEventListener("change", function() {
+    setColorNoOptions();
+    colorNoSelect.value = "";
+  });
 
   // フォント選択ラジオ(1ヵ所目)
   const fontRadios1 = document.getElementsByName("fontType1");
   fontRadios1.forEach(r=>{
     r.addEventListener("change",()=>handleFontRadio(1));
-  });
+  }); // ← 必ずここでforEachを閉じる！
 
   // draft時の必須外し
   const draftBtn = document.getElementById('draftSubmit');
