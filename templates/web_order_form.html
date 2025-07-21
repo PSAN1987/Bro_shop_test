@@ -1216,28 +1216,28 @@ function initFirstColor(idx){
    * ページ読み込み時の初期処理
    **********************************************/
 window.addEventListener("DOMContentLoaded", function () {
-  // 商品名option生成・セット
+  // 商品名option生成・値セット
   setProductNameOptions();
   productNameSelect.value = initialData.productName;
 
-  // 品番option生成・セット
+  // 品番option生成・値セット
   setProductNoOptions();
   productNoSelect.value = initialData.productNo;
 
-  // カラー名option生成・セット
+  // カラー名option生成・値セット
   setColorNameOptions();
   colorNameSelect.value = initialData.colorName;
 
-  // カラーNo option生成・セット
+  // カラーNo option生成・値セット
   setColorNoOptions();
   colorNoSelect.value = initialData.colorNo;
 
-  // すべての select / input の値を一括でセット
-  productNameSelect.value = initialData.productName;
-  productNoSelect.value   = initialData.productNo;
-  colorNameSelect.value   = initialData.colorName;
-  colorNoSelect.value     = initialData.colorNo;
+  // プリント位置No（1箇所目だけの場合）
+  if (initialData.printPositionNo1) {
+    document.getElementById("printPositionNo1").value = initialData.printPositionNo1;
+  }
 
+  // その他input, select
   document.getElementById("size150").value = initialData.size150;
   document.getElementById("sizeSS").value = initialData.sizeSS;
   document.getElementById("sizeS").value = initialData.sizeS;
@@ -1294,7 +1294,7 @@ window.addEventListener("DOMContentLoaded", function () {
   const fontRadios1 = document.getElementsByName("fontType1");
   fontRadios1.forEach(r=>{
     r.addEventListener("change",()=>handleFontRadio(1));
-  }); // ← 必ずここでforEachを閉じる！
+  });
 
   // draft時の必須外し
   const draftBtn = document.getElementById('draftSubmit');
