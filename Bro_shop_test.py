@@ -487,7 +487,7 @@ def flex_item_select():
                                     *[{
                                         "type": "image",
                                         "url": url,
-                                        "size": "sm",
+                                        "size": "md",
                                         "aspectMode": "cover",
                                         "aspectRatio": "1:1",
                                         "action": {
@@ -506,7 +506,7 @@ def flex_item_select():
                                     *[{
                                         "type": "image",
                                         "url": url,
-                                        "size": "sm",
+                                        "size": "md",
                                         "aspectMode": "cover",
                                         "aspectRatio": "1:1",
                                         "action": {
