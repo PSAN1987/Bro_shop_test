@@ -531,13 +531,13 @@ def flex_item_select():
             ("ドライロングTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png"),
             ("ドライポロシャツ", "https://catalog-bot-zf1t.onrender.com/dry_polo.png")
         ]),
-        ("スポーツユニフォーム系", [
+        ("スポーツ系", [
             ("ゲームシャツ", "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
             ("ベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/baseball_shirt.png"),
             ("ストライプベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/stripe_baseball.png"),
             ("ストライプユニフォーム", "https://catalog-bot-zf1t.onrender.com/stripe_uniform.png")
         ]),
-        ("トレーナー・バスケ系", [
+        ("トレーナー系", [
             ("クールネックライトトレーナー", "https://catalog-bot-zf1t.onrender.com/crew_trainer.png"),
             ("ジップアップライトトレーナー", "https://catalog-bot-zf1t.onrender.com/zip_trainer.png"),
             ("フーディーライトトレーナー", "https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png"),
@@ -689,7 +689,7 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                 {"type": "text", "text": f"【合計金額】¥{total_price:,}", "weight": "bold"},
                 {"type": "text", "text": f"【1枚あたり】¥{unit_price:,}"},
                 {"type": "separator"},
-                {"type": "text", "text": "※上記は色数1色・背ネームなしの簡易見積です。\nより正確な金額をご希望の方は、下記からデザイン相談へお進みください。", "wrap": True, "size": "sm"}
+                {"type": "text", "text": "※より正確な金額をご希望の方は、下記からデザイン相談へお進みください。", "wrap": True, "size": "sm"}
             ]
         },
         "footer": {
