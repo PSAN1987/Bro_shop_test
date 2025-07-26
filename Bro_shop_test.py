@@ -303,18 +303,23 @@ from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL, PRICE_TABLE_STUDENT
 
 def calculate_estimate(estimate_data):
     item = estimate_data.get("item", "")
-    pattern = estimate_data.get("pattern", "")
-    qty_text = estimate_data.get("quantity", "")
+    pattern_raw = estimate_data.get("pattern", "")
+    qty_text_raw = estimate_data.get("quantity", "")
     user_type = estimate_data.get("user_type", "一般")
 
+    # ▼ パターン表記（パターンA → A）に変換
+    pattern = pattern_raw.replace("パターン", "").strip()
+
+    # ▼ 数量レンジの波ダッシュ表記に統一（～ → 〜）
+    qty_text = qty_text_raw.replace("～", "〜").strip()
+
+    # ▼ 数値換算マップ
     quantity_map = {
-        "10〜19枚": 10, "20～29枚": 20, "30～39枚": 30,
-        "40～49枚": 40, "50～99枚": 50, "100枚以上": 100,
-        "20〜29枚": 20, "100枚以上": 100
+        "10〜19枚": 10, "20〜29枚": 20, "30〜39枚": 30,
+        "40〜49枚": 40, "50〜99枚": 50, "100枚以上": 100
     }
 
-    quantity_key = qty_text if "枚" in qty_text else None
-    quantity_value = quantity_map.get(quantity_key, 1)
+    quantity_value = quantity_map.get(qty_text, 1)
 
     def get_quantity_range(qty):
         if qty < 20:
@@ -332,7 +337,7 @@ def calculate_estimate(estimate_data):
 
     quantity_range = get_quantity_range(quantity_value)
 
-    # ▼ 属性に応じたテーブルを選択
+    # ▼ 属性ごとにテーブル選択
     price_table = PRICE_TABLE_STUDENT if user_type == "学生" else PRICE_TABLE_GENERAL
 
     for row in price_table:
@@ -341,6 +346,7 @@ def calculate_estimate(estimate_data):
             total_price = unit_price * quantity_value
             return total_price, unit_price
 
+    # 見つからない場合
     return 0, 0
 
 
