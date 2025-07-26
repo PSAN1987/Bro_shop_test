@@ -1,763 +1,437 @@
-PRICE_TABLE = [
-    # ゲームシャツ
-    {
-        "item": "ゲームシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1650, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 1850, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1480, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1680, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1400, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1600, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1310, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1510, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1220, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ゲームシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1420, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ストライプドライベースボールシャツ
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 2200, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 2400, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 2030, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 2230, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1950, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 2150, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1860, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 2060, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1770, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1970, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ドライベースボールシャツ
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1900, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 2100, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1730, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1930, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1650, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1850, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1560, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1760, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1470, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1670, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ストライプユニフォーム
-    {
-        "item": "ストライプユニフォーム", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 2250, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 2450, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 2080, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 2280, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 2000, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 2200, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1910, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 2110, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1820, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ストライプユニフォーム", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 2020, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # バスケシャツ
-    {
-        "item": "バスケシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1730, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 1930, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1560, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1760, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1480, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1680, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1390, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1590, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1300, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "バスケシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1500, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ドライTシャツ
-    {
-        "item": "ドライTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1240, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 1440, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1070, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1270, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 990, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1190, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 900, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1100, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 810, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1010, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ハイクオリティTシャツ
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1450, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 1650, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1280, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1480, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1200, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1400, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1110, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1310, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1020, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ハイクオリティTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1220, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ドライポロシャツ
-    {
-        "item": "ドライポロシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1600, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 1800, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1430, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1630, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1350, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1550, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1260, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1460, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1170, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライポロシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1370, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ドライロングスリーブTシャツ
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 1450, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 1650, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 1280, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 1480, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 1200, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 1400, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1110, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 1310, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1020, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ドライロングスリーブTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 1220, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # クルーネックライトトレーナー
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 2300, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 2500, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 2130, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 2330, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 2050, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 2250, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 1960, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 2160, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 1870, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "クルーネックライトトレーナー", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 2070, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # ジップアップライトパーカー
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 3170, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 3370, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 3000, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 3200, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 2920, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 3120, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 2830, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 3030, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 2740, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "ジップアップライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 2940, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-
-    # フーデッドライトパーカー
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "早割",
-        "unit_price": 2700, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "通常",
-        "unit_price": 2900, "color_add": 450, "pos_add": 450, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "早割",
-        "unit_price": 2530, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "通常",
-        "unit_price": 2730, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "早割",
-        "unit_price": 2450, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "通常",
-        "unit_price": 2650, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "早割",
-        "unit_price": 2360, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "通常",
-        "unit_price": 2560, "color_add": 350, "pos_add": 350, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "早割",
-        "unit_price": 2270, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-    {
-        "item": "フーデッドライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "通常",
-        "unit_price": 2470, "color_add": 300, "pos_add": 300, "fullcolor_add": 650,
-        "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300
-    },
-]
 PRICE_TABLE_GENERAL = [
-    # ゲームシャツ
-    {"item": "ゲームシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2145, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 2405, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 1924, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 2184, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 1820, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2080, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 1703, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 1963, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1586, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ゲームシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 1846, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ストライプドライベースボールシャツ
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2860, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 3120, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 2639, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 2899, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 2535, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2795, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 2418, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 2678, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 2301, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 2561, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ドライベースボールシャツ
-    {"item": "ドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2470, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 2730, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 2249, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 2509, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 2145, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2405, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 2028, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 2288, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1911, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライベースボールシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 2171, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ストライプユニフォーム
-    {"item": "ストライプユニフォーム", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2925, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 3185, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 2704, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 2964, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 2600, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2860, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 2483, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 2743, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 2366, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ストライプユニフォーム", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 2626, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # バスケシャツ
-    {"item": "バスケシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2249, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 2509, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 2028, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 2288, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 1924, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2184, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 1807, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 2067, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1690, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "バスケシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 1950, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ドライTシャツ
-    {"item": "ドライTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 1612, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 1872, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 1391, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 1651, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 1287, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 1547, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 1170, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 1430, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1053, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 1313, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ハイクオリティTシャツ
-    {"item": "ハイクオリティTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 1885, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 2145, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 1664, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 1924, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 1560, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 1820, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 1443, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 1703, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1326, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ハイクオリティTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 1586, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ドライポロシャツ
-    {"item": "ドライポロシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2080, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 2340, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 1859, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 2119, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 1755, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2015, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 1638, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 1898, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1521, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライポロシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 1781, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ドライロングスリーブTシャツ
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 1885, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 2145, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 1664, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 1924, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 1560, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 1820, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 1443, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 1703, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 1326, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ドライロングスリーブTシャツ", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 1586, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # クルーネックライトトレーナー
-    {"item": "クルーネックライトトレーナー", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 2990, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 3250, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 2769, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 3029, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 2665, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 2925, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 2548, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 2808, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 2431, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "クルーネックライトトレーナー", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 2691, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # ジップアップライトパーカー
-    {"item": "ジップアップライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 4121, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 4381, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 3900, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 4160, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 3796, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 4056, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 3679, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 3939, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 3562, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "ジップアップライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 3822, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    # フーデッドライトパーカー
-    {"item": "フーデッドライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "早割", "unit_price": 3510, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 20, "max_qty": 29, "discount_type": "通常", "unit_price": 3770, "color_add": 450, "pos_add": 450, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "早割", "unit_price": 3289, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 30, "max_qty": 39, "discount_type": "通常", "unit_price": 3549, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "早割", "unit_price": 3185, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 40, "max_qty": 49, "discount_type": "通常", "unit_price": 3445, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "早割", "unit_price": 3068, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 50, "max_qty": 99, "discount_type": "通常", "unit_price": 3328, "color_add": 350, "pos_add": 350, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "早割", "unit_price": 2951, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
-    {"item": "フーデッドライトパーカー", "min_qty": 100, "max_qty": 500, "discount_type": "通常", "unit_price": 3211, "color_add": 300, "pos_add": 300, "fullcolor_add": 650, "set_name_num": 800, "big_name": 550, "small_name": 300, "big_num": 550, "small_num": 300},
+    {'item': 'ドライTシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2200},
+    {'item': 'ドライTシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2050},
+    {'item': 'ドライTシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 1900},
+    {'item': 'ドライTシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 1750},
+    {'item': 'ドライTシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 1600},
+    {'item': 'ドライTシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1450},
+    {'item': 'ドライTシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 2700},
+    {'item': 'ドライTシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2550},
+    {'item': 'ドライTシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'ドライTシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2250},
+    {'item': 'ドライTシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2100},
+    {'item': 'ドライTシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 1950},
+    {'item': 'ドライTシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 2700},
+    {'item': 'ドライTシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2550},
+    {'item': 'ドライTシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'ドライTシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2250},
+    {'item': 'ドライTシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2100},
+    {'item': 'ドライTシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 1950},
+    {'item': 'ドライTシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'ドライTシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'ドライTシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'ドライTシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'ドライTシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'ドライTシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'ドライTシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'ドライTシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'ドライTシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'ドライTシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'ドライTシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'ドライTシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'ドライTシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 1000},
+    {'item': 'ドライTシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 950},
+    {'item': 'ドライTシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 900},
+    {'item': 'ドライTシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 850},
+    {'item': 'ドライTシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 800},
+    {'item': 'ドライTシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 750},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 3000},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2850},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2700},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 2550},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 2400},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 2250},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 2000},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1950},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1900},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1850},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1800},
+    {'item': 'ハイクオリティーTシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1750},
+    {'item': 'ドライロングTシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2500},
+    {'item': 'ドライロングTシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2350},
+    {'item': 'ドライロングTシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2200},
+    {'item': 'ドライロングTシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 2050},
+    {'item': 'ドライロングTシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 1900},
+    {'item': 'ドライロングTシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1750},
+    {'item': 'ドライロングTシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 3000},
+    {'item': 'ドライロングTシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2850},
+    {'item': 'ドライロングTシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2700},
+    {'item': 'ドライロングTシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2550},
+    {'item': 'ドライロングTシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2400},
+    {'item': 'ドライロングTシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2250},
+    {'item': 'ドライロングTシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 3000},
+    {'item': 'ドライロングTシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2850},
+    {'item': 'ドライロングTシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2700},
+    {'item': 'ドライロングTシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2550},
+    {'item': 'ドライロングTシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2400},
+    {'item': 'ドライロングTシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2250},
+    {'item': 'ドライロングTシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'ドライロングTシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'ドライロングTシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'ドライロングTシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'ドライロングTシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'ドライロングTシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'ドライロングTシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'ドライロングTシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'ドライロングTシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'ドライロングTシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'ドライロングTシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'ドライロングTシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'ドライロングTシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 1500},
+    {'item': 'ドライロングTシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1450},
+    {'item': 'ドライロングTシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1400},
+    {'item': 'ドライロングTシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1350},
+    {'item': 'ドライロングTシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1300},
+    {'item': 'ドライロングTシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1250},
+    {'item': 'ドライポロシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2200},
+    {'item': 'ドライポロシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2050},
+    {'item': 'ドライポロシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 1900},
+    {'item': 'ドライポロシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 1750},
+    {'item': 'ドライポロシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 1600},
+    {'item': 'ドライポロシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1450},
+    {'item': 'ドライポロシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 2700},
+    {'item': 'ドライポロシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2550},
+    {'item': 'ドライポロシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'ドライポロシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2250},
+    {'item': 'ドライポロシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2100},
+    {'item': 'ドライポロシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 1950},
+    {'item': 'ドライポロシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 2700},
+    {'item': 'ドライポロシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2550},
+    {'item': 'ドライポロシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'ドライポロシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2250},
+    {'item': 'ドライポロシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2100},
+    {'item': 'ドライポロシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 1950},
+    {'item': 'ドライポロシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'ドライポロシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'ドライポロシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'ドライポロシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'ドライポロシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'ドライポロシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'ドライポロシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'ドライポロシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'ドライポロシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'ドライポロシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'ドライポロシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'ドライポロシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'ドライポロシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 1200},
+    {'item': 'ドライポロシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1150},
+    {'item': 'ドライポロシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1100},
+    {'item': 'ドライポロシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1050},
+    {'item': 'ドライポロシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1000},
+    {'item': 'ドライポロシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 950},
+    {'item': 'ゲームシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2200},
+    {'item': 'ゲームシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2050},
+    {'item': 'ゲームシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 1900},
+    {'item': 'ゲームシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 1750},
+    {'item': 'ゲームシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 1600},
+    {'item': 'ゲームシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1450},
+    {'item': 'ゲームシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 2700},
+    {'item': 'ゲームシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2550},
+    {'item': 'ゲームシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'ゲームシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2250},
+    {'item': 'ゲームシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2100},
+    {'item': 'ゲームシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 1950},
+    {'item': 'ゲームシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 2700},
+    {'item': 'ゲームシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2550},
+    {'item': 'ゲームシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'ゲームシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2250},
+    {'item': 'ゲームシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2100},
+    {'item': 'ゲームシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 1950},
+    {'item': 'ゲームシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'ゲームシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'ゲームシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'ゲームシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'ゲームシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'ゲームシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'ゲームシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'ゲームシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'ゲームシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'ゲームシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'ゲームシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'ゲームシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'ゲームシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 1500},
+    {'item': 'ゲームシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1450},
+    {'item': 'ゲームシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1400},
+    {'item': 'ゲームシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1350},
+    {'item': 'ゲームシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1300},
+    {'item': 'ゲームシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1250},
+    {'item': 'ベースボールシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2400},
+    {'item': 'ベースボールシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2250},
+    {'item': 'ベースボールシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2100},
+    {'item': 'ベースボールシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 1950},
+    {'item': 'ベースボールシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 1800},
+    {'item': 'ベースボールシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1650},
+    {'item': 'ベースボールシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 2900},
+    {'item': 'ベースボールシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2750},
+    {'item': 'ベースボールシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2600},
+    {'item': 'ベースボールシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2450},
+    {'item': 'ベースボールシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2300},
+    {'item': 'ベースボールシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2150},
+    {'item': 'ベースボールシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 2900},
+    {'item': 'ベースボールシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2750},
+    {'item': 'ベースボールシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2600},
+    {'item': 'ベースボールシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2450},
+    {'item': 'ベースボールシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2300},
+    {'item': 'ベースボールシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2150},
+    {'item': 'ベースボールシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3400},
+    {'item': 'ベースボールシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3250},
+    {'item': 'ベースボールシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3100},
+    {'item': 'ベースボールシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 2950},
+    {'item': 'ベースボールシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 2800},
+    {'item': 'ベースボールシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2650},
+    {'item': 'ベースボールシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3400},
+    {'item': 'ベースボールシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3250},
+    {'item': 'ベースボールシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3100},
+    {'item': 'ベースボールシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 2950},
+    {'item': 'ベースボールシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 2800},
+    {'item': 'ベースボールシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2650},
+    {'item': 'ベースボールシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 1700},
+    {'item': 'ベースボールシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1650},
+    {'item': 'ベースボールシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1600},
+    {'item': 'ベースボールシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1550},
+    {'item': 'ベースボールシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1500},
+    {'item': 'ベースボールシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1450},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2600},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2450},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2300},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 2150},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 2000},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1850},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 3100},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2950},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2800},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2650},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2500},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2350},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 3100},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2950},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2800},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2650},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2500},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2350},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3600},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3450},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3300},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 3150},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 3000},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2850},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3600},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3450},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3300},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 3150},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 3000},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2850},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 2000},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1950},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1900},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1850},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1800},
+    {'item': 'ストライプベースボールシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1750},
+    {'item': 'ストライプユニフォーム', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 2300},
+    {'item': 'ストライプユニフォーム', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2150},
+    {'item': 'ストライプユニフォーム', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2000},
+    {'item': 'ストライプユニフォーム', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 1850},
+    {'item': 'ストライプユニフォーム', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 1700},
+    {'item': 'ストライプユニフォーム', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 1550},
+    {'item': 'ストライプユニフォーム', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 2800},
+    {'item': 'ストライプユニフォーム', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 2650},
+    {'item': 'ストライプユニフォーム', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 2500},
+    {'item': 'ストライプユニフォーム', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 2350},
+    {'item': 'ストライプユニフォーム', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2200},
+    {'item': 'ストライプユニフォーム', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2050},
+    {'item': 'ストライプユニフォーム', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 2800},
+    {'item': 'ストライプユニフォーム', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 2650},
+    {'item': 'ストライプユニフォーム', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 2500},
+    {'item': 'ストライプユニフォーム', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 2350},
+    {'item': 'ストライプユニフォーム', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2200},
+    {'item': 'ストライプユニフォーム', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2050},
+    {'item': 'ストライプユニフォーム', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 3300},
+    {'item': 'ストライプユニフォーム', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3150},
+    {'item': 'ストライプユニフォーム', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3000},
+    {'item': 'ストライプユニフォーム', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 2850},
+    {'item': 'ストライプユニフォーム', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 2700},
+    {'item': 'ストライプユニフォーム', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 2550},
+    {'item': 'ストライプユニフォーム', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 3300},
+    {'item': 'ストライプユニフォーム', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3150},
+    {'item': 'ストライプユニフォーム', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3000},
+    {'item': 'ストライプユニフォーム', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 2850},
+    {'item': 'ストライプユニフォーム', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 2700},
+    {'item': 'ストライプユニフォーム', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 2550},
+    {'item': 'ストライプユニフォーム', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 1700},
+    {'item': 'ストライプユニフォーム', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1650},
+    {'item': 'ストライプユニフォーム', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1600},
+    {'item': 'ストライプユニフォーム', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1550},
+    {'item': 'ストライプユニフォーム', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1500},
+    {'item': 'ストライプユニフォーム', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1450},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 3200},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 3050},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 2750},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 2600},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 2450},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 3700},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 3550},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 3400},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 3250},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 3100},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2950},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 3700},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 3550},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 3400},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 3250},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 3100},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2950},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 4200},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 4050},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3900},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 3750},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 3600},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 3450},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 4200},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 4050},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3900},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 3750},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 3600},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 3450},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 2500},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 2450},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 2350},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 2300},
+    {'item': 'クールネックライトトレーナー', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 2250},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 4500},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 4350},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 4200},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 4050},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 3900},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 3750},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 4500},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 4350},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 4200},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 4050},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 3900},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 3750},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 2000},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 1950},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 1900},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 1850},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 1800},
+    {'item': 'ジップアップライトトレーナー', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 1750},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 4500},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 4350},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 4200},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 4050},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 3900},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 3750},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 4500},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 4350},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 4200},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 4050},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 3900},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 3750},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 5000},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 4850},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 4700},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 4550},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 4400},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 4250},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 5000},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 4850},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 4700},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 4550},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 4400},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 4250},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 3000},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 2950},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 2900},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 2850},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 2800},
+    {'item': 'フーディーライトトレーナー', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'バスケシャツ', 'pattern': 'A', 'quantity_range': '10〜19枚', 'unit_price': 3000},
+    {'item': 'バスケシャツ', 'pattern': 'A', 'quantity_range': '20〜29枚', 'unit_price': 2850},
+    {'item': 'バスケシャツ', 'pattern': 'A', 'quantity_range': '30〜39枚', 'unit_price': 2700},
+    {'item': 'バスケシャツ', 'pattern': 'A', 'quantity_range': '40〜49枚', 'unit_price': 2550},
+    {'item': 'バスケシャツ', 'pattern': 'A', 'quantity_range': '50〜99枚', 'unit_price': 2400},
+    {'item': 'バスケシャツ', 'pattern': 'A', 'quantity_range': '100枚以上', 'unit_price': 2250},
+    {'item': 'バスケシャツ', 'pattern': 'B', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'バスケシャツ', 'pattern': 'B', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'バスケシャツ', 'pattern': 'B', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'バスケシャツ', 'pattern': 'B', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'バスケシャツ', 'pattern': 'B', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'バスケシャツ', 'pattern': 'B', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'バスケシャツ', 'pattern': 'C', 'quantity_range': '10〜19枚', 'unit_price': 3500},
+    {'item': 'バスケシャツ', 'pattern': 'C', 'quantity_range': '20〜29枚', 'unit_price': 3350},
+    {'item': 'バスケシャツ', 'pattern': 'C', 'quantity_range': '30〜39枚', 'unit_price': 3200},
+    {'item': 'バスケシャツ', 'pattern': 'C', 'quantity_range': '40〜49枚', 'unit_price': 3050},
+    {'item': 'バスケシャツ', 'pattern': 'C', 'quantity_range': '50〜99枚', 'unit_price': 2900},
+    {'item': 'バスケシャツ', 'pattern': 'C', 'quantity_range': '100枚以上', 'unit_price': 2750},
+    {'item': 'バスケシャツ', 'pattern': 'D', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'バスケシャツ', 'pattern': 'D', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'バスケシャツ', 'pattern': 'D', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'バスケシャツ', 'pattern': 'D', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'バスケシャツ', 'pattern': 'D', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'バスケシャツ', 'pattern': 'D', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'バスケシャツ', 'pattern': 'E', 'quantity_range': '10〜19枚', 'unit_price': 4000},
+    {'item': 'バスケシャツ', 'pattern': 'E', 'quantity_range': '20〜29枚', 'unit_price': 3850},
+    {'item': 'バスケシャツ', 'pattern': 'E', 'quantity_range': '30〜39枚', 'unit_price': 3700},
+    {'item': 'バスケシャツ', 'pattern': 'E', 'quantity_range': '40〜49枚', 'unit_price': 3550},
+    {'item': 'バスケシャツ', 'pattern': 'E', 'quantity_range': '50〜99枚', 'unit_price': 3400},
+    {'item': 'バスケシャツ', 'pattern': 'E', 'quantity_range': '100枚以上', 'unit_price': 3250},
+    {'item': 'バスケシャツ', 'pattern': 'F', 'quantity_range': '10〜19枚', 'unit_price': 2500},
+    {'item': 'バスケシャツ', 'pattern': 'F', 'quantity_range': '20〜29枚', 'unit_price': 2450},
+    {'item': 'バスケシャツ', 'pattern': 'F', 'quantity_range': '30〜39枚', 'unit_price': 2400},
+    {'item': 'バスケシャツ', 'pattern': 'F', 'quantity_range': '40〜49枚', 'unit_price': 2350},
+    {'item': 'バスケシャツ', 'pattern': 'F', 'quantity_range': '50〜99枚', 'unit_price': 2300},
+    {'item': 'バスケシャツ', 'pattern': 'F', 'quantity_range': '100枚以上', 'unit_price': 2250},
 ]
-
 
 COLOR_COST_MAP = {
     "前 or 背中 1色": (0, 0),

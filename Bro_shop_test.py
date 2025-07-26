@@ -304,64 +304,50 @@ def find_price_row_from_table(table, item_name, discount_type, quantity):
     return None
 
 
+from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL
+
 def calculate_estimate(estimate_data):
-    item_name = estimate_data['item']
-    discount_type = estimate_data['discount_type']
+    item = estimate_data.get("item", "")
+    pattern = estimate_data.get("pattern", "")
+    qty_text = estimate_data.get("quantity", "")
 
+    # 数値に変換（例: "30～39枚" → 30）※数量レンジは1つの基準値に丸める
     quantity_map = {
-        "20～29枚": 20,
-        "30～39枚": 30,
-        "40～49枚": 40,
-        "50～99枚": 50,
-        "100枚以上": 100
+        "10〜19枚": 10, "20～29枚": 20, "30～39枚": 30,
+        "40～49枚": 40, "50～99枚": 50, "100枚以上": 100,
+        "20～29枚": 20, "100枚以上": 100  # ユーザー入力からの変換も考慮
     }
-    quantity = quantity_map.get(estimate_data['quantity'], 1)
 
-    print_position = estimate_data['print_position']
-    color_choice = estimate_data['color_count']
-    back_name = estimate_data.get('back_name', "")
+    # 入力値が "30～39枚" などの表記ならそのまま
+    quantity_key = qty_text if "枚" in qty_text else None
+    quantity_value = quantity_map.get(quantity_key, 1)
 
-    # 属性に応じて PRICE_TABLE を切り替える
-    user_type = estimate_data.get("user_type")
-    if user_type == "学生":
-        table = PRICE_TABLE
-    else:
-        table = PRICE_TABLE_GENERAL
-
-    row = find_price_row_from_table(table, item_name, discount_type, quantity)
-    if row is None:
-        return 0, 0
-
-    base_price = row["unit_price"]
-
-    # プリント位置追加
-    if print_position in ["前のみ", "背中のみ"]:
-        pos_add = 0
-    else:
-        pos_add = row["pos_add"]
-
-    if print_position in ["前のみ", "背中のみ"]:
-        color_add_count, fullcolor_add_count = COLOR_COST_MAP_SINGLE[color_choice]
-        # 背ネームはスキップ扱い => 0円
-        back_name_fee = 0
-    else:
-        color_add_count, fullcolor_add_count = COLOR_COST_MAP_BOTH[color_choice]
-        # 背ネームありの場合
-        if back_name == "ネーム&背番号セット":
-            back_name_fee = row["set_name_num"]
-        elif back_name == "ネーム(大)":
-            back_name_fee = row["big_name"]
-        elif back_name == "番号(大)":
-            back_name_fee = row["big_num"]
+    # quantity_value から最適な quantity_range を再検索
+    def get_quantity_range(qty):
+        if qty < 20:
+            return "10〜19枚"
+        elif qty < 30:
+            return "20〜29枚"
+        elif qty < 40:
+            return "30〜39枚"
+        elif qty < 50:
+            return "40〜49枚"
+        elif qty < 100:
+            return "50〜99枚"
         else:
-            back_name_fee = 0
+            return "100枚以上"
 
-    color_fee = color_add_count * row["color_add"] + fullcolor_add_count * row["fullcolor_add"]
+    quantity_range = get_quantity_range(quantity_value)
 
-    unit_price = base_price + pos_add + color_fee + back_name_fee
-    total_price = unit_price * quantity
+    # 対応する価格行を検索
+    for row in PRICE_TABLE_GENERAL:
+        if row["item"] == item and row["pattern"] == pattern and row["quantity_range"] == quantity_range:
+            unit_price = row["unit_price"]
+            total_price = unit_price * quantity_value
+            return total_price, unit_price
 
-    return total_price, unit_price
+    # 見つからない場合はエラー処理
+    return 0, 0
 
 
 # -----------------------
@@ -1234,110 +1220,47 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         return
 
     elif step == 5:
-        valid_choices = ["20～29枚", "30～39枚", "40～49枚", "50～99枚", "100枚以上"]
-        if user_message in valid_choices:
-            session_data["answers"]["quantity"] = user_message
-            session_data["step"] = 6
-            line_bot_api.reply_message(event.reply_token, flex_print_position())
-        else:
-            del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
-        return
+        valid_choices = ["10～19枚", "20～29枚", "30～39枚", "40～49枚", "50～99枚", "100枚以上"]
+    if user_message in valid_choices:
+        session_data["answers"]["quantity"] = user_message
+        session_data["step"] = 6  # 最終ステップに進む（または終了）
 
-    elif step == 6:
-        valid_positions = ["前のみ", "背中のみ", "前と背中"]
-        if user_message in valid_positions:
-            session_data["answers"]["print_position"] = user_message
-            session_data["step"] = 7
-            if user_message in ["前のみ", "背中のみ"]:
-                session_data["is_single"] = True
-                line_bot_api.reply_message(event.reply_token, flex_color_count_single())
-            else:
-                session_data["is_single"] = False
-                line_bot_api.reply_message(event.reply_token, flex_color_count_both())
-        else:
-            del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
-        return
+        # プリント位置、色数、背ネームは仮値を自動設定
+        session_data["answers"]["print_position"] = "前のみ"
+        session_data["answers"]["color_count"] = "前 or 背中 1色"  # COLOR_COST_MAP_SINGLE より
+        session_data["answers"]["back_name"] = ""
 
-    elif step == 7:
-        if session_data["is_single"]:
-            if user_message not in COLOR_COST_MAP_SINGLE:
-                del user_estimate_sessions[user_id]
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
-                return
-            session_data["answers"]["color_count"] = user_message
+        # 見積もりを実行
+        est_data = session_data["answers"]
+        total_price, unit_price = calculate_estimate(est_data)
+        quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
 
-            if session_data["answers"]["print_position"] == "背中のみ":
-                session_data["step"] = 8
-                line_bot_api.reply_message(event.reply_token, flex_back_name())
-                return
+        reply_text = (
+            "✅ ご入力いただいた内容に基づく概算見積です：\n\n"
+            f"属性: {est_data['user_type']}\n"
+            f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
+            f"商品: {est_data['item']}\n"
+            f"パターン: {est_data.get('pattern','')}\n"
+            f"枚数: {est_data['quantity']}\n\n"
+            f"【合計金額】¥{total_price:,}\n"
+            f"【1枚あたり】¥{unit_price:,}\n\n"
+            "※上記は色数1色・背ネームなしの簡易見積です。\n"
+            "より正確な金額をご希望の方は、このままデザイン相談にお進みください。"
+        )
 
-            est_data = session_data["answers"]
-            total_price, unit_price = calculate_estimate(est_data)
-            quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
-            reply_text = (
-                f"概算のお見積りが完了しました。\n\n"
-                f"見積番号: {quote_number}\n"
-                f"属性: {est_data['user_type']}\n"
-                f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
-                f"商品: {est_data['item']}\n"
-                f"パターン: {est_data.get('pattern','')}\n"
-                f"枚数: {est_data['quantity']}\n"
-                f"プリント位置: {est_data['print_position']}\n"
-                f"色数: {est_data['color_count']}\n"
-                f"背ネーム・番号: {est_data.get('back_name', 'なし')}\n\n"
-                f"【合計金額】¥{total_price:,}\n"
-                f"【1枚あたり】¥{unit_price:,}\n\n"
-                "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
-                "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
-            )
-            line_bot_api.reply_message(event.reply_token, [TextSendMessage(text=reply_text), flex_consultation_options()])
-            del user_estimate_sessions[user_id]
-        else:
-            if user_message not in COLOR_COST_MAP_BOTH:
-                del user_estimate_sessions[user_id]
-                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
-                return
-            session_data["answers"]["color_count"] = user_message
-            session_data["step"] = 8
-            line_bot_api.reply_message(event.reply_token, flex_back_name())
-        return
+        line_bot_api.reply_message(
+            event.reply_token,
+            [TextSendMessage(text=reply_text), flex_consultation_options()]
+        )
 
-    elif step == 8:
-        valid_back_names = ["ネーム&背番号セット", "ネーム(大)", "番号(大)", "背ネーム・番号を使わない"]
-        if user_message in valid_back_names:
-            session_data["answers"]["back_name"] = user_message
-            est_data = session_data["answers"]
-            total_price, unit_price = calculate_estimate(est_data)
-            quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
-            reply_text = (
-                f"概算のお見積りが完了しました。\n\n"
-                f"見積番号: {quote_number}\n"
-                f"属性: {est_data['user_type']}\n"
-                f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
-                f"商品: {est_data['item']}\n"
-                f"パターン: {est_data.get('pattern','')}\n"
-                f"枚数: {est_data['quantity']}\n"
-                f"プリント位置: {est_data['print_position']}\n"
-                f"色数: {est_data['color_count']}\n"
-                f"背ネーム・番号: {est_data['back_name']}\n\n"
-                f"【合計金額】¥{total_price:,}\n"
-                f"【1枚あたり】¥{unit_price:,}\n\n"
-                "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
-                "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
-            )
-            line_bot_api.reply_message(event.reply_token, [TextSendMessage(text=reply_text), flex_consultation_options()])
-            del user_estimate_sessions[user_id]
-        else:
-            del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
-        return
-
+        del user_estimate_sessions[user_id]
     else:
         del user_estimate_sessions[user_id]
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="エラーが発生しました。見積りフローを終了しました。最初からやり直してください。"))
-        return
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
+        )
+    return
 
 
 # -----------------------
