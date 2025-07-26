@@ -479,65 +479,97 @@ def flex_usage_date():
     return FlexSendMessage(alt_text="使用日を選択してください", contents=flex_body)
 
 def flex_item_select():
-    """
-    4 商品を 4 バブルで表示。
-    画像は aspectMode:"fit" でオリジナル比率を保ったまま表示。
-    """
-    items = [
-        ("ゲームシャツ",           "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
-        ("ドライベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/dry_baseball.png"),
-        ("ドライTシャツ",          "https://catalog-bot-zf1t.onrender.com/dry_tshirt.png"),
-        ("ドライポロシャツ",        "https://catalog-bot-zf1t.onrender.com/dry_polo.png"),
-    ]
-
-    bubbles = []
-    for name, url in items:
-        bubbles.append({
+    def create_category_bubble(title, items):
+        return {
             "type": "bubble",
             "body": {
                 "type": "box",
                 "layout": "vertical",
                 "spacing": "md",
                 "contents": [
-                    {   # ❹商品名（ヘッダー）
-                        "type": "text",
-                        "text": "❹商品名",
-                        "weight": "bold",
-                        "size": "lg",
-                        "align": "center"
-                    },
-                    {   # 商品画像（タップで商品名送信）
-                        "type": "image",
-                        "url": url,
-                        "size": "full",      # 幅いっぱい
-                        "aspectMode": "fit",  # ← 画像比率をそのまま表示
-                        # aspectRatio: 未指定だと LINE 側が自動でスペースを確保しつつ fit で収める
-                        "action": {
-                            "type": "message",
-                            "label": name,
-                            "text": name
-                        }
-                    },
-                    {   # 商品名キャプション
-                        "type": "text",
-                        "text": name,
-                        "size": "sm",
-                        "align": "center",
-                        "wrap": True
+                    {"type": "text", "text": f"③商品カテゴリー：{title}", "weight": "bold", "size": "lg", "align": "center"},
+                    {
+                        "type": "box",
+                        "layout": "vertical",
+                        "spacing": "sm",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "spacing": "sm",
+                                "contents": [
+                                    *[{
+                                        "type": "image",
+                                        "url": url,
+                                        "size": "sm",
+                                        "aspectMode": "cover",
+                                        "aspectRatio": "1:1",
+                                        "action": {
+                                            "type": "message",
+                                            "label": label,
+                                            "text": label
+                                        }
+                                    } for label, url in items[:2]]
+                                ]
+                            },
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "spacing": "sm",
+                                "contents": [
+                                    *[{
+                                        "type": "image",
+                                        "url": url,
+                                        "size": "sm",
+                                        "aspectMode": "cover",
+                                        "aspectRatio": "1:1",
+                                        "action": {
+                                            "type": "message",
+                                            "label": label,
+                                            "text": label
+                                        }
+                                    } for label, url in items[2:]]
+                                ]
+                            }
+                        ]
                     }
                 ]
             }
-        })
+        }
 
-    carousel = {
-        "type": "carousel",
-        "contents": bubbles
-    }
+    # 画像付きアイテムカテゴリ一覧
+    categories = [
+        ("Tシャツ系", [
+            ("ドライTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_tshirt.png"),
+            ("ハイクオリティーTシャツ", "https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png"),
+            ("ドライロングTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png"),
+            ("ドライポロシャツ", "https://catalog-bot-zf1t.onrender.com/dry_polo.png")
+        ]),
+        ("スポーツユニフォーム系", [
+            ("ゲームシャツ", "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
+            ("ベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/baseball_shirt.png"),
+            ("ストライプベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/stripe_baseball.png"),
+            ("ストライプユニフォーム", "https://catalog-bot-zf1t.onrender.com/stripe_uniform.png")
+        ]),
+        ("トレーナー・バスケ系", [
+            ("クールネックライトトレーナー", "https://catalog-bot-zf1t.onrender.com/crew_trainer.png"),
+            ("ジップアップライトトレーナー", "https://catalog-bot-zf1t.onrender.com/zip_trainer.png"),
+            ("フーディーライトトレーナー", "https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png"),
+            ("バスケシャツ", "https://catalog-bot-zf1t.onrender.com/basketball_shirt.png")
+        ])
+    ]
+
+    # 各カテゴリごとのBubble生成
+    bubbles = [create_category_bubble(title, items) for title, items in categories]
 
     return FlexSendMessage(
-        alt_text="商品を選択してください",
-        contents=carousel
+        alt_text="商品カテゴリーを選択してください",
+        contents={
+            "type": "carousel",
+            "contents": bubbles
+        }
     )
+
 
 
 def flex_quantity():
