@@ -471,9 +471,9 @@ def flex_item_select():
             "body": {
                 "type": "box",
                 "layout": "vertical",
-                "spacing": "md",
+                "spacing": "lg",
                 "contents": [
-                    {"type": "text", "text": f"③商品カテゴリー：{title}", "weight": "bold", "size": "lg", "align": "center"},
+                    {"type": "text", "text": f"❸商品カテゴリー：{title}", "weight": "bold", "size": "md", "align": "center"},
                     {
                         "type": "box",
                         "layout": "vertical",
@@ -487,7 +487,7 @@ def flex_item_select():
                                     *[{
                                         "type": "image",
                                         "url": url,
-                                        "size": "md",
+                                        "size": "lg",
                                         "aspectMode": "cover",
                                         "aspectRatio": "1:1",
                                         "action": {
@@ -506,7 +506,7 @@ def flex_item_select():
                                     *[{
                                         "type": "image",
                                         "url": url,
-                                        "size": "md",
+                                        "size": "lg",
                                         "aspectMode": "cover",
                                         "aspectRatio": "1:1",
                                         "action": {
