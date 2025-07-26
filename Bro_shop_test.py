@@ -482,7 +482,7 @@ def flex_item_select():
                             {
                                 "type": "box",
                                 "layout": "horizontal",
-                                "spacing": "sm",
+                                "spacing": "md",
                                 "contents": [
                                     *[{
                                         "type": "image",
@@ -501,7 +501,7 @@ def flex_item_select():
                             {
                                 "type": "box",
                                 "layout": "horizontal",
-                                "spacing": "sm",
+                                "spacing": "md",
                                 "contents": [
                                     *[{
                                         "type": "image",
