@@ -397,7 +397,7 @@ def flex_user_type():
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#fc9cc2",
+                    "color": "#000000",
                     "height": "sm",
                     "action": {
                         "type": "message",
@@ -408,7 +408,7 @@ def flex_user_type():
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#fc9cc2",
+                    "color": "#000000",
                     "height": "sm",
                     "action": {
                         "type": "message",
@@ -453,7 +453,7 @@ def flex_usage_date():
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#fc9cc2",
+                    "color": "#000000",
                     "height": "sm",
                     "action": {
                         "type": "message",
@@ -464,7 +464,7 @@ def flex_usage_date():
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#fc9cc2",
+                    "color": "#000000",
                     "height": "sm",
                     "action": {
                         "type": "message",
@@ -486,7 +486,7 @@ def flex_budget():
         buttons.append({
             "type": "button",
             "style": "primary",
-            "color": "#fc9cc2",
+            "color": "#000000",
             "height": "sm",
             "action": {
                 "type": "message",
@@ -596,7 +596,7 @@ def flex_quantity():
         buttons.append({
             "type": "button",
             "style": "primary",
-            "color": "#fc9cc2",
+            "color": "#000000",
             "height": "sm",
             "action": {
                 "type": "message",
@@ -643,7 +643,7 @@ def flex_print_position():
         buttons.append({
             "type": "button",
             "style": "primary",
-            "color": "#fc9cc2",
+            "color": "#000000",
             "height": "sm",
             "action": {
                 "type": "message",
@@ -691,7 +691,7 @@ def flex_color_count_single():
         buttons_bubbles.append({
             "type": "button",
             "style": "primary",
-            "color": "#fc9cc2",
+            "color": "#000000",
             "height": "sm",
             "action": {
                 "type": "message",
@@ -738,7 +738,7 @@ def flex_color_count_both():
         buttons_bubbles.append({
             "type": "button",
             "style": "primary",
-            "color": "#fc9cc2",
+            "color": "#000000",
             "height": "sm",
             "action": {
                 "type": "message",
@@ -785,7 +785,7 @@ def flex_back_name():
         buttons.append({
             "type": "button",
             "style": "primary",
-            "color": "#fc9cc2",
+            "color": "#000000",
             "height": "sm",
             "action": {
                 "type": "message",
@@ -903,7 +903,7 @@ def flex_consultation_options():
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#fc9cc2",
+                    "color": "#000000",
                     "action": {
                         "type": "postback",
                         "label": "デザイン相談",
@@ -1010,7 +1010,7 @@ def handle_postback(event):
                     {
                         "type": "button",
                         "style": "primary",          # primary にすると文字は自動で白
-                        "color": "#fc9cc2",          # ボタン背景をピンク
+                        "color": "#000000",          # ボタン背景をピンク
                         "height": "sm",
                         "action": {
                             "type": "uri",
@@ -1841,7 +1841,7 @@ def build_order_confirm_flex(order_no: str,
                 {
                     "type": "button",
                     "style": "primary",
-                    "color": "#fc9cc2",          # ピンク
+                    "color": "#000000",          # ピンク
                     "action": {
                         "type": "postback",
                         "label": "注文確定",
