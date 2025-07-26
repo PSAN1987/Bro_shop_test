@@ -237,7 +237,16 @@ def write_to_spreadsheet_for_catalog(form_data: dict):
 # -----------------------
 # 簡易見積用データ構造
 # -----------------------
-from PRICE_TABLE_2025 import PRICE_TABLE, PRICE_TABLE_GENERAL, COLOR_COST_MAP,COLOR_ATTR_MAP,SPECIAL_SINGLE_COLOR_FEE,FULLCOLOR_SIZE_FEE, BACK_NAME_FEE, OPTION_INK_EXTRA
+from PRICE_TABLE_2025 import (
+    PRICE_TABLE_GENERAL,
+    COLOR_COST_MAP,
+    COLOR_ATTR_MAP,
+    SPECIAL_SINGLE_COLOR_FEE,
+    FULLCOLOR_SIZE_FEE,
+    BACK_NAME_FEE,
+    OPTION_INK_EXTRA
+)
+
 from collections import defaultdict
 
 # ▼▼▼ 新規: プリント位置が「前のみ/背中のみ」のときの色数選択肢および対応コスト
