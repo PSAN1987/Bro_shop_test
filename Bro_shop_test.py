@@ -281,7 +281,7 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
         user_id,
         estimate_data['user_type'],  # 追加した「属性」
         f"{estimate_data['usage_date']}({estimate_data['discount_type']})",
-        estimate_data['budget'],
+        estimate_data.get('budget', ''),
         estimate_data['item'],
         estimate_data['quantity'],
         estimate_data['print_position'],
@@ -477,55 +477,6 @@ def flex_usage_date():
         }
     }
     return FlexSendMessage(alt_text="使用日を選択してください", contents=flex_body)
-
-
-def flex_budget():
-    budgets = ["特になし", "1,000円以内", "1,500円以内", "2,000円以内", "2,500円以内", "3,000円以内", "3,500円以内"]
-    buttons = []
-    for b in budgets:
-        buttons.append({
-            "type": "button",
-            "style": "primary",
-            "color": "#000000",
-            "height": "sm",
-            "action": {
-                "type": "message",
-                "label": b,
-                "text": b
-            }
-        })
-
-    flex_body = {
-        "type": "bubble",
-        "hero": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "❸1枚当たりの予算",
-                    "weight": "bold",
-                    "size": "lg",
-                    "align": "center"
-                },
-                {
-                    "type": "text",
-                    "text": "ご希望の1枚あたり予算を選択してください。",
-                    "size": "sm",
-                    "wrap": True
-                }
-            ]
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": buttons,
-            "flex": 0
-        }
-    }
-    return FlexSendMessage(alt_text="予算を選択してください", contents=flex_body)
-
 
 def flex_item_select():
     """
@@ -1160,7 +1111,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
         return
 
@@ -1168,27 +1119,13 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         if user_message in ["14日目以降", "14日目以内"]:
             session_data["answers"]["usage_date"] = user_message
             session_data["answers"]["discount_type"] = "早割" if user_message == "14日目以降" else "通常"
-            session_data["step"] = 3
-            line_bot_api.reply_message(event.reply_token, flex_budget())
-        else:
-            del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
-            )
-        return
-
-    elif step == 3:
-        valid_budgets = ["特になし", "1,000円以内", "1,500円以内", "2,000円以内", "2,500円以内", "3,000円以内", "3,500円以内"]
-        if user_message in valid_budgets:
-            session_data["answers"]["budget"] = user_message
-            session_data["step"] = 4
+            session_data["step"] = 4  # 予算ステップはスキップして item 選択へ
             line_bot_api.reply_message(event.reply_token, flex_item_select())
         else:
             del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
         return
 
@@ -1207,7 +1144,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
         return
 
@@ -1221,7 +1158,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
         return
 
@@ -1230,7 +1167,6 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         if user_message in valid_positions:
             session_data["answers"]["print_position"] = user_message
             session_data["step"] = 7
-
             if user_message in ["前のみ", "背中のみ"]:
                 session_data["is_single"] = True
                 line_bot_api.reply_message(event.reply_token, flex_color_count_single())
@@ -1241,7 +1177,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
         return
 
@@ -1251,114 +1187,84 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 del user_estimate_sessions[user_id]
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                    TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
                 )
                 return
-
             session_data["answers"]["color_count"] = user_message
-            # ===== ★ ここから追記 ★ ====================================
-            # 「背中のみ」のときは背ネーム選択に進ませる
+
             if session_data["answers"]["print_position"] == "背中のみ":
-                session_data["step"] = 8                      # 次へ
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    flex_back_name()                         # ⑧の Flex
-                )
-                return                                        # ここで抜ける
-            # ===== ★ 追記ここまで ★ ====================================
-            
+                session_data["step"] = 8
+                line_bot_api.reply_message(event.reply_token, flex_back_name())
+                return
+
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
             quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
-            order_url = (
-                "https://bro-shop-test.onrender.com/"
-                f"web_order_form?uid={user_id}"
-            )
             reply_text = (
-            f"概算のお見積りが完了しました。\n\n"
-            f"見積番号: {quote_number}\n"
-            f"属性: {est_data['user_type']}\n"
-            f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
-            f"予算: {est_data['budget']}\n"
-            f"商品: {est_data['item']}\n"
-            f"枚数: {est_data['quantity']}\n"
-            f"プリント位置: {est_data['print_position']}\n"
-            f"色数: {est_data['color_count']}\n"
-            f"背ネーム・番号: {est_data.get('back_name', 'なし')}\n\n"
-            f"【合計金額】¥{total_price:,}\n"
-            f"【1枚あたり】¥{unit_price:,}\n"
-            "\n"
-            "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
-            "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
-        )
-
+                f"概算のお見積りが完了しました。\n\n"
+                f"見積番号: {quote_number}\n"
+                f"属性: {est_data['user_type']}\n"
+                f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
+                f"商品: {est_data['item']}\n"
+                f"枚数: {est_data['quantity']}\n"
+                f"プリント位置: {est_data['print_position']}\n"
+                f"色数: {est_data['color_count']}\n"
+                f"背ネーム・番号: {est_data.get('back_name', 'なし')}\n\n"
+                f"【合計金額】¥{total_price:,}\n"
+                f"【1枚あたり】¥{unit_price:,}\n\n"
+                "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
+                "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
+            )
             line_bot_api.reply_message(
                 event.reply_token,
-                    [
-                        TextSendMessage(text=reply_text),
-                        flex_consultation_options()
-                    ]
+                [TextSendMessage(text=reply_text), flex_consultation_options()]
             )
             del user_estimate_sessions[user_id]
-
         else:
             if user_message not in COLOR_COST_MAP_BOTH:
                 del user_estimate_sessions[user_id]
                 line_bot_api.reply_message(
                     event.reply_token,
-                    TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                    TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
                 )
                 return
-
             session_data["answers"]["color_count"] = user_message
             session_data["step"] = 8
             line_bot_api.reply_message(event.reply_token, flex_back_name())
-
         return
 
     elif step == 8:
         valid_back_names = ["ネーム&背番号セット", "ネーム(大)", "番号(大)", "背ネーム・番号を使わない"]
         if user_message in valid_back_names:
             session_data["answers"]["back_name"] = user_message
-            session_data["step"] = 9
-
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
             quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
-            order_url = (
-                "https://bro-shop-test.onrender.com/"
-                f"web_order_form?uid={user_id}"
-            )
             reply_text = (
                 f"概算のお見積りが完了しました。\n\n"
                 f"見積番号: {quote_number}\n"
                 f"属性: {est_data['user_type']}\n"
                 f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
-                f"予算: {est_data['budget']}\n"
                 f"商品: {est_data['item']}\n"
                 f"枚数: {est_data['quantity']}\n"
                 f"プリント位置: {est_data['print_position']}\n"
                 f"色数: {est_data['color_count']}\n"
                 f"背ネーム・番号: {est_data['back_name']}\n\n"
                 f"【合計金額】¥{total_price:,}\n"
-                f"【1枚あたり】¥{unit_price:,}\n"
-                "\n"
+                f"【1枚あたり】¥{unit_price:,}\n\n"
                 "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
                 "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
             )
             line_bot_api.reply_message(
                 event.reply_token,
-                    [
-                        TextSendMessage(text=reply_text),
-                        flex_consultation_options()
-                    ]
+                [TextSendMessage(text=reply_text), flex_consultation_options()]
             )
             del user_estimate_sessions[user_id]
         else:
             del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあるようです。 \nお手数をおかけしますが、再度メニューの「カンタン見積り」より、該当の項目を選択タブからお選びください。\n※テキストの直接入力はご利用いただけませんので、ご了承くださいませ。")
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
         return
 
