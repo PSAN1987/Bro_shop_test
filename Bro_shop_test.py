@@ -570,6 +570,58 @@ def flex_item_select():
         }
     )
 
+def flex_pattern_select(product_name):
+    patterns = ["A", "B", "C", "D", "E", "F"]
+    bubbles = []
+
+    for p in patterns:
+        bubbles.append({
+            "type": "bubble",
+            "hero": {
+                "type": "image",
+                "url": f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png",  # 実際の画像URLに差し替えてください
+                "size": "full",
+                "aspectMode": "cover",
+                "aspectRatio": "1:1"
+            },
+            "body": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": f"パターン{p}で金額を確認",
+                        "wrap": True,
+                        "weight": "bold",
+                        "align": "center"
+                    }
+                ]
+            },
+            "footer": {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "button",
+                        "style": "primary",
+                        "color": "#000000",
+                        "action": {
+                            "type": "message",
+                            "label": f"パターン{p}",
+                            "text": f"パターン{p}"
+                        }
+                    }
+                ]
+            }
+        })
+
+    return FlexSendMessage(
+        alt_text="パターンを選択してください",
+        contents={
+            "type": "carousel",
+            "contents": bubbles
+        }
+    )
 
 
 def flex_quantity():
@@ -1141,43 +1193,44 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             line_bot_api.reply_message(event.reply_token, flex_usage_date())
         else:
             del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-            )
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
         return
 
     elif step == 2:
         if user_message in ["14日目以降", "14日目以内"]:
             session_data["answers"]["usage_date"] = user_message
             session_data["answers"]["discount_type"] = "早割" if user_message == "14日目以降" else "通常"
-            session_data["step"] = 4  # 予算ステップはスキップして item 選択へ
+            session_data["step"] = 3
             line_bot_api.reply_message(event.reply_token, flex_item_select())
         else:
             del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-            )
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
+        return
+
+    elif step == 3:
+        valid_products = [
+            "ドライTシャツ", "ハイクオリティーTシャツ", "ドライロングTシャツ", "ドライポロシャツ",
+            "ゲームシャツ", "ベースボールシャツ", "ストライプベースボールシャツ", "ストライプユニフォーム",
+            "クールネックライトトレーナー", "ジップアップライトトレーナー", "フーディーライトトレーナー", "バスケシャツ"
+        ]
+        if user_message in valid_products:
+            session_data["answers"]["item"] = user_message
+            session_data["step"] = 4
+            line_bot_api.reply_message(event.reply_token, flex_pattern_select(user_message))
+        else:
+            del user_estimate_sessions[user_id]
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
         return
 
     elif step == 4:
-        items = [
-            "ドライTシャツ",
-            "ドライベースボールシャツ",
-            "ゲームシャツ",
-            "ドライポロシャツ",
-        ]
-        if user_message in items:
-            session_data["answers"]["item"] = user_message
+        valid_patterns = ["パターンA", "パターンB", "パターンC", "パターンD", "パターンE", "パターンF"]
+        if user_message in valid_patterns:
+            session_data["answers"]["pattern"] = user_message
             session_data["step"] = 5
             line_bot_api.reply_message(event.reply_token, flex_quantity())
         else:
             del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-            )
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
         return
 
     elif step == 5:
@@ -1188,10 +1241,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             line_bot_api.reply_message(event.reply_token, flex_print_position())
         else:
             del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-            )
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
         return
 
     elif step == 6:
@@ -1207,20 +1257,14 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 line_bot_api.reply_message(event.reply_token, flex_color_count_both())
         else:
             del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-            )
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
         return
 
     elif step == 7:
         if session_data["is_single"]:
             if user_message not in COLOR_COST_MAP_SINGLE:
                 del user_estimate_sessions[user_id]
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-                )
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
                 return
             session_data["answers"]["color_count"] = user_message
 
@@ -1238,6 +1282,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"属性: {est_data['user_type']}\n"
                 f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
                 f"商品: {est_data['item']}\n"
+                f"パターン: {est_data.get('pattern','')}\n"
                 f"枚数: {est_data['quantity']}\n"
                 f"プリント位置: {est_data['print_position']}\n"
                 f"色数: {est_data['color_count']}\n"
@@ -1247,18 +1292,12 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
                 "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
             )
-            line_bot_api.reply_message(
-                event.reply_token,
-                [TextSendMessage(text=reply_text), flex_consultation_options()]
-            )
+            line_bot_api.reply_message(event.reply_token, [TextSendMessage(text=reply_text), flex_consultation_options()])
             del user_estimate_sessions[user_id]
         else:
             if user_message not in COLOR_COST_MAP_BOTH:
                 del user_estimate_sessions[user_id]
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-                )
+                line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
                 return
             session_data["answers"]["color_count"] = user_message
             session_data["step"] = 8
@@ -1278,6 +1317,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 f"属性: {est_data['user_type']}\n"
                 f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
                 f"商品: {est_data['item']}\n"
+                f"パターン: {est_data.get('pattern','')}\n"
                 f"枚数: {est_data['quantity']}\n"
                 f"プリント位置: {est_data['print_position']}\n"
                 f"色数: {est_data['color_count']}\n"
@@ -1287,25 +1327,16 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "▼上記お見積もり内容でご注文を希望の場合は「デザインの相談をする」をご選択ください。\n"
                 "その他、お見積、ご注文に関しての場合は「個別に相談」をご選択後、内容を入力ください。"
             )
-            line_bot_api.reply_message(
-                event.reply_token,
-                [TextSendMessage(text=reply_text), flex_consultation_options()]
-            )
+            line_bot_api.reply_message(event.reply_token, [TextSendMessage(text=reply_text), flex_consultation_options()])
             del user_estimate_sessions[user_id]
         else:
             del user_estimate_sessions[user_id]
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
-            )
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。"))
         return
 
     else:
         del user_estimate_sessions[user_id]
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="エラーが発生しました。見積りフローを終了しました。最初からやり直してください。")
-        )
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="エラーが発生しました。見積りフローを終了しました。最初からやり直してください。"))
         return
 
 
