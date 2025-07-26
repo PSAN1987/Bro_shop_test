@@ -656,6 +656,71 @@ def flex_quantity():
     }
     return FlexSendMessage(alt_text="必要枚数を選択してください", contents=flex_body)
 
+def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
+    item = estimate_data["item"]
+    pattern_raw = estimate_data.get("pattern", "")
+    pattern = pattern_raw.replace("パターン", "").strip()  # A, B, C...
+
+    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png"
+
+    alt_text = f"{item}の見積結果"
+
+    flex = {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": image_url,
+            "size": "full",
+            "aspectMode": "cover",
+            "aspectRatio": "1:1"
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "md",
+            "contents": [
+                {"type": "text", "text": f"✅ 概算見積", "weight": "bold", "size": "lg"},
+                {"type": "text", "text": f"属性: {estimate_data['user_type']}"},
+                {"type": "text", "text": f"使用日: {estimate_data['usage_date']}（{estimate_data['discount_type']}）"},
+                {"type": "text", "text": f"商品: {item}"},
+                {"type": "text", "text": f"パターン: {pattern_raw}"},
+                {"type": "text", "text": f"枚数: {estimate_data['quantity']}"},
+                {"type": "separator"},
+                {"type": "text", "text": f"【合計金額】¥{total_price:,}", "weight": "bold"},
+                {"type": "text", "text": f"【1枚あたり】¥{unit_price:,}"},
+                {"type": "separator"},
+                {"type": "text", "text": "※上記は色数1色・背ネームなしの簡易見積です。\nより正確な金額をご希望の方は、下記からデザイン相談へお進みください。", "wrap": True, "size": "sm"}
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#000000",
+                    "action": {
+                        "type": "postback",
+                        "label": "デザイン相談",
+                        "data": "CONSULT_DESIGN"
+                    }
+                },
+                {
+                    "type": "button",
+                    "style": "secondary",
+                    "action": {
+                        "type": "postback",
+                        "label": "個別相談",
+                        "data": "CONSULT_PERSONAL"
+                    }
+                }
+            ]
+        }
+    }
+
+    return FlexSendMessage(alt_text=alt_text, contents=flex)
 
 # -----------------------
 # お問い合わせ時に返信するFlex Message
@@ -1025,39 +1090,31 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
 
     elif step == 5:
         valid_choices = ["10～19枚", "20～29枚", "30～39枚", "40～49枚", "50～99枚", "100枚以上"]
-    if user_message in valid_choices:
-        session_data["answers"]["quantity"] = user_message
-        session_data["step"] = 6  # 最終ステップに進む（または終了）
+        if user_message in valid_choices:
+            session_data["answers"]["quantity"] = user_message
+            session_data["step"] = 6  # 最終ステップに進む
 
-        # プリント位置、色数、背ネームは仮値を自動設定
-        session_data["answers"]["print_position"] = "前のみ"
-        session_data["answers"]["color_count"] = "前 or 背中 1色"  # COLOR_COST_MAP_SINGLE より
-        session_data["answers"]["back_name"] = ""
+            # プリント位置、色数、背ネームは仮値を自動設定
+            session_data["answers"]["print_position"] = "前のみ"
+            session_data["answers"]["color_count"] = "前 or 背中 1色"  # COLOR_COST_MAP_SINGLE より
+            session_data["answers"]["back_name"] = ""
 
-        # 見積もりを実行
-        est_data = session_data["answers"]
-        total_price, unit_price = calculate_estimate(est_data)
-        quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
+            # 見積もりを実行
+            est_data = session_data["answers"]
+            total_price, unit_price = calculate_estimate(est_data)
+            quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
 
-        reply_text = (
-            "✅ ご入力いただいた内容に基づく概算見積です：\n\n"
-            f"属性: {est_data['user_type']}\n"
-            f"使用日: {est_data['usage_date']}（{est_data['discount_type']}）\n"
-            f"商品: {est_data['item']}\n"
-            f"パターン: {est_data.get('pattern','')}\n"
-            f"枚数: {est_data['quantity']}\n\n"
-            f"【合計金額】¥{total_price:,}\n"
-            f"【1枚あたり】¥{unit_price:,}\n\n"
-            "※上記は色数1色・背ネームなしの簡易見積です。\n"
-            "より正確な金額をご希望の方は、このままデザイン相談にお進みください。"
-        )
+            # Flex メッセージ（画像付き見積結果）
+            flex_msg = flex_estimate_result_with_image(est_data, total_price, unit_price, quote_number)
 
-        line_bot_api.reply_message(
-            event.reply_token,
-            [TextSendMessage(text=reply_text), flex_consultation_options()]
-        )
+            line_bot_api.reply_message(
+                event.reply_token,
+                flex_msg
+            )
 
-        del user_estimate_sessions[user_id]
+            # セッション削除
+            del user_estimate_sessions[user_id]
+
     else:
         del user_estimate_sessions[user_id]
         line_bot_api.reply_message(
@@ -1065,6 +1122,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
             TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
         )
     return
+
 
 
 # -----------------------
