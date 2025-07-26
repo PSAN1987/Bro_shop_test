@@ -239,12 +239,7 @@ def write_to_spreadsheet_for_catalog(form_data: dict):
 # -----------------------
 from PRICE_TABLE_2025 import (
     PRICE_TABLE_GENERAL,
-    COLOR_COST_MAP,
-    COLOR_ATTR_MAP,
-    SPECIAL_SINGLE_COLOR_FEE,
-    FULLCOLOR_SIZE_FEE,
-    BACK_NAME_FEE,
-    OPTION_INK_EXTRA
+    PRICE_TABLE_STUDENT
 )
 
 from collections import defaultdict
@@ -304,25 +299,23 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
     return quote_number
 
 
-from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL
+from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL, PRICE_TABLE_STUDENT
 
 def calculate_estimate(estimate_data):
     item = estimate_data.get("item", "")
     pattern = estimate_data.get("pattern", "")
     qty_text = estimate_data.get("quantity", "")
+    user_type = estimate_data.get("user_type", "一般")
 
-    # 数値に変換（例: "30～39枚" → 30）※数量レンジは1つの基準値に丸める
     quantity_map = {
         "10〜19枚": 10, "20～29枚": 20, "30～39枚": 30,
         "40～49枚": 40, "50～99枚": 50, "100枚以上": 100,
-        "20～29枚": 20, "100枚以上": 100  # ユーザー入力からの変換も考慮
+        "20〜29枚": 20, "100枚以上": 100
     }
 
-    # 入力値が "30～39枚" などの表記ならそのまま
     quantity_key = qty_text if "枚" in qty_text else None
     quantity_value = quantity_map.get(quantity_key, 1)
 
-    # quantity_value から最適な quantity_range を再検索
     def get_quantity_range(qty):
         if qty < 20:
             return "10〜19枚"
@@ -339,14 +332,15 @@ def calculate_estimate(estimate_data):
 
     quantity_range = get_quantity_range(quantity_value)
 
-    # 対応する価格行を検索
-    for row in PRICE_TABLE_GENERAL:
+    # ▼ 属性に応じたテーブルを選択
+    price_table = PRICE_TABLE_STUDENT if user_type == "学生" else PRICE_TABLE_GENERAL
+
+    for row in price_table:
         if row["item"] == item and row["pattern"] == pattern and row["quantity_range"] == quantity_range:
             unit_price = row["unit_price"]
             total_price = unit_price * quantity_value
             return total_price, unit_price
 
-    # 見つからない場合はエラー処理
     return 0, 0
 
 
