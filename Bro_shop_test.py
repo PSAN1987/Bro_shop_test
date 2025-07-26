@@ -824,6 +824,10 @@ def handle_postback(event):
 
     # --- デザイン相談 or 個別相談 選択時の応答 ---------------
     if data == "CONSULT_DESIGN":
+        # セッション初期化
+        if event.source.user_id in user_estimate_sessions:
+            del user_estimate_sessions[event.source.user_id]
+
         message = (
             "有人チャットに接続いたします。\n"
             "ご検討中のデザインがございましたら、画像やイラストなどの資料をお送りくださいませ。\n\n"
@@ -833,13 +837,14 @@ def handle_postback(event):
             "その他ご要望やご不明点がございましたら、お気軽にメッセージをお送りくださいませ。\n"
             "どうぞよろしくお願いいたします。"
         )
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message)
-        )
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
         return
 
     if data == "CONSULT_PERSONAL":
+        # セッション初期化
+        if event.source.user_id in user_estimate_sessions:
+            del user_estimate_sessions[event.source.user_id]
+
         message = (
             "スタッフによるチャット対応を開始いたします。\n"
             "ご検討中の商品について、金額やデザインに関するご質問がございましたら、こちらからお気軽にご相談ください。\n\n"
@@ -849,10 +854,7 @@ def handle_postback(event):
             "そのほか、ご要望やご不明点がございましたら、メッセージにてお知らせください。\n"
             "よろしくお願いいたします。"
         )
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message)
-        )
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=message))
         return
     
     # --- 注文確定 --------------------------------------------------
@@ -951,6 +953,10 @@ def handle_message(event: MessageEvent):
 
     # 2) 有人チャット
     if user_message == "#有人チャット":
+        # セッションを初期化しておく
+        if user_id in user_estimate_sessions:
+            del user_estimate_sessions[user_id]
+
         reply_text = (
             "有人チャットに接続いたします。\n"
             "ご検討中のデザインを画像やイラストでお送りください。\n\n"
