@@ -536,11 +536,22 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
             "spacing": "md",
             "contents": [
                 {"type": "text", "text": f"✅ 概算見積", "weight": "bold", "size": "lg"},
-                {"type": "text", "text": f"見積番号: {quote_number}", "size": "sm"},
+
+                # ▼ 見積番号（ラベル＋青文字）
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                        {"type": "text", "text": "見積番号: ", "flex": 0},
+                        {"type": "text", "text": quote_number, "wrap": True, "color": "#0000FF"}
+                    ]
+                },
+
                 {"type": "text", "text": f"属性: {estimate_data['user_type']}"},
                 {"type": "text", "text": f"使用日: {estimate_data['usage_date']}（{estimate_data['discount_type']}）"},
-                {"type": "text", "text": f"商品: {item}"},
-                {"type": "text", "text": f"パターン: {pattern_raw}"},
+                {"type": "text", "text": f"商品: {estimate_data['item']}"},
+                {"type": "text", "text": f"パターン: {estimate_data['pattern']}"},
                 {"type": "text", "text": f"枚数: {estimate_data['quantity']}"},
                 {"type": "separator"},
                 {"type": "text", "text": f"【合計金額】¥{total_price:,}", "weight": "bold"},
@@ -549,6 +560,7 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                 {"type": "text", "text": "※より正確な金額をご希望の方は、下記からデザイン相談へお進みください。", "wrap": True, "size": "sm"}
             ]
         },
+
         "footer": {
             "type": "box",
             "layout": "vertical",
