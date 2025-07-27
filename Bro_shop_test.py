@@ -1161,7 +1161,24 @@ def submit_catalog_form():
 def show_quotation_form():
     token = str(uuid.uuid4())
     session['quotation_form_token'] = token
-    return render_template("quotation_form.html", token=token)
+
+    quote_no = request.args.get("quote_no", "").strip()
+    prefill_data = {}
+
+    if quote_no:
+        try:
+            gc = get_gspread_client()
+            sh = gc.open_by_key(SPREADSHEET_KEY)
+            ws = sh.worksheet("Simple Estimate_1")
+            all_rows = ws.get_all_records()
+            for row in all_rows:
+                if str(row.get("見積番号")) == quote_no:
+                    prefill_data = row
+                    break
+        except Exception as e:
+            print("読み取りエラー:", e)
+
+    return render_template("quotation_form.html", token=token, prefill=prefill_data)
 
 @app.route("/submit_quotation", methods=["POST"])
 def submit_quotation_form():
@@ -1214,6 +1231,7 @@ def write_to_quotation_spreadsheet(form_data: dict):
     jst = pytz.timezone('Asia/Tokyo')
     now_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
 
+    # 新しいデータ行
     new_row = [
         now_str,
         form_data["quote_no"],
@@ -1231,8 +1249,16 @@ def write_to_quotation_spreadsheet(form_data: dict):
         form_data["print_design"],
         form_data["form_url"]
     ]
-    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
+    # 全データ取得して、見積番号で検索（2行目以降）
+    records = worksheet.get_all_values()
+    for idx, row in enumerate(records[1:], start=2):  # 1-based index, skip header
+        if row[1] == form_data["quote_no"]:
+            worksheet.update(f"A{idx}:O{idx}", [new_row])  # 上書き
+            return
+
+    # 一致しなければ末尾に追加
+    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
 # -----------------------
 # 動作確認用
