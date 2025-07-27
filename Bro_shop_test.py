@@ -508,12 +508,16 @@ def flex_quantity():
     }
     return FlexSendMessage(alt_text="必要枚数を選択してください", contents=flex_body)
 
+from datetime import datetime
+
 def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
     item = estimate_data["item"]
     pattern_raw = estimate_data.get("pattern", "")
-    pattern = pattern_raw.replace("パターン", "").strip()  # A, B, C...
+    pattern = pattern_raw.replace("パターン", "").strip()
 
-    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png"
+    # ▼ キャッシュ対策のためバージョン付きURLに変更
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png?v={timestamp}"
 
     alt_text = f"{item}の見積結果"
 
@@ -532,6 +536,7 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
             "spacing": "md",
             "contents": [
                 {"type": "text", "text": f"✅ 概算見積", "weight": "bold", "size": "lg"},
+                {"type": "text", "text": f"見積番号: {quote_number}", "size": "sm"},
                 {"type": "text", "text": f"属性: {estimate_data['user_type']}"},
                 {"type": "text", "text": f"使用日: {estimate_data['usage_date']}（{estimate_data['discount_type']}）"},
                 {"type": "text", "text": f"商品: {item}"},
