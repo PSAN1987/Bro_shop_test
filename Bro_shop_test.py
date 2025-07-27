@@ -464,6 +464,12 @@ def flex_usage_date():
     }
     return FlexSendMessage(alt_text="使用日を選択してください", contents=flex_body)
 
+from datetime import datetime
+
+def versioned_image(url: str) -> str:
+    version = datetime.now().strftime("%Y%m%d%H%M%S")
+    return f"{url}?v={version}"
+
 def flex_item_select():
     def create_category_bubble(title, items):
         return {
@@ -524,27 +530,27 @@ def flex_item_select():
         }
 
     # 画像付きアイテムカテゴリ一覧
+    now = datetime.now().strftime("%Y%m%d%H%M%S")
     categories = [
         ("Tシャツ系", [
-            ("ドライTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_tshirt.png"),
-            ("ハイクオリティーTシャツ", "https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png"),
-            ("ドライロングTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png"),
-            ("ドライポロシャツ", "https://catalog-bot-zf1t.onrender.com/dry_polo.png")
+            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png?v={now}"),
+            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png?v={now}"),
+            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png?v={now}"),
+            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png?v={now}")
         ]),
         ("スポーツ系", [
-            ("ゲームシャツ", "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
-            ("ベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/baseball_shirt.png"),
-            ("ストライプベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/stripe_baseball.png"),
-            ("ストライプユニフォーム", "https://catalog-bot-zf1t.onrender.com/stripe_uniform.png")
+            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png?v={now}"),
+            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png?v={now}"),
+            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png?v={now}"),
+            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png?v={now}")
         ]),
         ("トレーナー系", [
-            ("クールネックライトトレーナー", "https://catalog-bot-zf1t.onrender.com/crew_trainer.png"),
-            ("ジップアップライトトレーナー", "https://catalog-bot-zf1t.onrender.com/zip_trainer.png"),
-            ("フーディーライトトレーナー", "https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png"),
-            ("バスケシャツ", "https://catalog-bot-zf1t.onrender.com/basketball_shirt.png")
+            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png?v={now}"),
+            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png?v={now}"),
+            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png?v={now}"),
+            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png?v={now}")
         ])
     ]
-
     # 各カテゴリごとのBubble生成
     bubbles = [create_category_bubble(title, items) for title, items in categories]
 
