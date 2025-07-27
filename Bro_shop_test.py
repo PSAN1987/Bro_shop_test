@@ -369,7 +369,7 @@ def flex_user_type():
                 },
                 {
                     "type": "text",
-                    "text": "ご利用者の属性を選択してください。",
+                    "text": "　ご利用者の属性を選択してください。",
                     "size": "sm",
                     "wrap": True
                 }
@@ -406,7 +406,7 @@ def flex_user_type():
             "flex": 0
         }
     }
-    return FlexSendMessage(alt_text="属性を選択してください", contents=flex_body)
+    return FlexSendMessage(alt_text="　属性を選択してください", contents=flex_body)
 
 
 def flex_usage_date():
@@ -425,7 +425,7 @@ def flex_usage_date():
                 },
                 {
                     "type": "text",
-                    "text": "ご使用日は、今日より? \n(注文日より使用日が14日目以降なら早割)",
+                    "text": "　ご使用日は、今日より? \n　(注文日より使用日が14日目以降なら早割)",
                     "size": "sm",
                     "wrap": True
                 }
@@ -462,7 +462,7 @@ def flex_usage_date():
             "flex": 0
         }
     }
-    return FlexSendMessage(alt_text="使用日を選択してください", contents=flex_body)
+    return FlexSendMessage(alt_text="　使用日を選択してください", contents=flex_body)
 
 from datetime import datetime
 
@@ -619,6 +619,7 @@ def flex_pattern_select(product_name):
             "contents": bubbles
         }
     )
+
 
 
 def flex_quantity():
