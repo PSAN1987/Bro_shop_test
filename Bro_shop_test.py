@@ -74,139 +74,14 @@ def get_or_create_worksheet(sheet, title):
                 "メールアドレス", "Insta/TikTok名",
                 "在籍予定の学校名と学年", "その他(質問・要望)"
             ]])
-        elif title == "簡易見積":
-            # 属性カラムを追加したため、A1:M1 で13列に拡張
-            ws.update('A1:N1', [[
+        elif title == "Simple Estimate_1":
+            ws.update('A1:M1', [[
                 "日時", "見積番号", "ユーザーID", "属性",
-                "使用日(割引区分)", "予算", "商品名", "枚数",
+                "使用日(割引区分)", "商品名", "パターン", "枚数",
                 "プリント位置", "色数", "背ネーム",
-                "合計金額", "単価","WebフォームURL"
+                "合計金額", "単価"
             ]])
-        elif title == "WebOrderRequests":
-            headers = [
-    # 基本情報 --------------------------------------------------------
-    "日時",
-    "商品名", "品番", "カラー番号", "商品カラー",
-    "150サイズ枚数", "SSサイズ枚数", "Sサイズ枚数", "Mサイズ枚数",
-    "L(F)サイズ枚数", "LL(XL)サイズ枚数", "3L(XXL)サイズ枚数", "合計枚数",
-
-    # ── １ヵ所目 ─────────────────────────────────────────
-    "プリント位置No1", "ネーム・番号オプション1", "ネーム・番号プリント種別1",
-    "単色カラー1", "フチ付きタイプ1",
-    "文字色1", "フチ色1(1)", "フチ色2(1)",
-    "フォント種別1", "フォント番号1",
-    "プリントカラー1色目(1)", "プリントカラー2色目(1)", "プリントカラー3色目(1)",
-    "フルカラーサイズ1",
-    "デザイン番号1", "デザインサイズ種別1", "デザイン幅cm1", "デザイン高さcm1",
-
-    # ── ２ヵ所目 ─────────────────────────────────────────
-    "プリント位置No2", "ネーム・番号オプション2", "ネーム・番号プリント種別2",
-    "単色カラー2", "フチ付きタイプ2",
-    "文字色2", "フチ色1(2)", "フチ色2(2)",
-    "フォント種別2", "フォント番号2",
-    "プリントカラー1色目(2)", "プリントカラー2色目(2)", "プリントカラー3色目(2)",
-    "フルカラーサイズ2",
-    "デザイン番号2", "デザインサイズ種別2", "デザイン幅cm2", "デザイン高さcm2",
-
-    # ── ３ヵ所目 ─────────────────────────────────────────
-    "プリント位置No3", "ネーム・番号オプション3", "ネーム・番号プリント種別3",
-    "単色カラー3", "フチ付きタイプ3",
-    "文字色3", "フチ色1(3)", "フチ色2(3)",
-    "フォント種別3", "フォント番号3",
-    "プリントカラー1色目(3)", "プリントカラー2色目(3)", "プリントカラー3色目(3)",
-    "フルカラーサイズ3",
-    "デザイン番号3", "デザインサイズ種別3", "デザイン幅cm3", "デザイン高さcm3",
-
-    # ── ４ヵ所目 ─────────────────────────────────────────
-    "プリント位置No4", "ネーム・番号オプション4", "ネーム・番号プリント種別4",
-    "単色カラー4", "フチ付きタイプ4",
-    "文字色4", "フチ色1(4)", "フチ色2(4)",
-    "フォント種別4", "フォント番号4",
-    "プリントカラー1色目(4)", "プリントカラー2色目(4)", "プリントカラー3色目(4)",
-    "フルカラーサイズ4",
-    "デザイン番号4", "デザインサイズ種別4", "デザイン幅cm4", "デザイン高さcm4",
-
-    # 発送・連絡先など --------------------------------------------------
-    "希望お届け日", "使用日", "申込日", "利用学割特典",
-    "学校名", "LINE名", "クラス・団体名",
-    "郵便番号", "住所1", "住所2", "お届け先宛名", "学校TEL",
-    "代表者", "代表者TEL", "代表者メール",
-    "デザイン確認方法", "お支払い方法",
-    "注文番号", "見積番号", "単価", "合計金額"
-]
-            # ❶ 必要な列数を確保（あとで行追加時に不足すると困るため）
-            ws.resize(rows=2000, cols=len(headers))
-            # ❷ A1 だけを指定してヘッダーを書き込む
-            ws.update('A1', [headers])
-            ws.update('A1', [headers])          # ← 'A1:AZ1' を 'A1' に変更
-            ws.resize(rows=2000, cols=len(headers))   # 念のため列も合わせておく
-            # 新たに Webフォーム注文のヘッダーをセット（必要に応じて列を追加/変更）
     return ws
-
-# ヘッダーと同じ順序でキーを定義 （フォーム上の name と合わせる）
-WEB_ORDER_COLUMN_KEYS = [
-    # 基本情報
-    "timestamp",
-    "productName", "productNo", "colorNo", "colorName",
-    "size150", "sizeSS", "sizeS", "sizeM",
-    "sizeL", "sizeXL", "sizeXXL", "totalQuantity",
-
-    # ── １ヵ所目 ─────────────────────────────────────────
-    "printPositionNo1", "nameNumberOption1", "nameNumberPrintType1",
-    "singleColor1", "edgeType1",
-    "edgeCustomTextColor1", "edgeCustomEdgeColor1", "edgeCustomEdgeColor2_1",
-    "fontType1", "fontNumber1",
-    "printColorOption1_1", "printColorOption1_2", "printColorOption1_3",
-    "fullColorSize1",
-    "designCode1", "designSize1", "designSizeX1", "designSizeY1",
-
-    # ── ２ヵ所目 ─────────────────────────────────────────
-    "printPositionNo2", "nameNumberOption2", "nameNumberPrintType2",
-    "singleColor2", "edgeType2",
-    "edgeCustomTextColor2", "edgeCustomEdgeColor2", "edgeCustomEdgeColor2_2",
-    "fontType2", "fontNumber2",
-    "printColorOption2_1", "printColorOption2_2", "printColorOption2_3",
-    "fullColorSize2",
-    "designCode2", "designSize2", "designSizeX2", "designSizeY2",
-
-    # ── ３ヵ所目 ─────────────────────────────────────────
-    "printPositionNo3", "nameNumberOption3", "nameNumberPrintType3",
-    "singleColor3", "edgeType3",
-    "edgeCustomTextColor3", "edgeCustomEdgeColor3", "edgeCustomEdgeColor2_3",
-    "fontType3", "fontNumber3",
-    "printColorOption3_1", "printColorOption3_2", "printColorOption3_3",
-    "fullColorSize3",
-    "designCode3", "designSize3", "designSizeX3", "designSizeY3",
-
-    # ── ４ヵ所目 ─────────────────────────────────────────
-    "printPositionNo4", "nameNumberOption4", "nameNumberPrintType4",
-    "singleColor4", "edgeType4",
-    "edgeCustomTextColor4", "edgeCustomEdgeColor4", "edgeCustomEdgeColor2_4",
-    "fontType4", "fontNumber4",
-    "printColorOption4_1", "printColorOption4_2", "printColorOption4_3",
-    "fullColorSize4",
-    "designCode4", "designSize4", "designSizeX4", "designSizeY4",
-
-    # 発送・連絡先など
-    "deliveryDate", "useDate", "applicationDate", "discountOption",
-    "schoolName", "lineName", "classGroupName",
-    "zipCode", "address1", "address2","addresseeName","schoolTel",
-    "representativeName", "representativeTel", "representativeEmail",
-    "designCheckMethod", "paymentMethod",
-
-    "orderNo", "quote_no","unitPrice", "totalPrice"
-]
-
-def build_web_order_row_values(data: dict) -> list:
-    """
-    WebOrderRequests のヘッダー順に沿って、必ず同じ数・同じ順序で配列を返す。
-    data にキーが無い場合は空文字 "" を返す。
-    """
-    row = []
-    for key in WEB_ORDER_COLUMN_KEYS:
-        row.append(data.get(key, ""))  # 空文字でも埋める
-    return row
-
 
 def write_to_spreadsheet_for_catalog(form_data: dict):
     gc = get_gspread_client()
@@ -266,16 +141,16 @@ user_estimate_sessions = {}  # { user_id: {"step": n, "answers": {...}, "is_sing
 
 def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_price):
     """
-    計算が終わった見積情報をスプレッドシートの「簡易見積」に書き込む
+    見積情報をスプレッドシートの「Simple Estimate_1」に書き込む
     """
     gc = get_gspread_client()
     sh = gc.open_by_key(SPREADSHEET_KEY)
-    worksheet = get_or_create_worksheet(sh, "簡易見積")
+    worksheet = get_or_create_worksheet(sh, "Simple Estimate_1")
 
-    quote_number = str(int(time.time()))  # 見積番号を UNIX時間 で仮生成
-    order_url = f"https://bro-shop-test.onrender.com/web_order_form?quote_no={quote_number}&uid={user_id}"
+    quote_number = str(int(time.time()))
+    # WebフォームURLはLINEからは未使用のため空欄
+    form_url = ""
 
-    # 日本時間の現在時刻
     jst = pytz.timezone('Asia/Tokyo')
     now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
 
@@ -283,21 +158,20 @@ def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_pric
         now_jst_str,
         quote_number,
         user_id,
-        estimate_data['user_type'],  # 追加した「属性」
+        estimate_data['user_type'],
         f"{estimate_data['usage_date']}({estimate_data['discount_type']})",
-        estimate_data.get('budget', ''),
         estimate_data['item'],
+        estimate_data['pattern'],
         estimate_data['quantity'],
         estimate_data['print_position'],
         estimate_data['color_count'],
-        estimate_data.get('back_name', ''), 
-       f"¥{unit_price:,}",
-       order_url
-       ]
+        estimate_data.get('back_name', ''),
+        f"¥{total_price:,}",
+        f"¥{unit_price:,}"
+    ]
     worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
     return quote_number
-
 
 from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL, PRICE_TABLE_STUDENT
 
@@ -1290,382 +1164,86 @@ def submit_catalog_form():
 
     return "フォーム送信ありがとうございました！ カタログ送付をお待ちください。", 200
 
+# -----------------------
+# カンタン見積管理HTMLの処理
+# -----------------------
 
-# ========== ここから新規追加 (Webオーダーフォーム) ==========
+@app.route("/quotation_form", methods=["GET"])
+def show_quotation_form():
+    token = str(uuid.uuid4())
+    session['quotation_form_token'] = token
+    return render_template("quotation_form.html", token=token)
 
-@app.route("/web_order_form")
-def show_web_order_form():
-    quote_no = request.args.get("quote_no")
-    uid = request.args.get("uid")
-    initial_data = {}
+@app.route("/submit_quotation", methods=["POST"])
+def submit_quotation_form():
+    form_token = request.form.get('form_token')
+    if form_token != session.get('quotation_form_token'):
+        return "二重送信、または不正なアクセスです。", 400
 
-    gc = get_gspread_client()
-    sh = gc.open_by_key(SPREADSHEET_KEY)
+    session.pop('quotation_form_token', None)
 
-    # ▼ ① WebOrderRequests から最新の下書きデータを探す
+    form_data = {
+        "quote_no": request.form.get("quote_no", "").strip(),
+        "user_id": request.form.get("user_id", "").strip(),
+        "attribute": request.form.get("attribute", "").strip(),
+        "usage_date": request.form.get("usage_date", "").strip(),
+        "product_category": request.form.get("product_category", "").strip(),
+        "pattern": request.form.get("pattern", "").strip(),
+        "quantity": request.form.get("quantity", "").strip(),
+        "total_price": request.form.get("total_price", "").strip(),
+        "unit_price": request.form.get("unit_price", "").strip(),
+        "print_position": request.form.get("print_position", "").strip(),
+        "print_color": request.form.get("print_color", "").strip(),
+        "print_size": request.form.get("print_size", "").strip(),
+        "print_design": request.form.get("print_design", "").strip(),
+        "form_url": request.form.get("form_url", "").strip()
+    }
+
     try:
-        ws_order = get_or_create_worksheet(sh, "WebOrderRequests")
-        quote_col = ws_order.col_values(WEB_ORDER_COLUMN_KEYS.index("quote_no") + 1)
-        if quote_no in quote_col:
-            idx = quote_col.index(quote_no) + 1
-            row = ws_order.row_values(idx)
-            initial_data = dict(zip(WEB_ORDER_COLUMN_KEYS, row))
+        write_to_quotation_spreadsheet(form_data)
     except Exception as e:
-        print(f"WebOrderRequests から取得失敗: {e}")
+        return f"エラーが発生しました: {e}", 500
 
-    # ▼ ② もし WebOrderRequests になければ簡易見積から fallback する（任意）
-    if not initial_data and quote_no:
-        try:
-            ws_estimate = get_or_create_worksheet(sh, "簡易見積")
-            estimate_col = ws_estimate.col_values(1)  # 見積番号列
-            if quote_no in estimate_col:
-                idx = estimate_col.index(quote_no) + 1
-                row = ws_estimate.row_values(idx)
-                initial_data = {
-                    "productName": row[6],
-                    "quantity": row[7],
-                    "print_position": row[8],
-                    "color_count": row[9],
-                    "back_name": row[10],
-                }
-        except Exception as e:
-            print(f"簡易見積からの読み込みも失敗: {e}")
+    return "見積内容を保存しました。", 200
 
-    # ▼ render_template に渡す
-    return render_template(
-        "web_order_form.html",
-        token=str(uuid.uuid4()),
-        liff_id=os.getenv("WEB_ORDER_LIFF_ID"),
-        initial_data=initial_data,
-        quote_no=quote_no
-    )
-
-
-@app.route("/submit_web_order_form", methods=["POST"])
-@app.route("/submit_web_order_form", methods=["POST"])
-def submit_web_order_form():
-    form_data = {k: request.form.get(k, "").strip() for k in request.form}
-    submit_mode = request.form.get("submit_mode", "final")  # default = final
-
-    # --- ✅ 注文番号の扱い（初回だけ生成） ---
-    order_no = form_data.get("orderNo")
-    if not order_no:
-        jst = pytz.timezone('Asia/Tokyo')
-        order_no = datetime.now(jst).strftime("%Y%m%d%H%M%S")
-    form_data["orderNo"] = order_no
-
-    # --- ✅ タイムスタンプとステータスの保存 ---
-    jst = pytz.timezone('Asia/Tokyo')
-    now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
-    form_data["timestamp"] = now_jst_str
-    form_data["submit_mode"] = submit_mode  # ← 下書き or 確定ステータス保持
-
-    # --- ✅ バリデーション（確定時のみ） ---
-    if submit_mode == "final":
-        required_fields = [
-            "productName", "colorName", "sizeM", "deliveryDate",
-            "schoolName", "representativeName", "representativeTel",
-            "zipCode", "address2", "addresseeName", "discountOption",
-            "designCheckMethod", "paymentMethod"
-        ]
-        for field in required_fields:
-            if not form_data.get(field):
-                return f"必須項目が未入力です：{field}", 400
-
-    # --- ✅ 金額再計算（常に実行） ---
-    est = calculate_web_order_estimate(form_data)
-    form_data["unitPrice"] = est["unit_price"]
-    form_data["totalPrice"] = est["total_price"]
-
-    # --- ✅ スプレッドシート保存（新規 or 上書き） ---
-    write_to_spreadsheet_for_web_order(form_data)
-
-    # --- ✅ 通知（注文確定時のみ） ---
-    if submit_mode == "final":
-        uid = form_data.get("lineUserId")
-        if uid:
-            summary = make_order_summary(order_no, form_data, est)
-            flex_msg = build_order_confirm_flex(order_no, summary)
-            line_bot_api.push_message(uid, flex_msg)
-
-    # --- ✅ レスポンス返却 ---
-    return "保存が完了しました。" if submit_mode == "draft" else "注文を受け付けました！", 200
-
-
-def write_to_spreadsheet_for_web_order(data: dict):
+def write_to_quotation_spreadsheet(form_data: dict):
     gc = get_gspread_client()
     sh = gc.open_by_key(SPREADSHEET_KEY)
-    worksheet = get_or_create_worksheet(sh, "WebOrderRequests")
 
-    # row_values をヘッダー順に作成
-    row_values = build_web_order_row_values(data)
-
-    # 書き込む
-    worksheet.append_row(row_values, value_input_option="USER_ENTERED")
-
-    
-def calculate_web_order_estimate(data: dict) -> dict:
-    """Web オーダーフォーム１件ぶんの単価・合計金額を返す"""
-
-    # 1) 基本行を PRICE_TABLE から取得 ------------------------------
-    item          = data.get("productName", "")
-    qty           = int(data.get("totalQuantity", "0") or 0)
-    discount_type = "早割" if data.get("discountOption") == "早割" else "通常"
-
-    # プリント位置数 (printPositionNo1〜4 に値が入っている数)
-    pos_cnt = sum(1 for i in range(1,5) if data.get(f"printPositionNo{i}"))
-
-    # PRICE_TABLE から該当行検索
-    def _find():
-        for row in PRICE_TABLE:
-            if (row["item"] == item 
-                and row["discount_type"] == discount_type 
-                and row["min_qty"] <= qty <= row["max_qty"]):
-                return row
-        return None
-
-    row = _find()
-    if not row:
-        # 見つからない場合は金額0を返すなど、適宜処理
-        return {
-            "unit_price": 0,
-            "total_price": 0,
-            "base_unit": 0,
-            "pos_add_fee": 0,
-            "color_fee": 0,
-            "back_name_fee": 0,
-            "option_ink_extra": 0,
-            "fullcolor_extra": 0,
-            "qty": qty
-        }
-
-    base_unit   = row["unit_price"]
-    pos_add_fee = row["pos_add"] * max(0, pos_cnt-1)
-
-    # 2) プリントカラー追加料金 ------------------------------
-    color_add_cnt    = 0     # 2色なら+1、3色なら+2
-    option_ink_extra = 0
-    fullcolor_extra  = 0
-    back_name_fee    = 0     # 背ネーム・番号セット等の加算
-    # ↑ 従来の背ネーム類はここへ合算していく
-
-    for p in range(1,5):
-        if not data.get(f"printPositionNo{p}"):
-            continue
-
-        # 1〜3色入力欄(プリントカラー・オプション)で実際に入力された値を取得
-        color_list = [
-            data.get(f"printColorOption{p}_1"),
-            data.get(f"printColorOption{p}_2"),
-            data.get(f"printColorOption{p}_3"),
-        ]
-        color_list = [c for c in color_list if c]  # 空文字除外
-
-        # 2色指定なら +1、3色指定なら +2
-        if len(color_list) == 2:
-            color_add_cnt += 1
-        elif len(color_list) == 3:
-            color_add_cnt += 2
-
-        # 各色の属性チェック
-        for c in color_list:
-            # (A) ネーム＆背番号セット/ネーム(大)/(小)/番号(大)/(小) が含まれていたら back_name_fee
-            if c in BACK_NAME_FEE:  
-                back_name_fee += BACK_NAME_FEE[c]
-
-            # (B) 特殊カラー(グリッター等)があれば SPECIAL_SINGLE_COLOR_FEE
-            if c in SPECIAL_SINGLE_COLOR_FEE:
-                back_name_fee += SPECIAL_SINGLE_COLOR_FEE[c]
-
-            # (C) COLOR_ATTR_MAP で "オプションインク" なら、option_ink_extra を加算
-            if COLOR_ATTR_MAP.get(c) == "オプションインク":
-                option_ink_extra += OPTION_INK_EXTRA
-
-        # フルカラーオプション
-        fcs = data.get(f"fullColorSize{p}")  # "S"/"M"/"L" など
-        if fcs:
-            fullcolor_extra += FULLCOLOR_SIZE_FEE.get(fcs, 0)  # サイズ別に加算
-
-        # 3) ネーム&番号カラーオプション（単色 or フチ付き）----------------
-        # 単色カラーを選択していた場合
-        single_color = data.get(f"singleColor{p}")
-        if single_color and single_color in SPECIAL_SINGLE_COLOR_FEE:
-            back_name_fee += SPECIAL_SINGLE_COLOR_FEE[single_color]
-
-        # フチ付きタイプを選択していた場合
-        edge_type = data.get(f"edgeType{p}")
-        if edge_type and edge_type != "なし":
-            # たとえばフチ付きは +100円
-            back_name_fee += 100
-
-            # カスタムフチ色の場合、edgeCustomTextColor{p} / edgeCustomEdgeColor{p} / edgeCustomEdgeColor2_{p} の中に
-            # 特殊色があれば追加
-            edge_text = data.get(f"edgeCustomTextColor{p}")
-            edge_col1 = data.get(f"edgeCustomEdgeColor{p}")
-            edge_col2 = data.get(f"edgeCustomEdgeColor2_{p}")
-
-            for ec in (edge_text, edge_col1, edge_col2):
-                if ec and ec in SPECIAL_SINGLE_COLOR_FEE:
-                    back_name_fee += SPECIAL_SINGLE_COLOR_FEE[ec]
-
-    # カラー追加料金 (各1色目はベース料金に含まれている想定)
-    # color_add_cnt * row["color_add"] で追加料金
-    color_fee = color_add_cnt * row["color_add"] + fullcolor_extra + option_ink_extra
-
-    # 4) 単価・合計 ---------------------------------
-    unit_price  = base_unit + pos_add_fee + color_fee + back_name_fee
-    total_price = unit_price * qty
-
-    return {
-        "unit_price":       unit_price,
-        "total_price":      total_price,
-        "base_unit":        base_unit,
-        "pos_add_fee":      pos_add_fee,
-        "color_fee":        color_fee,
-        "back_name_fee":    back_name_fee,
-        "option_ink_extra": option_ink_extra,
-        "fullcolor_extra":  fullcolor_extra,
-        "qty":              qty
-    }
-
-def make_order_summary(order_no: str,
-                       data: dict,
-                       est: dict) -> str:
-    """LINE に送るサマリー（日本語レイアウト & 価格内訳）"""
-
-    # サイズ別内訳（0 枚は表示しない）
-    size_map = [("150","size150"),("SS","sizeSS"),("S","sizeS"),
-                ("M","sizeM"),("L(F)","sizeL"),("LL(XL)","sizeXL"),
-                ("3L","sizeXXL")]
-    size_lines = [f"{label}:{data.get(key,0)}枚" for label,key in size_map]
-    size_block = ", ".join(size_lines)
-
-    # プリント位置＋色
-    pos_lines = []
-    for p in range(1,5):
-        if not data.get(f"printPositionNo{p}"):
-            continue
-        cols = [data.get(f"printColorOption{p}_{i}") for i in (1,2,3)]
-        cols = ", ".join([c for c in cols if c])
-        pos_lines.append(f"{p}か所目 ({data.get(f'printPositionNo{p}')}) : {cols}")
-    pos_block = "\n".join(pos_lines) if pos_lines else "—"
-
-    # （背ネーム・番号などを取得する変数 back_name があっても、ここでは表示しないので削除またはコメントアウト）
-
-    # 価格内訳
-    price_break_down = (
-        f"  ベース価格          ¥{est['base_unit']:,}\n"
-        f"  位置追加            +¥{est['pos_add_fee']:,}\n"
-        f"  色追加              +¥{est['color_fee']:,}\n"
-        f"  背ネーム・番号      +¥{est['back_name_fee']:,}\n"
-        "  -------------------------------\n"
-        f"  単価               ¥{est['unit_price']:,}\n"
-        f"  合計（{est['qty']}枚）   ¥{est['total_price']:,}"
-    )
-
-    # メッセージ作成
-    return (
-        "ご注文ありがとうございます。\n\n"
-        f"注文番号: {order_no}\n"
-        f"商品: {data.get('productName')}\n"
-        f"商品カラー: {data.get('colorName')}\n"
-        f"サイズ別枚数: {size_block}\n"
-        f"合計枚数: {est['qty']} 枚\n\n"
-        "【プリントカラー】\n"
-        f"{pos_block}\n\n"
-        # ↓ この2行を削除・コメントアウトしておく
-        # "【番号・ネーム情報】\n"
-        # f"{back_name}\n\n"
-        "【価格内訳（1枚あたり）】\n"
-        f"{price_break_down}\n\n"
-        "※納期は注文確定後に担当スタッフから連絡をします。"
-    )
-
-def build_order_confirm_flex(order_no: str,
-                             summary_text: str) -> FlexSendMessage:
-    """
-    - order_no      … make_order_summary() で使った注文番号
-    - summary_text  … make_order_summary() で生成した全文
-                      （2000 文字以内ならそのまま入れて OK）
-    """
-    bubble = {
-        "type": "bubble",
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "md",
-            "contents": [
-                {
-                    # ▼ wrap=True を必ず付けると長文でも折り返してくれます
-                    "type": "text",
-                    "text": summary_text,
-                    "wrap": True,
-                    "size": "sm",
-                    "color": "#000000"
-                }
-            ]
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-                {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#000000",          # ピンク
-                    "action": {
-                        "type": "postback",
-                        "label": "注文確定",
-                        "data": f"CONFIRM_ORDER:{order_no}"
-                    }
-                },
-                {
-                    "type": "button",
-                    "style": "secondary",
-                    "action": {
-                        "type": "postback",
-                        "label": "今は注文しない",
-                        "data": f"CANCEL_ORDER:{order_no}"
-                    }
-                }
-            ]
-        }
-    }
-
-    # FlexSendMessage に詰めて返す
-    return FlexSendMessage(
-        alt_text="ご注文内容の確認",
-        contents=bubble
-    )
-
-PALE_GREEN = (0.85, 1.0, 0.85)   # 確定時
-WHITE      = (1.0,  1.0, 1.0)    # キャンセル時
-
-def mark_order_confirmed(order_no: str, *, cancel: bool = False) -> bool:
-    """
-    確定 (=淡い緑)／キャンセル (=白) の 2 役をこなす。
-      cancel=True で白へ塗り戻す
-      戻り値 True: 成功 / False: order_no が見つからない
-    """
-    rgb = WHITE if cancel else PALE_GREEN               # ← ここだけ分岐
-
-    gc = get_gspread_client()
-    sh = gc.open_by_key(SPREADSHEET_KEY)
-    ws = get_or_create_worksheet(sh, "WebOrderRequests")
-
-    ORDER_NO_COL = WEB_ORDER_COLUMN_KEYS.index("orderNo") + 1
-    col_vals = ws.col_values(ORDER_NO_COL)
-
+    # ワークシート取得または作成
     try:
-        row_idx = col_vals.index(order_no) + 1          # 1-origin
-    except ValueError:
-        return False
+        worksheet = sh.worksheet("Simple Estimate_1")
+    except gspread.exceptions.WorksheetNotFound:
+        worksheet = sh.add_worksheet(title="Simple Estimate_1", rows=2000, cols=50)
+        worksheet.update('A1:O1', [[
+            "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
+            "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
+            "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL"
+        ]])
 
-    ws.format(f"A{row_idx}:DA{row_idx}", {              # A〜DA くらいまで
-        "backgroundColor": { "red": rgb[0], "green": rgb[1], "blue": rgb[2] }
-    })
-    return True
+    # JSTの日時
+    jst = pytz.timezone('Asia/Tokyo')
+    now_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
+
+    new_row = [
+        now_str,
+        form_data["quote_no"],
+        form_data["user_id"],
+        form_data["attribute"],
+        form_data["usage_date"],
+        form_data["product_category"],
+        form_data["pattern"],
+        form_data["quantity"],
+        form_data["total_price"],
+        form_data["unit_price"],
+        form_data["print_position"],
+        form_data["print_color"],
+        form_data["print_size"],
+        form_data["print_design"],
+        form_data["form_url"]
+    ]
+    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
+
 
 # -----------------------
 # 動作確認用
