@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>見積番号管理フォーム</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1em;
+        }
+        label {
+            display: block;
+            margin-top: 1em;
+        }
+        input[type=text], textarea {
+            width: 100%;
+            padding: 0.5em;
+            margin-top: 0.3em;
+        }
+        input[type=submit] {
+            margin-top: 1em;
+            padding: 0.7em 1em;
+        }
+    </style>
+</head>
+<body>
+    <h2>見積番号管理フォーム</h2>
+    <form action="/submit_quotation" method="post">
+        <input type="hidden" name="form_token" value="{{ token }}">
+
+        <label>見積番号: <input type="text" name="quote_no" required></label>
+        <label>ユーザーID: <input type="text" name="user_id" required></label>
+        <label>属性: <input type="text" name="attribute" required></label>
+        <label>使用日(割引区分): <input type="text" name="usage_date" required></label>
+        <label>商品カテゴリー: <input type="text" name="product_category" required></label>
+        <label>パターン: <input type="text" name="pattern" required></label>
+        <label>枚数: <input type="text" name="quantity" required></label>
+        <label>合計金額: <input type="text" name="total_price" required></label>
+        <label>単価: <input type="text" name="unit_price" required></label>
+        <label>プリント位置: <input type="text" name="print_position"></label>
+        <label>プリントカラー: <input type="text" name="print_color"></label>
+        <label>プリントサイズ: <input type="text" name="print_size"></label>
+        <label>プリントデザイン: <input type="text" name="print_design"></label>
+        <label>見積番号管理WEBフォームURL: <input type="text" name="form_url"></label>
+
+        <input type="submit" value="保存">
+    </form>
+</body>
+</html>
