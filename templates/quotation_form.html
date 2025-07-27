@@ -30,20 +30,20 @@
     <form action="/submit_quotation" method="post">
         <input type="hidden" name="form_token" value="{{ token }}">
 
-        <label>見積番号: <input type="text" name="quote_no" required></label>
-        <label>ユーザーID: <input type="text" name="user_id" required></label>
-        <label>属性: <input type="text" name="attribute" required></label>
-        <label>使用日(割引区分): <input type="text" name="usage_date" required></label>
-        <label>商品カテゴリー: <input type="text" name="product_category" required></label>
-        <label>パターン: <input type="text" name="pattern" required></label>
-        <label>枚数: <input type="text" name="quantity" required></label>
-        <label>合計金額: <input type="text" name="total_price" required></label>
-        <label>単価: <input type="text" name="unit_price" required></label>
-        <label>プリント位置: <input type="text" name="print_position"></label>
-        <label>プリントカラー: <input type="text" name="print_color"></label>
-        <label>プリントサイズ: <input type="text" name="print_size"></label>
-        <label>プリントデザイン: <input type="text" name="print_design"></label>
-        <label>見積番号管理WEBフォームURL: <input type="text" name="form_url"></label>
+        <label>見積番号: <input type="text" name="quote_no" required value="{{ prefill.get('見積番号', '') }}"></label>
+        <label>ユーザーID: <input type="text" name="user_id" required value="{{ prefill.get('ユーザーID', '') }}"></label>
+        <label>属性: <input type="text" name="attribute" required value="{{ prefill.get('属性', '') }}"></label>
+        <label>使用日(割引区分): <input type="text" name="usage_date" required value="{{ prefill.get('使用日(割引区分)', '') }}"></label>
+        <label>商品カテゴリー: <input type="text" name="product_category" required value="{{ prefill.get('商品カテゴリー', '') }}"></label>
+        <label>パターン: <input type="text" name="pattern" required value="{{ prefill.get('パターン', '') }}"></label>
+        <label>枚数: <input type="text" name="quantity" required value="{{ prefill.get('枚数', '') }}"></label>
+        <label>合計金額: <input type="text" name="total_price" required value="{{ prefill.get('合計金額', '') }}"></label>
+        <label>単価: <input type="text" name="unit_price" required value="{{ prefill.get('単価', '') }}"></label>
+        <label>プリント位置: <input type="text" name="print_position" value="{{ prefill.get('プリント位置', '') }}"></label>
+        <label>プリントカラー: <input type="text" name="print_color" value="{{ prefill.get('プリントカラー', '') }}"></label>
+        <label>プリントサイズ: <input type="text" name="print_size" value="{{ prefill.get('プリントサイズ', '') }}"></label>
+        <label>プリントデザイン: <input type="text" name="print_design" value="{{ prefill.get('プリントデザイン', '') }}"></label>
+        <label>見積番号管理WEBフォームURL: <input type="text" name="form_url" value="{{ prefill.get('見積番号管理WEBフォームURL', '') }}"></label>
 
         <input type="submit" value="保存">
     </form>
