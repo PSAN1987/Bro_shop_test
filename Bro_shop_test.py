@@ -139,40 +139,6 @@ COLOR_COST_MAP_BOTH = {
 user_estimate_sessions = {}  # { user_id: {"step": n, "answers": {...}, "is_single": bool} }
 
 
-def write_estimate_to_spreadsheet(user_id, estimate_data, total_price, unit_price):
-    """
-    見積情報をスプレッドシートの「Simple Estimate_1」に書き込む
-    """
-    gc = get_gspread_client()
-    sh = gc.open_by_key(SPREADSHEET_KEY)
-    worksheet = get_or_create_worksheet(sh, "Simple Estimate_1")
-
-    quote_number = str(int(time.time()))
-    # WebフォームURLはLINEからは未使用のため空欄
-    form_url = ""
-
-    jst = pytz.timezone('Asia/Tokyo')
-    now_jst_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
-
-    new_row = [
-        now_jst_str,
-        quote_number,
-        user_id,
-        estimate_data['user_type'],
-        f"{estimate_data['usage_date']}({estimate_data['discount_type']})",
-        estimate_data['item'],
-        estimate_data['pattern'],
-        estimate_data['quantity'],
-        estimate_data['print_position'],
-        estimate_data['color_count'],
-        estimate_data.get('back_name', ''),
-        f"¥{total_price:,}",
-        f"¥{unit_price:,}"
-    ]
-    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
-
-    return quote_number
-
 from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL, PRICE_TABLE_STUDENT
 
 def calculate_estimate(estimate_data):
@@ -984,28 +950,51 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         valid_choices = ["10～19枚", "20～29枚", "30～39枚", "40～49枚", "50～99枚", "100枚以上"]
         if user_message in valid_choices:
             session_data["answers"]["quantity"] = user_message
-            session_data["step"] = 6  # 最終ステップに進む
+            session_data["step"] = 6
 
-            # プリント位置、色数、背ネームは仮値を自動設定
             session_data["answers"]["print_position"] = "前のみ"
-            session_data["answers"]["color_count"] = "前 or 背中 1色"  # COLOR_COST_MAP_SINGLE より
+            session_data["answers"]["color_count"] = "前 or 背中 1色"
             session_data["answers"]["back_name"] = ""
 
-            # 見積もりを実行
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
-            quote_number = write_estimate_to_spreadsheet(user_id, est_data, total_price, unit_price)
 
-            # Flex メッセージ（画像付き見積結果）
+            # ▼ 見積番号とフォームURL生成
+            quote_number = str(int(time.time()))
+            form_url = f"https://bro-shop-test.onrender.com/quotation_form?quote_no={quote_number}"
+
+            # ▼ 書き込み用form_dataに変換
+            form_data = {
+                "quote_no": quote_number,
+                "user_id": user_id,
+                "attribute": est_data["user_type"],
+                "usage_date": f"{est_data['usage_date']}({est_data['discount_type']})",
+                "product_category": est_data["item"],
+                "pattern": est_data["pattern"],
+                "quantity": est_data["quantity"],
+                "total_price": f"¥{total_price:,}",
+                "unit_price": f"¥{unit_price:,}",
+                "print_position": est_data["print_position"],
+                "print_color": est_data["color_count"],
+                "print_size": "",  # オプション未使用
+                "print_design": est_data.get("back_name", ""),
+                "form_url": form_url
+            }
+
+            # ▼ 統合スプレッドシート書き込み
+            write_to_quotation_spreadsheet(form_data)
+
+            # ▼ Flex メッセージ送信
             flex_msg = flex_estimate_result_with_image(est_data, total_price, unit_price, quote_number)
+            line_bot_api.reply_message(event.reply_token, flex_msg)
 
+            del user_estimate_sessions[user_id]
+        else:
+            del user_estimate_sessions[user_id]
             line_bot_api.reply_message(
                 event.reply_token,
-                flex_msg
+                TextSendMessage(text="入力内容に誤りがあります。もう一度「カンタン見積り」からやり直してください。")
             )
-
-            # セッション削除
-            del user_estimate_sessions[user_id]
 
     else:
         del user_estimate_sessions[user_id]
