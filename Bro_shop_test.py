@@ -562,16 +562,21 @@ def flex_item_select():
         }
     )
 
+from datetime import datetime
+
 def flex_pattern_select(product_name):
     patterns = ["A", "B", "C", "D", "E", "F"]
     bubbles = []
 
+    version = datetime.now().strftime("%Y%m%d%H%M%S")
+
     for p in patterns:
+        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png?v={version}"
         bubbles.append({
             "type": "bubble",
             "hero": {
                 "type": "image",
-                "url": f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png",  # 実際の画像URLに差し替えてください
+                "url": image_url,
                 "size": "full",
                 "aspectMode": "cover",
                 "aspectRatio": "1:1"
