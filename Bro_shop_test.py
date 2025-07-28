@@ -117,24 +117,6 @@ from PRICE_TABLE_2025 import (
     PRICE_TABLE_STUDENT
 )
 
-from collections import defaultdict
-
-# ▼▼▼ 新規: プリント位置が「前のみ/背中のみ」のときの色数選択肢および対応コスト
-COLOR_COST_MAP_SINGLE = {
-    "前 or 背中 1色": (0, 0),
-    "前 or 背中 2色": (1, 0),
-    "前 or 背中 フルカラー": (0, 1)
-}
-
-# ▼▼▼ 新規: プリント位置が「前と背中」のときの色数選択肢および対応コスト
-COLOR_COST_MAP_BOTH = {
-    "前と背中 前1色 背中1色": (0, 0),
-    "前と背中 前2色 背中1色": (1, 0),
-    "前と背中 前1色 背中2色": (1, 0),
-    "前と背中 前2色 背中2色": (2, 0),
-    "前と背中 フルカラー": (0, 2)
-}
-
 # ユーザの見積フロー管理用（簡易的セッション）
 user_estimate_sessions = {}  # { user_id: {"step": n, "answers": {...}, "is_single": bool} }
 
@@ -493,7 +475,7 @@ def flex_quantity():
                 },
                 {
                     "type": "text",
-                    "text": "必要枚数を選択してください。",
+                    "text": "　必要枚数を選択してください。",
                     "size": "sm",
                     "wrap": True
                 },
@@ -575,15 +557,6 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                         "label": "デザイン相談",
                         "data": "CONSULT_DESIGN"
                     }
-                },
-                {
-                    "type": "button",
-                    "style": "secondary",
-                    "action": {
-                        "type": "postback",
-                        "label": "個別相談",
-                        "data": "CONSULT_PERSONAL"
-                    }
                 }
             ]
         }
@@ -631,58 +604,6 @@ def flex_inquiry():
         ]
     }
     return FlexSendMessage(alt_text="お問い合わせ情報", contents=contents)
-
-
-# -----------------------
-# デザイン相談に誘導するFlex Message
-# -----------------------
-
-def flex_consultation_options():
-    flex = {
-        "type": "bubble",
-        "body": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-                {
-                    "type": "text",
-                    "text": "ご希望の相談方法をお選びください",
-                    "wrap": True,
-                    "weight": "bold",
-                    "size": "md"
-                }
-            ]
-        },
-        "footer": {
-            "type": "box",
-            "layout": "vertical",
-            "spacing": "sm",
-            "contents": [
-                {
-                    "type": "button",
-                    "style": "primary",
-                    "color": "#000000",
-                    "action": {
-                        "type": "postback",
-                        "label": "デザイン相談",
-                        "data": "CONSULT_DESIGN"
-                    }
-                },
-                {
-                    "type": "button",
-                    "style": "secondary",
-                    "action": {
-                        "type": "postback",
-                        "label": "個別相談",
-                        "data": "CONSULT_PERSONAL"
-                    }
-                }
-            ]
-        }
-    }
-    return FlexSendMessage(alt_text="相談方法を選択してください", contents=flex)
-
 
 # -----------------------
 # 0) ハンドラ側でキャッチして動的 URL を返す
@@ -968,11 +889,6 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         if user_message in valid_choices:
             session_data["answers"]["quantity"] = user_message
             session_data["step"] = 6
-
-            session_data["answers"]["print_position"] = "前のみ"
-            session_data["answers"]["color_count"] = "前 or 背中 1色"
-            session_data["answers"]["back_name"] = ""
-
             est_data = session_data["answers"]
             total_price, unit_price = calculate_estimate(est_data)
 
