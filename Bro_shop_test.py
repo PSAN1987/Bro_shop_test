@@ -907,10 +907,10 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "quantity": est_data["quantity"],
                 "total_price": f"¥{total_price:,}",
                 "unit_price": f"¥{unit_price:,}",
-                "print_position": est_data["print_position"],
-                "print_color": est_data["color_count"],
+                "print_position": "",  # オプション未使用
+                "print_color": "",  # オプション未使用
                 "print_size": "",  # オプション未使用
-                "print_design": est_data.get("back_name", ""),
+                "print_design": "",  # オプション未使用
                 "form_url": form_url
             }
 
