@@ -385,6 +385,7 @@ def flex_item_select():
     )
 
 from datetime import datetime
+from linebot.models import FlexSendMessage
 
 def flex_pattern_select(product_name):
     patterns = ["A", "B", "C", "D", "E", "F"]
@@ -403,19 +404,6 @@ def flex_pattern_select(product_name):
                 "aspectMode": "cover",
                 "aspectRatio": "1:1"
             },
-            "body": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "text",
-                        "text": f"パターン{p}で金額を確認",
-                        "wrap": True,
-                        "weight": "bold",
-                        "align": "center"
-                    }
-                ]
-            },
             "footer": {
                 "type": "box",
                 "layout": "vertical",
@@ -426,8 +414,8 @@ def flex_pattern_select(product_name):
                         "color": "#000000",
                         "action": {
                             "type": "message",
-                            "label": f"パターン{p}",
-                            "text": f"パターン{p}"
+                            "label": f"パターン{p}で金額を確認",
+                            "text": f"パターン{p}で金額を確認"
                         }
                     }
                 ]
@@ -874,7 +862,10 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         return
 
     elif step == 4:
-        valid_patterns = ["パターンA", "パターンB", "パターンC", "パターンD", "パターンE", "パターンF"]
+        valid_patterns = [
+       "パターンAで金額を確認", "パターンBで金額を確認", "パターンCで金額を確認",
+       "パターンDで金額を確認", "パターンEで金額を確認", "パターンFで金額を確認"
+        ]
         if user_message in valid_patterns:
             session_data["answers"]["pattern"] = user_message
             session_data["step"] = 5
