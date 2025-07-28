@@ -478,8 +478,8 @@ def flex_quantity():
     }
     return FlexSendMessage(alt_text="必要枚数を選択してください", contents=flex_body)
 
-from linebot.models import FlexSendMessage
 from datetime import datetime
+from linebot.models import FlexSendMessage
 
 def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
     item = estimate_data["item"]
@@ -492,13 +492,6 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
 
     flex = {
         "type": "bubble",
-        "hero": {
-            "type": "image",
-            "url": image_url,
-            "size": "full",
-            "aspectMode": "cover",
-            "aspectRatio": "1:1"
-        },
         "body": {
             "type": "box",
             "layout": "vertical",
@@ -509,8 +502,14 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                     "text": "概算見積",
                     "weight": "bold",
                     "size": "xl",
-                    "align": "center",
-                    "margin": "none"
+                    "align": "center"
+                },
+                {
+                    "type": "image",
+                    "url": image_url,
+                    "size": "full",
+                    "aspectMode": "cover",
+                    "aspectRatio": "1:1"
                 },
                 {
                     "type": "box",
@@ -530,7 +529,12 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                 {"type": "text", "text": f"【合計金額】¥{total_price:,}", "weight": "bold"},
                 {"type": "text", "text": f"【1枚あたり】¥{unit_price:,}"},
                 {"type": "separator"},
-                {"type": "text", "text": "※より正確な金額をご希望の方は、下記からデザイン相談へお進みください。", "wrap": True, "size": "sm"}
+                {
+                    "type": "text",
+                    "text": "※より正確な金額をご希望の方は、下記からデザイン相談へお進みください。",
+                    "wrap": True,
+                    "size": "sm"
+                }
             ]
         },
         "footer": {
@@ -553,6 +557,7 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
     }
 
     return FlexSendMessage(alt_text=alt_text, contents=flex)
+
 
 # -----------------------
 # お問い合わせ時に返信するFlex Message
