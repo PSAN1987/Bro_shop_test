@@ -384,6 +384,7 @@ def flex_item_select():
         }
     )
 
+
 from datetime import datetime
 from linebot.models import FlexSendMessage
 
@@ -414,8 +415,8 @@ def flex_pattern_select(product_name):
                         "color": "#000000",
                         "action": {
                             "type": "message",
-                            "label": f"パターン{p}で金額を確認",
-                            "text": f"パターン{p}で金額を確認"
+                            "label": f"パターン{p}で金額を確認",  # 表示用
+                            "text": f"パターン{p}"              # 実際に送るメッセージ
                         }
                     }
                 ]
@@ -429,7 +430,6 @@ def flex_pattern_select(product_name):
             "contents": bubbles
         }
     )
-
 
 
 def flex_quantity():
@@ -478,6 +478,7 @@ def flex_quantity():
     }
     return FlexSendMessage(alt_text="必要枚数を選択してください", contents=flex_body)
 
+from linebot.models import FlexSendMessage
 from datetime import datetime
 
 def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
@@ -485,10 +486,8 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
     pattern_raw = estimate_data.get("pattern", "")
     pattern = pattern_raw.replace("パターン", "").strip()
 
-    # ▼ キャッシュ対策のためバージョン付きURLに変更
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png?v={timestamp}"
-
     alt_text = f"{item}の見積結果"
 
     flex = {
@@ -505,9 +504,14 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
             "layout": "vertical",
             "spacing": "md",
             "contents": [
-                {"type": "text", "text": f"✅ 概算見積", "weight": "bold", "size": "lg"},
-
-                # ▼ 見積番号（ラベル＋青文字）
+                {
+                    "type": "text",
+                    "text": "概算見積",
+                    "weight": "bold",
+                    "size": "xl",
+                    "align": "center",
+                    "margin": "none"
+                },
                 {
                     "type": "box",
                     "layout": "baseline",
@@ -517,7 +521,6 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                         {"type": "text", "text": quote_number, "wrap": True, "color": "#0000FF"}
                     ]
                 },
-
                 {"type": "text", "text": f"属性: {estimate_data['user_type']}"},
                 {"type": "text", "text": f"使用日: {estimate_data['usage_date']}（{estimate_data['discount_type']}）"},
                 {"type": "text", "text": f"商品: {estimate_data['item']}"},
@@ -530,7 +533,6 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                 {"type": "text", "text": "※より正確な金額をご希望の方は、下記からデザイン相談へお進みください。", "wrap": True, "size": "sm"}
             ]
         },
-
         "footer": {
             "type": "box",
             "layout": "vertical",
@@ -862,10 +864,7 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
         return
 
     elif step == 4:
-        valid_patterns = [
-       "パターンAで金額を確認", "パターンBで金額を確認", "パターンCで金額を確認",
-       "パターンDで金額を確認", "パターンEで金額を確認", "パターンFで金額を確認"
-        ]
+        valid_patterns = ["パターンA", "パターンB", "パターンC", "パターンD", "パターンE", "パターンF"]
         if user_message in valid_patterns:
             session_data["answers"]["pattern"] = user_message
             session_data["step"] = 5
