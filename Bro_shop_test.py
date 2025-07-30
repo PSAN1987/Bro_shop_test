@@ -171,9 +171,6 @@ def calculate_estimate(estimate_data):
     # 見つからない場合
     return 0, 0
 
-# 固定バージョンを定義（画像更新時だけ変更）
-FIXED_IMAGE_VERSION = "20250730"
-
 # -----------------------
 # ここからFlex Message定義
 # -----------------------
@@ -357,22 +354,22 @@ def flex_item_select():
     now = datetime.now().strftime("%Y%m%d%H%M%S")
     categories = [
         ("Tシャツ系", [
-            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png?v={FIXED_IMAGE_VERSION}"),
-            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png?v={FIXED_IMAGE_VERSION}"),
-            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png?v={FIXED_IMAGE_VERSION}"),
-            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png?v={FIXED_IMAGE_VERSION}")
+            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png?v={now}"),
+            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png?v={now}"),
+            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png?v={now}"),
+            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png?v={now}")
         ]),
         ("スポーツ系", [
-            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png?v={FIXED_IMAGE_VERSION}"),
-            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png?v={FIXED_IMAGE_VERSION}"),
-            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png?v={FIXED_IMAGE_VERSION}"),
-            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png?v={FIXED_IMAGE_VERSION}")
+            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png?v={now}"),
+            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png?v={now}"),
+            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png?v={now}"),
+            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png?v={now}")
         ]),
         ("トレーナー系", [
-            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png?v={FIXED_IMAGE_VERSION}"),
-            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png?v={FIXED_IMAGE_VERSION}"),
-            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png?v={FIXED_IMAGE_VERSION}"),
-            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png?v={FIXED_IMAGE_VERSION}")
+            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png?v={now}"),
+            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png?v={now}"),
+            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png?v={now}"),
+            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png?v={now}")
         ])
     ]
     # 各カテゴリごとのBubble生成
@@ -397,7 +394,7 @@ def flex_pattern_select(product_name):
     version = datetime.now().strftime("%Y%m%d%H%M%S")
 
     for p in patterns:
-        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png?v={FIXED_IMAGE_VERSION}"
+        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png?v={version}"
         bubbles.append({
             "type": "bubble",
             "hero": {
@@ -489,7 +486,7 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
     pattern = pattern_raw.replace("パターン", "").strip()
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png?v={FIXED_IMAGE_VERSION}"
+    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png?v={timestamp}"
     alt_text = f"{item}の見積結果"
 
     flex = {
