@@ -132,7 +132,7 @@ user_estimate_sessions = {}  # { user_id: {"step": n, "answers": {...}, "is_sing
 from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL, PRICE_TABLE_STUDENT
 
 def calculate_estimate(estimate_data):
-    item = estimate_data.get("item", "")
+    item_raw = estimate_data.get("item", "")
     item = normalize_text(item_raw)
     pattern_raw = estimate_data.get("pattern", "")
     qty_text_raw = estimate_data.get("quantity", "")
@@ -490,8 +490,8 @@ from datetime import datetime
 from linebot.models import FlexSendMessage
 
 def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
-    item = estimate_data["item"]
-    item = normalize_text(item_raw)  # ← 正規化
+    item_raw = estimate_data["item"]
+    item = normalize_text(item_raw)
     pattern_raw = estimate_data.get("pattern", "")
     pattern = pattern_raw.replace("パターン", "").strip()
 
