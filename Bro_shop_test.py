@@ -3,6 +3,7 @@ import json
 import time
 from datetime import datetime
 import pytz
+import unicodedata  # ← 正規化のために追加
 
 import gspread
 from flask import Flask, render_template, render_template_string, request, session, abort
@@ -22,6 +23,13 @@ from linebot.models import (
 
 app = Flask(__name__)
 app.secret_key = 'some_secret_key'  # セッションが必要
+
+# 正規化ユーティリティ（追加）
+def normalize_text(text):
+    """
+    Unicode NFC 正規化（例：「ト」＋「゛」→「ド」）
+    """
+    return unicodedata.normalize("NFC", text)
 
 # -----------------------
 # 環境変数取得
@@ -125,6 +133,7 @@ from PRICE_TABLE_2025 import PRICE_TABLE_GENERAL, PRICE_TABLE_STUDENT
 
 def calculate_estimate(estimate_data):
     item = estimate_data.get("item", "")
+    item = normalize_text(item_raw)
     pattern_raw = estimate_data.get("pattern", "")
     qty_text_raw = estimate_data.get("quantity", "")
     user_type = estimate_data.get("user_type", "一般")
@@ -482,6 +491,7 @@ from linebot.models import FlexSendMessage
 
 def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
     item = estimate_data["item"]
+    item = normalize_text(item_raw)  # ← 正規化
     pattern_raw = estimate_data.get("pattern", "")
     pattern = pattern_raw.replace("パターン", "").strip()
 
