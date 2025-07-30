@@ -778,34 +778,26 @@ def handle_message(event: MessageEvent):
 
 def send_catalog_info(event: MessageEvent):
     reply_text = (
-        "🎁➖➖➖➖➖➖➖➖🎁\n"
-        "  ✨カタログ無料プレゼント✨\n"
-        "🎁➖➖➖➖➖➖➖➖🎁\n\n"
-        "クラスTシャツの最新デザインやトレンド情報が詰まったカタログを、"
-        "期間限定で無料でお届けします✨\n\n"
-        "【応募方法】\n"
-        "以下のアカウントをフォロー👇\n"
-        "（どちらかでOK🙆）\n"
-        "📸 Instagram\n"
-        "https://www.instagram.com/graffitees_045/\n"
-        "🎥 TikTok\n"
-        "https://www.tiktok.com/@graffitees_045\n\n"
-        "フォロー後、下記のフォームからお申込みください👇\n"
-        "📩 カタログ申込みフォーム\n"
-        "https://bro-shop-test.onrender.com/catalog_form\n"
-        "⚠️ 注意：サブアカウントや重複申込みはご遠慮ください。\n\n"
-        "【カタログ発送時期】\n"
-        "📅 2025年4月中旬より郵送で発送予定です。\n\n"
-        "【配布数について】\n"
-        "先着300名様分を予定しています。\n"
-        "※応募多数となった場合、配布数の増加や抽選となる可能性があります。\n\n"
-        "ご応募お待ちしております🙆"
+        "📢 現在のキャンペーン情報\n"
+        "現在、実施中のキャンペーンはございません🙇‍♀️\n"
+        "今後、お得なキャンペーンやプレゼント企画などを予定しておりますので、"
+        "ぜひLINEをお友だち登録したままお待ちいただけますと嬉しいです🎁✨\n"
+        "新着情報は、LINEや各SNSで随時お知らせいたします！\n\n"
+        "📸 Instagramはこちら\n"
+        "商品紹介や制作事例、お客様の声などを日々アップしています！\n"
+        "ぜひチェック＆フォローをよろしくお願いします👇\n"
+        "👉 https://www.instagram.com/original_tshirt_3tlab/\n\n"
+        "🎵 TikTokはこちら\n"
+        "制作風景や裏側、スタッフの日常などを楽しくお届け中📹✨\n"
+        "フォローして最新動画をお見逃しなく👇\n"
+        "👉 https://www.tiktok.com/@3tlab_original_tshirt\n\n"
+        "皆さまの応援が励みになります😊\n"
+        "今後ともどうぞよろしくお願いいたします！"
     )
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=reply_text)
     )
-
 
 # -----------------------
 # 見積りフロー
