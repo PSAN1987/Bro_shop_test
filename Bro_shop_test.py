@@ -1141,6 +1141,8 @@ def submit_quotation_form():
 
     return "見積内容を保存しました。", 200
 
+import gspread.utils  # 列文字変換のために追加
+
 def write_to_quotation_spreadsheet(form_data: dict):
     gc = get_gspread_client()
     sh = gc.open_by_key(SPREADSHEET_KEY)
@@ -1232,24 +1234,16 @@ def write_to_quotation_spreadsheet(form_data: dict):
     ]
 
     records = worksheet.get_all_values()
-    for idx, row in enumerate(records[1:], start=2):  # skip header row
-        if row[1] == form_data.get("quote_no", ""):
-            worksheet.update(f"A{idx}:AI{idx}", [new_row])
+    quote_no = form_data.get("quote_no", "")
+
+    for idx, row in enumerate(records[1:], start=2):  # Skip header
+        if row[1] == quote_no:
+            end_col_letter = gspread.utils.rowcol_to_a1(1, len(new_row)).split("1")[0]
+            worksheet.update(f"A{idx}:{end_col_letter}{idx}", [new_row])
             return
 
     worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
-
-
-    # 全データ取得して、見積番号で検索（2行目以降）
-    records = worksheet.get_all_values()
-    for idx, row in enumerate(records[1:], start=2):  # 1-based index, skip header
-        if row[1] == form_data["quote_no"]:
-            worksheet.update(f"A{idx}:O{idx}", [new_row])  # 上書き
-            return
-
-    # 一致しなければ末尾に追加
-    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
 
 # -----------------------
 # 動作確認用
