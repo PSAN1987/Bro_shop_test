@@ -1145,73 +1145,100 @@ def write_to_quotation_spreadsheet(form_data: dict):
     gc = get_gspread_client()
     sh = gc.open_by_key(SPREADSHEET_KEY)
 
-    # ワークシート取得または作成
     try:
         worksheet = sh.worksheet("Simple Estimate_1")
     except gspread.exceptions.WorksheetNotFound:
-        worksheet = sh.add_worksheet(title="Simple Estimate_1", rows=2000, cols=50)
+        worksheet = sh.add_worksheet(title="Simple Estimate_1", rows=2000, cols=100)
         worksheet.update('A1:AI1', [[
-        "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
-        "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
-        "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
+            "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
+            "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
+            "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
 
-        # 追加項目
-        "ボディ品番", "ボディ商品名", "ボディカラーNo", "商品カラー", "サイズ", "注文数",
-        "プリント箇所数",
-        "プリント位置_1", "プリントデザイン_1", "プリントカラー数_1", "プリントカラー_1", "デザインサイズ_1",
-        "プリント位置_2", "プリントデザイン_2", "プリントカラー数_2", "プリントカラー_2", "デザインサイズ_2",
-        "プリント位置_3", "プリントデザイン_3", "プリントカラー数_3", "プリントカラー_3", "デザインサイズ_3",
-        "プリント位置_4", "プリントデザイン_4", "プリントカラー数_4", "プリントカラー_4", "デザインサイズ_4",
-        "加工方法", "納期",
-        "特殊仕様", "希望納期", "袋詰め有無", "その他備考",
-        "パターン料金", "枚数(ロット)", "送料", "納期(希望日)"
-    ]])
+            "ボディ品番", "ボディ商品名", "ボディカラーNo", "商品カラー", "サイズ", "注文数",
+            "プリント箇所数",
+            "プリント位置_1", "プリントデザイン_1", "プリントカラー数_1", "プリントカラー_1", "デザインサイズ_1",
+            "プリント位置_2", "プリントデザイン_2", "プリントカラー数_2", "プリントカラー_2", "デザインサイズ_2",
+            "プリント位置_3", "プリントデザイン_3", "プリントカラー数_3", "プリントカラー_3", "デザインサイズ_3",
+            "プリント位置_4", "プリントデザイン_4", "プリントカラー数_4", "プリントカラー_4", "デザインサイズ_4",
+            "加工方法", "納期",
+            "特殊仕様", "希望納期", "袋詰め有無", "その他備考",
+            "パターン料金", "枚数(ロット)", "送料", "納期(希望日)"
+        ]])
 
-    # JSTの日時
     jst = pytz.timezone('Asia/Tokyo')
     now_str = datetime.now(jst).strftime("%Y/%m/%d %H:%M:%S")
 
-    # 新しいデータ行
     new_row = [
         now_str,
-        form_data["quote_no"],
-        form_data["user_id"],
-        form_data["attribute"],
-        form_data["usage_date"],
-        form_data["product_category"],
-        form_data["pattern"],
-        form_data["quantity"],
-        form_data["total_price"],
-        form_data["unit_price"],
-        form_data["print_position"],
-        form_data["print_color"],
-        form_data["print_size"],
-        form_data["print_design"],
-        form_data["form_url"],
+        form_data.get("quote_no", ""),
+        form_data.get("user_id", ""),
+        form_data.get("attribute", ""),
+        form_data.get("usage_date", ""),
+        form_data.get("product_category", ""),
+        form_data.get("pattern", ""),
+        form_data.get("quantity", ""),
+        form_data.get("total_price", ""),
+        form_data.get("unit_price", ""),
+        form_data.get("print_position", ""),
+        form_data.get("print_color", ""),
+        form_data.get("print_size", ""),
+        form_data.get("print_design", ""),
+        form_data.get("form_url", ""),
 
-        # 追加列
-        form_data["body_code"],
-        form_data["body_name"],
-        form_data["body_color_no"],
-        form_data["body_color"],
-        form_data["size"],
-        form_data["order_count"],
-        form_data["print_area_count"],
-        form_data["print_position_1"], form_data["print_design_1"], form_data["print_color_count_1"], form_data["print_color_1"], form_data["print_size_1"],
-        form_data["print_position_2"], form_data["print_design_2"], form_data["print_color_count_2"], form_data["print_color_2"], form_data["print_size_2"],
-        form_data["print_position_3"], form_data["print_design_3"], form_data["print_color_count_3"], form_data["print_color_3"], form_data["print_size_3"],
-        form_data["print_position_4"], form_data["print_design_4"], form_data["print_color_count_4"], form_data["print_color_4"], form_data["print_size_4"],
-        form_data["processing_method"],
-        form_data["delivery_date"],
-        form_data["special_spec"],
-        form_data["requested_delivery"],
-        form_data["packaging"],
-        form_data["other_notes"],
-        form_data["pattern_fee"],
-        form_data["lot_size"],
-        form_data["shipping_fee"],
-        form_data["delivery_request_date"]
+        form_data.get("body_code", ""),
+        form_data.get("body_name", ""),
+        form_data.get("body_color_no", ""),
+        form_data.get("body_color", ""),
+        form_data.get("size", ""),
+        form_data.get("order_count", ""),
+        form_data.get("print_area_count", ""),
+
+        form_data.get("print_position_1", ""),
+        form_data.get("print_design_1", ""),
+        form_data.get("print_color_count_1", ""),
+        form_data.get("print_color_1", ""),
+        form_data.get("print_size_1", ""),
+
+        form_data.get("print_position_2", ""),
+        form_data.get("print_design_2", ""),
+        form_data.get("print_color_count_2", ""),
+        form_data.get("print_color_2", ""),
+        form_data.get("print_size_2", ""),
+
+        form_data.get("print_position_3", ""),
+        form_data.get("print_design_3", ""),
+        form_data.get("print_color_count_3", ""),
+        form_data.get("print_color_3", ""),
+        form_data.get("print_size_3", ""),
+
+        form_data.get("print_position_4", ""),
+        form_data.get("print_design_4", ""),
+        form_data.get("print_color_count_4", ""),
+        form_data.get("print_color_4", ""),
+        form_data.get("print_size_4", ""),
+
+        form_data.get("processing_method", ""),
+        form_data.get("delivery_date", ""),
+
+        form_data.get("special_spec", ""),
+        form_data.get("requested_delivery", ""),
+        form_data.get("packaging", ""),
+        form_data.get("other_notes", ""),
+
+        form_data.get("pattern_fee", ""),
+        form_data.get("lot_size", ""),
+        form_data.get("shipping_fee", ""),
+        form_data.get("delivery_request_date", "")
     ]
+
+    records = worksheet.get_all_values()
+    for idx, row in enumerate(records[1:], start=2):  # skip header row
+        if row[1] == form_data.get("quote_no", ""):
+            worksheet.update(f"A{idx}:AI{idx}", [new_row])
+            return
+
+    worksheet.append_row(new_row, value_input_option="USER_ENTERED")
+
 
 
     # 全データ取得して、見積番号で検索（2行目以降）
