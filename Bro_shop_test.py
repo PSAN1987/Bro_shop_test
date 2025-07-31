@@ -1102,12 +1102,79 @@ def show_quotation_form():
             all_rows = ws.get_all_records()
             for row in all_rows:
                 if str(row.get("見積番号")) == quote_no:
-                    prefill_data = row
+                    # 日本語列名 → 英語キーの変換
+                    prefill_data = {
+                        "quote_no": row.get("見積番号", ""),
+                        "user_id": row.get("ユーザーID", ""),
+                        "attribute": row.get("属性", ""),
+                        "usage_date": row.get("使用日(割引区分)", ""),
+                        "product_category": row.get("商品カテゴリー", ""),
+                        "pattern": row.get("パターン", ""),
+                        "quantity": row.get("枚数", ""),
+                        "total_price": row.get("合計金額", ""),
+                        "unit_price": row.get("単価", ""),
+                        "print_position": row.get("プリント位置", ""),
+                        "print_color": row.get("プリントカラー", ""),
+                        "print_size": row.get("プリントサイズ", ""),
+                        "print_design": row.get("プリントデザイン", ""),
+                        "form_url": row.get("見積番号管理WEBフォームURL", ""),
+
+                        # ボディ情報
+                        "body_code": row.get("ボディ品番", ""),
+                        "body_name": row.get("ボディ商品名", ""),
+                        "body_color_no": row.get("ボディカラーNo", ""),
+                        "body_color": row.get("商品カラー", ""),
+                        "size": row.get("サイズ", ""),
+                        "order_count": row.get("注文数", ""),
+
+                        # プリント箇所情報
+                        "print_area_count": row.get("プリント箇所数", ""),
+                        "print_position_1": row.get("プリント位置_1", ""),
+                        "print_design_1": row.get("プリントデザイン_1", ""),
+                        "print_color_count_1": row.get("プリントカラー数_1", ""),
+                        "print_color_1": row.get("プリントカラー_1", ""),
+                        "print_size_1": row.get("デザインサイズ_1", ""),
+
+                        "print_position_2": row.get("プリント位置_2", ""),
+                        "print_design_2": row.get("プリントデザイン_2", ""),
+                        "print_color_count_2": row.get("プリントカラー数_2", ""),
+                        "print_color_2": row.get("プリントカラー_2", ""),
+                        "print_size_2": row.get("デザインサイズ_2", ""),
+
+                        "print_position_3": row.get("プリント位置_3", ""),
+                        "print_design_3": row.get("プリントデザイン_3", ""),
+                        "print_color_count_3": row.get("プリントカラー数_3", ""),
+                        "print_color_3": row.get("プリントカラー_3", ""),
+                        "print_size_3": row.get("デザインサイズ_3", ""),
+
+                        "print_position_4": row.get("プリント位置_4", ""),
+                        "print_design_4": row.get("プリントデザイン_4", ""),
+                        "print_color_count_4": row.get("プリントカラー数_4", ""),
+                        "print_color_4": row.get("プリントカラー_4", ""),
+                        "print_size_4": row.get("デザインサイズ_4", ""),
+
+                        # 加工・納期
+                        "processing_method": row.get("加工方法", ""),
+                        "delivery_date": row.get("納期", ""),
+
+                        # 備考欄
+                        "special_spec": row.get("特殊仕様", ""),
+                        "requested_delivery": row.get("希望納期", ""),
+                        "packaging": row.get("袋詰め有無", ""),
+                        "other_notes": row.get("その他備考", "") or row.get("その他", ""),  # 旧名にも対応
+
+                        # 確定後反映項目
+                        "pattern_fee": row.get("パターン料金", ""),
+                        "lot_size": row.get("枚数(ロット)", ""),
+                        "shipping_fee": row.get("送料", ""),
+                        "delivery_request_date": row.get("納期(希望日)", "")
+                    }
                     break
         except Exception as e:
             print("読み取りエラー:", e)
 
     return render_template("quotation_form.html", token=token, prefill=prefill_data)
+
 
 @app.route("/submit_quotation", methods=["POST"])
 def submit_quotation_form():
