@@ -1177,6 +1177,7 @@ def show_quotation_form():
 
 
 @app.route("/submit_quotation", methods=["POST"])
+@app.route("/submit_quotation", methods=["POST"])
 def submit_quotation_form():
     form_token = request.form.get('form_token')
     if form_token != session.get('quotation_form_token'):
@@ -1198,8 +1199,41 @@ def submit_quotation_form():
         "print_color": request.form.get("print_color", "").strip(),
         "print_size": request.form.get("print_size", "").strip(),
         "print_design": request.form.get("print_design", "").strip(),
-        "form_url": request.form.get("form_url", "").strip()
+        "form_url": request.form.get("form_url", "").strip(),
+
+        # ボディ情報
+        "body_code": request.form.get("body_code", "").strip(),
+        "body_name": request.form.get("body_name", "").strip(),
+        "body_color_no": request.form.get("body_color_no", "").strip(),
+        "body_color": request.form.get("body_color", "").strip(),
+        "size": request.form.get("size", "").strip(),
+        "order_count": request.form.get("order_count", "").strip(),
+
+        # プリント箇所
+        "print_area_count": request.form.get("print_area_count", "").strip(),
+        "processing_method": request.form.get("processing_method", "").strip(),
+        "delivery_date": request.form.get("delivery_date", "").strip(),
+
+        # 備考欄
+        "special_spec": request.form.get("special_spec", "").strip(),
+        "requested_delivery": request.form.get("requested_delivery", "").strip(),
+        "packaging": request.form.get("packaging", "").strip(),
+        "other_notes": request.form.get("other_notes", "").strip(),
+
+        # 確定後
+        "pattern_fee": request.form.get("pattern_fee", "").strip(),
+        "lot_size": request.form.get("lot_size", "").strip(),
+        "shipping_fee": request.form.get("shipping_fee", "").strip(),
+        "delivery_request_date": request.form.get("delivery_request_date", "").strip(),
     }
+
+    # 1～4 箇所分のプリント情報（ループで取得）
+    for i in range(1, 5):
+        form_data[f"print_position_{i}"] = request.form.get(f"print_position_{i}", "").strip()
+        form_data[f"print_design_{i}"] = request.form.get(f"print_design_{i}", "").strip()
+        form_data[f"print_color_count_{i}"] = request.form.get(f"print_color_count_{i}", "").strip()
+        form_data[f"print_color_{i}"] = request.form.get(f"print_color_{i}", "").strip()
+        form_data[f"print_size_{i}"] = request.form.get(f"print_size_{i}", "").strip()
 
     try:
         write_to_quotation_spreadsheet(form_data)
@@ -1207,6 +1241,7 @@ def submit_quotation_form():
         return f"エラーが発生しました: {e}", 500
 
     return "見積内容を保存しました。", 200
+
 
 import gspread.utils  # 列文字変換のために追加
 
