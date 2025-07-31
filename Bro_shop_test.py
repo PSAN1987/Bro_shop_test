@@ -1219,7 +1219,7 @@ def write_to_quotation_spreadsheet(form_data: dict):
 
         # ★ ヘッダーが空のままになっている既存シートを救済
         if not any(worksheet.row_values(1)):
-            worksheet.update('A1:AI1', [[
+            worksheet.update('A1:AZ1', [[
                 "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
                 "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
                 "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
@@ -1236,7 +1236,7 @@ def write_to_quotation_spreadsheet(form_data: dict):
 
     except gspread.exceptions.WorksheetNotFound:
         worksheet = sh.add_worksheet(title="Simple Estimate_1", rows=2000, cols=100)
-        worksheet.update('A1:AI1', [[
+        worksheet.update('A1:AZ1', [[
             "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
             "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
             "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
