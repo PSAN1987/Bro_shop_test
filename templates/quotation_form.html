@@ -30,6 +30,7 @@
     <form action="/submit_quotation" method="post">
         <input type="hidden" name="form_token" value="{{ token }}">
 
+        <!-- 基本情報 -->
         <label>見積番号: <input type="text" name="quote_no" required value="{{ prefill.get('見積番号', '') }}"></label>
         <label>ユーザーID: <input type="text" name="user_id" required value="{{ prefill.get('ユーザーID', '') }}"></label>
         <label>属性: <input type="text" name="attribute" required value="{{ prefill.get('属性', '') }}"></label>
@@ -39,13 +40,50 @@
         <label>枚数: <input type="text" name="quantity" required value="{{ prefill.get('枚数', '') }}"></label>
         <label>合計金額: <input type="text" name="total_price" required value="{{ prefill.get('合計金額', '') }}"></label>
         <label>単価: <input type="text" name="unit_price" required value="{{ prefill.get('単価', '') }}"></label>
-        <label>プリント位置: <input type="text" name="print_position" value="{{ prefill.get('プリント位置', '') }}"></label>
-        <label>プリントカラー: <input type="text" name="print_color" value="{{ prefill.get('プリントカラー', '') }}"></label>
-        <label>プリントサイズ: <input type="text" name="print_size" value="{{ prefill.get('プリントサイズ', '') }}"></label>
-        <label>プリントデザイン: <input type="text" name="print_design" value="{{ prefill.get('プリントデザイン', '') }}"></label>
+
+        <!-- ボディ情報 -->
+        <label>ボディ品番: <input type="text" name="body_code" value="{{ prefill.get('ボディ品番', '') }}"></label>
+        <label>ボディ商品名: <input type="text" name="body_name" value="{{ prefill.get('ボディ商品名', '') }}"></label>
+        <label>ボディカラーNo: <input type="text" name="body_color_no" value="{{ prefill.get('ボディカラーNo', '') }}"></label>
+        <label>商品カラー: <input type="text" name="body_color" value="{{ prefill.get('商品カラー', '') }}"></label>
+        <label>サイズ: <input type="text" name="size" value="{{ prefill.get('サイズ', '') }}"></label>
+        <label>注文数: <input type="text" name="order_count" value="{{ prefill.get('注文数', '') }}"></label>
+
+        <!-- プリント情報 -->
+        <label>プリント箇所数: <input type="text" name="print_area_count" value="{{ prefill.get('プリント箇所数', '') }}"></label>
+
+        {% for i in range(1,5) %}
+        <fieldset style="margin-top:1.5em; border:1px solid #ccc; padding:1em;">
+            <legend>プリント情報 {{ i }}箇所目</legend>
+            <label>位置: <input type="text" name="print_position_{{ i }}" value="{{ prefill.get('プリント位置_' ~ i ~ '箇所', '') }}"></label>
+            <label>デザイン: <input type="text" name="print_design_{{ i }}" value="{{ prefill.get('プリントデザイン_' ~ i ~ '箇所', '') }}"></label>
+            <label>カラー数: <input type="text" name="print_color_count_{{ i }}" value="{{ prefill.get('プリントカラー数__' ~ i ~ '箇所', '') }}"></label>
+            <label>カラー内容: <input type="text" name="print_color_{{ i }}" value="{{ prefill.get('プリントカラー_' ~ i ~ '箇所', '') }}"></label>
+            <label>デザインサイズ: <input type="text" name="print_size_{{ i }}" value="{{ prefill.get('デザインサイズ_' ~ i ~ '箇所', '') }}"></label>
+        </fieldset>
+        {% endfor %}
+
+        <!-- 加工・納期 -->
+        <label>加工方法: <input type="text" name="processing_method" value="{{ prefill.get('加工方法', '') }}"></label>
+        <label>納期: <input type="text" name="delivery_date" value="{{ prefill.get('納期', '') }}"></label>
+
+        <!-- 備考欄 -->
+        <label>特殊仕様: <textarea name="special_spec">{{ prefill.get('特殊仕様', '') }}</textarea></label>
+        <label>希望納期: <textarea name="requested_delivery">{{ prefill.get('希望納期', '') }}</textarea></label>
+        <label>袋詰め有無: <input type="text" name="packaging" value="{{ prefill.get('袋詰め有無', '') }}"></label>
+        <label>その他: <textarea name="other_notes">{{ prefill.get('その他', '') }}</textarea></label>
+
+        <!-- ヒアリング後の反映情報 -->
+        <label>パターン料金: <input type="text" name="pattern_fee" value="{{ prefill.get('パターン料金', '') }}"></label>
+        <label>枚数（ロット）: <input type="text" name="lot_size" value="{{ prefill.get('枚数(ロット)', '') }}"></label>
+        <label>送料: <input type="text" name="shipping_fee" value="{{ prefill.get('送料', '') }}"></label>
+        <label>納期（希望日）: <input type="text" name="delivery_request_date" value="{{ prefill.get('納期(希望日)', '') }}"></label>
+
+        <!-- URL -->
         <label>見積番号管理WEBフォームURL: <input type="text" name="form_url" value="{{ prefill.get('見積番号管理WEBフォームURL', '') }}"></label>
 
         <input type="submit" value="保存">
     </form>
 </body>
 </html>
+
