@@ -34,12 +34,7 @@
         <!-- 基本情報 -->
         <label>見積番号: <input type="text" name="quote_no" required value="{{ prefill.get('quote_no', '') }}"></label>
         <label>ユーザーID: <input type="text" name="user_id" required value="{{ prefill.get('user_id', '') }}"></label>
-        <label>属性:
-          <select name="attribute">
-            {% for opt in options.attribute %}
-              <option value="{{ opt }}" {% if prefill.get('attribute') == opt %}selected{% endif %}>{{ opt }}</option>
-            {% endfor %}
-          </select>
+        <label>属性: <input type="text" name="attribute" required value="{{ prefill.get('attribute', '') }}"></label>
         </label>
         <label>使用日(割引区分): <input type="text" name="usage_date" required value="{{ prefill.get('usage_date', '') }}"></label>
         <label>商品カテゴリー:
