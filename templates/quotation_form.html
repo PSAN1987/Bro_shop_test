@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +15,7 @@
             display: block;
             margin-top: 1em;
         }
-        input[type=text], textarea {
+        input[type=text], textarea, select {
             width: 100%;
             padding: 0.5em;
             margin-top: 0.3em;
@@ -35,48 +34,162 @@
         <!-- 基本情報 -->
         <label>見積番号: <input type="text" name="quote_no" required value="{{ prefill.get('quote_no', '') }}"></label>
         <label>ユーザーID: <input type="text" name="user_id" required value="{{ prefill.get('user_id', '') }}"></label>
-        <label>属性: <input type="text" name="attribute" required value="{{ prefill.get('attribute', '') }}"></label>
+        <label>属性:
+          <select name="attribute">
+            {% for opt in options.attribute %}
+              <option value="{{ opt }}" {% if prefill.get('attribute') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
         <label>使用日(割引区分): <input type="text" name="usage_date" required value="{{ prefill.get('usage_date', '') }}"></label>
-        <label>商品カテゴリー: <input type="text" name="product_category" required value="{{ prefill.get('product_category', '') }}"></label>
+        <label>商品カテゴリー:
+          <select name="product_category">
+            {% for opt in options.body_name %}
+              <option value="{{ opt }}" {% if prefill.get('product_category') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
         <label>パターン: <input type="text" name="pattern" required value="{{ prefill.get('pattern', '') }}"></label>
         <label>枚数: <input type="text" name="quantity" required value="{{ prefill.get('quantity', '') }}"></label>
         <label>合計金額: <input type="text" name="total_price" required value="{{ prefill.get('total_price', '') }}"></label>
         <label>単価: <input type="text" name="unit_price" required value="{{ prefill.get('unit_price', '') }}"></label>
 
         <!-- ボディ情報 -->
-        <label>ボディ品番: <input type="text" name="body_code" value="{{ prefill.get('body_code', '') }}"></label>
-        <label>ボディ商品名: <input type="text" name="body_name" value="{{ prefill.get('body_name', '') }}"></label>
-        <label>ボディカラーNo: <input type="text" name="body_color_no" value="{{ prefill.get('body_color_no', '') }}"></label>
-        <label>商品カラー: <input type="text" name="body_color" value="{{ prefill.get('body_color', '') }}"></label>
+        <label>ボディ品番:
+          <select name="body_code">
+            {% for opt in options.body_code %}
+              <option value="{{ opt }}" {% if prefill.get('body_code') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>ボディ商品名:
+          <select name="body_name">
+            {% for opt in options.body_name %}
+              <option value="{{ opt }}" {% if prefill.get('body_name') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>ボディカラーNo:
+          <select name="body_color_no">
+            {% for opt in options.body_color_no %}
+              <option value="{{ opt }}" {% if prefill.get('body_color_no') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>商品カラー:
+          <select name="body_color">
+            {% for opt in options.body_color %}
+              <option value="{{ opt }}" {% if prefill.get('body_color') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
         <label>サイズ: <input type="text" name="size" value="{{ prefill.get('size', '') }}"></label>
         <label>注文数: <input type="text" name="order_count" value="{{ prefill.get('order_count', '') }}"></label>
 
         <!-- プリント情報 -->
-        <label>プリント箇所数: <input type="text" name="print_area_count" value="{{ prefill.get('print_area_count', '') }}"></label>
+        <label>プリント箇所数:
+          <select name="print_area_count">
+            {% for opt in options.print_area_count %}
+              <option value="{{ opt }}" {% if prefill.get('print_area_count') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
 
         {% for i in range(1, 5) %}
         <fieldset style="margin-top:1.5em; border:1px solid #ccc; padding:1em;">
             <legend>プリント情報 {{ i }}箇所目</legend>
-            <label>位置: <input type="text" name="print_position_{{ i }}" value="{{ prefill.get('print_position_' ~ i, '') }}"></label>
-            <label>デザイン: <input type="text" name="print_design_{{ i }}" value="{{ prefill.get('print_design_' ~ i, '') }}"></label>
-            <label>カラー数: <input type="text" name="print_color_count_{{ i }}" value="{{ prefill.get('print_color_count_' ~ i, '') }}"></label>
-            <label>カラー内容: <input type="text" name="print_color_{{ i }}" value="{{ prefill.get('print_color_' ~ i, '') }}"></label>
+            <label>位置:
+              <select name="print_position_{{ i }}">
+                {% for opt in options.print_position %}
+                  <option value="{{ opt }}" {% if prefill.get('print_position_' ~ i) == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>デザイン:
+              <select name="print_design_{{ i }}">
+                {% for opt in options.print_design %}
+                  <option value="{{ opt }}" {% if prefill.get('print_design_' ~ i) == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>カラー数:
+              <select name="print_color_count_{{ i }}">
+                {% for opt in options.print_color_count %}
+                  <option value="{{ opt }}" {% if prefill.get('print_color_count_' ~ i) == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <label>カラー内容:
+              <select name="print_color_{{ i }}">
+                {% for opt in options.print_color %}
+                  <option value="{{ opt }}" {% if prefill.get('print_color_' ~ i) == opt %}selected{% endif %}>{{ opt }}</option>
+                {% endfor %}
+              </select>
+            </label>
             <label>デザインサイズ: <input type="text" name="print_size_{{ i }}" value="{{ prefill.get('print_size_' ~ i, '') }}"></label>
         </fieldset>
         {% endfor %}
 
         <!-- 背番号/背ネーム -->
-        <label>背番号: <input type="text" name="jersey_number" value="{{ prefill.get('jersey_number', '') }}"></label>
-        <label>背ネーム: <input type="text" name="jersey_name" value="{{ prefill.get('jersey_name', '') }}"></label>
-        <label>背番号カラー: <input type="text" name="jersey_number_color" value="{{ prefill.get('jersey_number_color', '') }}"></label>
-        <label>背ネームカラー: <input type="text" name="jersey_name_color" value="{{ prefill.get('jersey_name_color', '') }}"></label>
-        <label>フチ付き: <input type="text" name="outline_enabled" value="{{ prefill.get('outline_enabled', '') }}"></label>
-        <label>記号: <input type="text" name="symbol" value="{{ prefill.get('symbol', '') }}"></label>
+        <label>背番号:
+          <select name="jersey_number">
+            {% for opt in options.jersey_number %}
+              <option value="{{ opt }}" {% if prefill.get('jersey_number') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>背ネーム:
+          <select name="jersey_name">
+            {% for opt in options.jersey_name %}
+              <option value="{{ opt }}" {% if prefill.get('jersey_name') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>背番号カラー:
+          <select name="jersey_number_color">
+            {% for opt in options.jersey_number_color %}
+              <option value="{{ opt }}" {% if prefill.get('jersey_number_color') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>背ネームカラー:
+          <select name="jersey_name_color">
+            {% for opt in options.jersey_name_color %}
+              <option value="{{ opt }}" {% if prefill.get('jersey_name_color') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>フチ付き:
+          <select name="outline_enabled">
+            {% for opt in options.outline_enabled %}
+              <option value="{{ opt }}" {% if prefill.get('outline_enabled') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>記号:
+          <select name="symbol">
+            {% for opt in options.symbol %}
+              <option value="{{ opt }}" {% if prefill.get('symbol') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
 
         <!-- 加工・納期 -->
-        <label>加工方法: <input type="text" name="processing_method" value="{{ prefill.get('processing_method', '') }}"></label>
+        <label>加工方法:
+          <select name="processing_method">
+            {% for opt in options.processing_method %}
+              <option value="{{ opt }}" {% if prefill.get('processing_method') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
         <label>納期: <input type="text" name="delivery_date" value="{{ prefill.get('delivery_date', '') }}"></label>
-        <label>支払い方法: <input type="text" name="payment_method" value="{{ prefill.get('payment_method', '') }}"></label>
+        <label>支払い方法:
+          <select name="payment_method">
+            {% for opt in options.payment_method %}
+              <option value="{{ opt }}" {% if prefill.get('payment_method') == opt %}selected{% endif %}>{{ opt }}</option>
+            {% endfor %}
+          </select>
+        </label>
 
         <!-- 備考欄 -->
         <label>特殊仕様: <textarea name="special_spec">{{ prefill.get('special_spec', '') }}</textarea></label>
