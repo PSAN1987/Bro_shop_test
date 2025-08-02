@@ -1,30 +1,86 @@
 
-<!DOCTYPE html>
-<html>
 <head>
-    <meta charset="utf-8">
-    <title>見積番号管理フォーム</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 1em;
-        }
-        label {
-            display: block;
-            margin-top: 1em;
-        }
-        input[type=text], textarea, select {
-            width: 100%;
-            padding: 0.5em;
-            margin-top: 0.3em;
-        }
-        input[type=submit] {
-            margin-top: 1em;
-            padding: 0.7em 1em;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>見積番号管理フォーム</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 1em;
+      background-color: #fdfdfd;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1em;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2em;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      font-size: 1rem;
+      padding: 0.5em;
+      margin-top: 0.3em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    input[type="submit"] {
+      padding: 0.9em 1em;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    fieldset {
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 1em;
+      background-color: #f9f9f9;
+    }
+
+    legend {
+      font-weight: bold;
+      padding: 0 0.5em;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 0.5em;
+      }
+      h2 {
+        font-size: 1.2rem;
+      }
+      input[type="submit"] {
+        font-size: 0.95rem;
+        padding: 0.8em;
+      }
+    }
+  </style>
 </head>
 <body>
     <h2>見積番号管理フォーム</h2>
