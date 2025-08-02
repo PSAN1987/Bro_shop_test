@@ -1124,7 +1124,14 @@ def show_quotation_form():
                         "body_name": row.get("ボディ商品名", ""),
                         "body_color_no": row.get("ボディカラーNo", ""),
                         "body_color": row.get("商品カラー", ""),
-                        "size": row.get("サイズ", ""),
+                        "size_count_SS": row.get("SS", ""),
+                        "size_count_S": row.get("S", ""),
+                        "size_count_M": row.get("M", ""),
+                        "size_count_L": row.get("L", ""),
+                        "size_count_XL": row.get("XL", ""),
+                        "size_count_XXL": row.get("XXL", ""),
+                        "size_count_XXXL": row.get("XXXL", ""),
+                        "size_count_XXXXL": row.get("XXXXL", ""),
                         "order_count": row.get("注文数", ""),
 
                         # プリント箇所情報
@@ -1189,8 +1196,6 @@ def show_quotation_form():
 
     return render_template("quotation_form.html", token=token, prefill=prefill_data, options=options)
 
-
-@app.route("/submit_quotation", methods=["POST"])
 @app.route("/submit_quotation", methods=["POST"])
 def submit_quotation_form():
     form_token = request.form.get('form_token')
@@ -1220,7 +1225,14 @@ def submit_quotation_form():
         "body_name": request.form.get("body_name", "").strip(),
         "body_color_no": request.form.get("body_color_no", "").strip(),
         "body_color": request.form.get("body_color", "").strip(),
-        "size": request.form.get("size", "").strip(),
+        "size_count_SS": request.form.get("size_count_SS", "").strip(),
+        "size_count_S": request.form.get("size_count_S", "").strip(),
+        "size_count_M": request.form.get("size_count_M", "").strip(),
+        "size_count_L": request.form.get("size_count_L", "").strip(),
+        "size_count_XL": request.form.get("size_count_XL", "").strip(),
+        "size_count_XXL": request.form.get("size_count_XXL", "").strip(),
+        "size_count_XXXL": request.form.get("size_count_XXXL", "").strip(),
+        "size_count_XXXXL": request.form.get("size_count_XXXXL", "").strip(),
         "order_count": request.form.get("order_count", "").strip(),
 
         # プリント箇所
@@ -1275,11 +1287,11 @@ def write_to_quotation_spreadsheet(form_data: dict):
 
         # ★ ヘッダーが空のままになっている既存シートを救済
         if not any(worksheet.row_values(1)):
-            worksheet.update('A1:BG1', [[
+            worksheet.update('A1:BN1', [[
                 "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
                 "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
                 "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
-                "ボディ品番", "ボディ商品名", "ボディカラーNo", "商品カラー", "サイズ", "注文数",
+                "ボディ品番", "ボディ商品名", "ボディカラーNo", "商品カラー", "SS", "S", "M", "L", "XL", "XXL", "XXXL", "XXXXL", "注文数",
                 "プリント箇所数",
                 "プリント位置_1", "プリントデザイン_1", "プリントカラー数_1", "プリントカラー_1", "デザインサイズ_1",
                 "プリント位置_2", "プリントデザイン_2", "プリントカラー数_2", "プリントカラー_2", "デザインサイズ_2",
@@ -1293,12 +1305,12 @@ def write_to_quotation_spreadsheet(form_data: dict):
 
     except gspread.exceptions.WorksheetNotFound:
         worksheet = sh.add_worksheet(title="Simple Estimate_1", rows=2000, cols=100)
-        worksheet.update('A1:BG1', [[
+        worksheet.update('A1:BN1', [[
             "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
             "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
             "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
 
-            "ボディ品番", "ボディ商品名", "ボディカラーNo", "商品カラー", "サイズ", "注文数",
+            "ボディ品番", "ボディ商品名", "ボディカラーNo", "商品カラー", "SS", "S", "M", "L", "XL", "XXL", "XXXL", "XXXXL", "注文数",
             "プリント箇所数",
             "プリント位置_1", "プリントデザイン_1", "プリントカラー数_1", "プリントカラー_1", "デザインサイズ_1",
             "プリント位置_2", "プリントデザイン_2", "プリントカラー数_2", "プリントカラー_2", "デザインサイズ_2",
@@ -1334,7 +1346,15 @@ def write_to_quotation_spreadsheet(form_data: dict):
         form_data.get("body_name", ""),
         form_data.get("body_color_no", ""),
         form_data.get("body_color", ""),
-        form_data.get("size", ""),
+        form_data.get("size_count_SS", ""),
+        form_data.get("size_count_S", ""),
+        form_data.get("size_count_M", ""),
+        form_data.get("size_count_L", ""),
+        form_data.get("size_count_XL", ""),
+        form_data.get("size_count_XXL", ""),
+        form_data.get("size_count_XXXL", ""),
+        form_data.get("size_count_XXXXL", ""),
+
         form_data.get("order_count", ""),
         form_data.get("print_area_count", ""),
 
