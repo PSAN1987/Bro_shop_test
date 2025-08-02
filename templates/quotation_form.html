@@ -70,20 +70,20 @@
               <option value="{{ opt }}" {% if prefill.get('body_color') == opt %}selected{% endif %}>{{ opt }}</option>
             {% endfor %}
           </select>
-        </label>
         <fieldset style="margin-top:1.5em; border:1px solid #ccc; padding:1em;">
           <legend>サイズ別の注文数</legend>
-          <label>SS: <input type="number" name="size_count_SS" min="0" value="{{ prefill.get('size_count_SS', '') }}"></label>
-          <label>S: <input type="number" name="size_count_S" min="0" value="{{ prefill.get('size_count_S', '') }}"></label>
-          <label>M: <input type="number" name="size_count_M" min="0" value="{{ prefill.get('size_count_M', '') }}"></label>
-          <label>L: <input type="number" name="size_count_L" min="0" value="{{ prefill.get('size_count_L', '') }}"></label>
-          <label>XL: <input type="number" name="size_count_XL" min="0" value="{{ prefill.get('size_count_XL', '') }}"></label>
-          <label>XXL: <input type="number" name="size_count_XXL" min="0" value="{{ prefill.get('size_count_XXL', '') }}"></label>
-          <label>XXXL: <input type="number" name="size_count_XXXL" min="0" value="{{ prefill.get('size_count_XXXL', '') }}"></label>
-          <label>XXXXL: <input type="number" name="size_count_XXXXL" min="0" value="{{ prefill.get('size_count_XXXXL', '') }}"></label>
+          <label>SS: <input type="number" name="size_count_SS" min="0" value="{{ prefill.get('size_count_SS', '') }}" oninput="updateOrderCount()"></label>
+          <label>S: <input type="number" name="size_count_S" min="0" value="{{ prefill.get('size_count_S', '') }}" oninput="updateOrderCount()"></label>
+          <label>M: <input type="number" name="size_count_M" min="0" value="{{ prefill.get('size_count_M', '') }}" oninput="updateOrderCount()"></label>
+          <label>L: <input type="number" name="size_count_L" min="0" value="{{ prefill.get('size_count_L', '') }}" oninput="updateOrderCount()"></label>
+          <label>XL: <input type="number" name="size_count_XL" min="0" value="{{ prefill.get('size_count_XL', '') }}" oninput="updateOrderCount()"></label>
+          <label>XXL: <input type="number" name="size_count_XXL" min="0" value="{{ prefill.get('size_count_XXL', '') }}" oninput="updateOrderCount()"></label>
+          <label>XXXL: <input type="number" name="size_count_XXXL" min="0" value="{{ prefill.get('size_count_XXXL', '') }}" oninput="updateOrderCount()"></label>
+          <label>XXXXL: <input type="number" name="size_count_XXXXL" min="0" value="{{ prefill.get('size_count_XXXXL', '') }}" oninput="updateOrderCount()"></label>
         </fieldset>
-        <label>注文数: <input type="text" name="order_count" value="{{ prefill.get('order_count', '') }}"></label>
-
+        <label>注文数:
+          <input type="number" name="order_count" id="order_count" readonly value="{{ prefill.get('order_count', '') }}">
+        </label>
         <!-- プリント情報 -->
         <label>プリント箇所数:
           <select name="print_area_count">
@@ -206,5 +206,18 @@
 
         <input type="submit" value="保存">
     </form>
+<script>
+function updateOrderCount() {
+    const sizes = ["SS", "S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"];
+    let total = 0;
+    sizes.forEach(sz => {
+        const el = document.querySelector(`[name="size_count_${sz}"]`);
+        const val = parseInt(el?.value || 0);
+        total += isNaN(val) ? 0 : val;
+    });
+    const orderField = document.querySelector(`[name="order_count"]`);
+    if (orderField) orderField.value = total;
+}
+</script>
 </body>
 </html>
