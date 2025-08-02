@@ -1180,7 +1180,14 @@ def show_quotation_form():
         except Exception as e:
             print("読み取りエラー:", e)
 
-    return render_template("quotation_form.html", token=token, prefill=prefill_data)
+    try:
+        with open("select_options.json", encoding="utf-8") as f:
+            options = json.load(f)
+    except Exception as e:
+        options = {}
+        print("選択肢読み込みエラー:", e)
+
+    return render_template("quotation_form.html", token=token, prefill=prefill_data, options=options)
 
 
 @app.route("/submit_quotation", methods=["POST"])
