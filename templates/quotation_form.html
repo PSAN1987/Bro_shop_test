@@ -65,9 +65,18 @@
         </fieldset>
         {% endfor %}
 
+        <!-- 背番号/背ネーム -->
+        <label>背番号: <input type="text" name="jersey_number" value="{{ prefill.get('jersey_number', '') }}"></label>
+        <label>背ネーム: <input type="text" name="jersey_name" value="{{ prefill.get('jersey_name', '') }}"></label>
+        <label>背番号カラー: <input type="text" name="jersey_number_color" value="{{ prefill.get('jersey_number_color', '') }}"></label>
+        <label>背ネームカラー: <input type="text" name="jersey_name_color" value="{{ prefill.get('jersey_name_color', '') }}"></label>
+        <label>フチ付き: <input type="text" name="outline_enabled" value="{{ prefill.get('outline_enabled', '') }}"></label>
+        <label>記号: <input type="text" name="symbol" value="{{ prefill.get('symbol', '') }}"></label>
+
         <!-- 加工・納期 -->
         <label>加工方法: <input type="text" name="processing_method" value="{{ prefill.get('processing_method', '') }}"></label>
         <label>納期: <input type="text" name="delivery_date" value="{{ prefill.get('delivery_date', '') }}"></label>
+        <label>支払い方法: <input type="text" name="payment_method" value="{{ prefill.get('payment_method', '') }}"></label>
 
         <!-- 備考欄 -->
         <label>特殊仕様: <textarea name="special_spec">{{ prefill.get('special_spec', '') }}</textarea></label>
