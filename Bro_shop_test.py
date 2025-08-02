@@ -1152,10 +1152,17 @@ def show_quotation_form():
                         "print_color_count_4": row.get("プリントカラー数_4", ""),
                         "print_color_4": row.get("プリントカラー_4", ""),
                         "print_size_4": row.get("デザインサイズ_4", ""),
+                        "jersey_number": row.get("背番号", ""),
+                        "jersey_name": row.get("背ネーム", ""),
+                        "jersey_number_color": row.get("背番号カラー", ""),
+                        "jersey_name_color": row.get("背ネームカラー", ""),
+                        "outline_enabled": row.get("フチ付き", ""),
+                        "symbol": row.get("記号", ""),
 
                         # 加工・納期
                         "processing_method": row.get("加工方法", ""),
                         "delivery_date": row.get("納期", ""),
+                        "payment_method": row.get("支払い方法", ""),
 
                         # 備考欄
                         "special_spec": row.get("特殊仕様", ""),
@@ -1213,6 +1220,12 @@ def submit_quotation_form():
         "print_area_count": request.form.get("print_area_count", "").strip(),
         "processing_method": request.form.get("processing_method", "").strip(),
         "delivery_date": request.form.get("delivery_date", "").strip(),
+        "jersey_number": request.form.get("jersey_number", "").strip(),
+        "jersey_name": request.form.get("jersey_name", "").strip(),
+        "jersey_number_color": request.form.get("jersey_number_color", "").strip(),
+        "jersey_name_color": request.form.get("jersey_name_color", "").strip(),
+        "outline_enabled": request.form.get("outline_enabled", "").strip(),
+        "symbol": request.form.get("symbol", "").strip(),
 
         # 備考欄
         "special_spec": request.form.get("special_spec", "").strip(),
@@ -1225,6 +1238,7 @@ def submit_quotation_form():
         "lot_size": request.form.get("lot_size", "").strip(),
         "shipping_fee": request.form.get("shipping_fee", "").strip(),
         "delivery_request_date": request.form.get("delivery_request_date", "").strip(),
+        "payment_method": request.form.get("payment_method", "").strip(),
     }
 
     # 1～4 箇所分のプリント情報（ループで取得）
@@ -1254,7 +1268,7 @@ def write_to_quotation_spreadsheet(form_data: dict):
 
         # ★ ヘッダーが空のままになっている既存シートを救済
         if not any(worksheet.row_values(1)):
-            worksheet.update('A1:AZ1', [[
+            worksheet.update('A1:BG1', [[
                 "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
                 "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
                 "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
@@ -1264,14 +1278,15 @@ def write_to_quotation_spreadsheet(form_data: dict):
                 "プリント位置_2", "プリントデザイン_2", "プリントカラー数_2", "プリントカラー_2", "デザインサイズ_2",
                 "プリント位置_3", "プリントデザイン_3", "プリントカラー数_3", "プリントカラー_3", "デザインサイズ_3",
                 "プリント位置_4", "プリントデザイン_4", "プリントカラー数_4", "プリントカラー_4", "デザインサイズ_4",
-                "加工方法", "納期",
+                "背番号", "背ネーム", "背番号カラー", "背ネームカラー", "フチ付き", "記号",
+                "加工方法", "納期","支払い方法",
                 "特殊仕様", "希望納期", "袋詰め有無", "その他備考",
                 "パターン料金", "枚数(ロット)", "送料", "納期(希望日)"
             ]])
 
     except gspread.exceptions.WorksheetNotFound:
         worksheet = sh.add_worksheet(title="Simple Estimate_1", rows=2000, cols=100)
-        worksheet.update('A1:AZ1', [[
+        worksheet.update('A1:BG1', [[
             "日時", "見積番号", "ユーザーID", "属性", "使用日(割引区分)",
             "商品カテゴリー", "パターン", "枚数", "合計金額", "単価",
             "プリント位置", "プリントカラー", "プリントサイズ", "プリントデザイン", "見積番号管理WEBフォームURL",
@@ -1282,7 +1297,8 @@ def write_to_quotation_spreadsheet(form_data: dict):
             "プリント位置_2", "プリントデザイン_2", "プリントカラー数_2", "プリントカラー_2", "デザインサイズ_2",
             "プリント位置_3", "プリントデザイン_3", "プリントカラー数_3", "プリントカラー_3", "デザインサイズ_3",
             "プリント位置_4", "プリントデザイン_4", "プリントカラー数_4", "プリントカラー_4", "デザインサイズ_4",
-            "加工方法", "納期",
+            "背番号", "背ネーム", "背番号カラー", "背ネームカラー", "フチ付き", "記号",
+            "加工方法", "納期","支払い方法",
             "特殊仕様", "希望納期", "袋詰め有無", "その他備考",
             "パターン料金", "枚数(ロット)", "送料", "納期(希望日)"
         ]])
@@ -1339,8 +1355,17 @@ def write_to_quotation_spreadsheet(form_data: dict):
         form_data.get("print_color_4", ""),
         form_data.get("print_size_4", ""),
 
+        form_data.get("jersey_number", ""),
+        form_data.get("jersey_name", ""),
+        form_data.get("jersey_number_color", ""),
+        form_data.get("jersey_name_color", ""),
+        form_data.get("outline_enabled", ""),
+        form_data.get("symbol", ""),
+
         form_data.get("processing_method", ""),
         form_data.get("delivery_date", ""),
+        form_data.get("payment_method", ""),
+
 
         form_data.get("special_spec", ""),
         form_data.get("requested_delivery", ""),
