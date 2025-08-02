@@ -535,8 +535,8 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
                 {"type": "text", "text": f"パターン: {estimate_data['pattern']}"},
                 {"type": "text", "text": f"枚数: {estimate_data['quantity']}"},
                 {"type": "separator"},
-                {"type": "text", "text": f"【合計金額】¥{total_price:,}", "weight": "bold"},
-                {"type": "text", "text": f"【1枚あたり】¥{unit_price:,}"},
+                {"type": "text", "text": f"【合計金額】{total_price:,}", "weight": "bold"},
+                {"type": "text", "text": f"【1枚あたり】{unit_price:,}"},
                 {"type": "separator"},
                 {
                     "type": "text",
@@ -901,8 +901,8 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "product_category": est_data["item"],
                 "pattern": est_data["pattern"],
                 "quantity": est_data["quantity"],
-                "total_price": f"¥{total_price:,}",
-                "unit_price": f"¥{unit_price:,}",
+                "total_price": f"{total_price:,}",
+                "unit_price": f"{unit_price:,}",
                 "print_position": "",  # オプション未使用
                 "print_color": "",  # オプション未使用
                 "print_size": "",  # オプション未使用
