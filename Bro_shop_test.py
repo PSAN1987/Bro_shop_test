@@ -901,8 +901,8 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "product_category": est_data["item"],
                 "pattern": est_data["pattern"],
                 "quantity": est_data["quantity"],
-                "total_price": f"{total_price:,}",
-                "unit_price": f"{unit_price:,}",
+                "total_price": total_price,   # ←文字列にせず数値で渡す
+                "unit_price": unit_price,
                 "print_position": "",  # オプション未使用
                 "print_color": "",  # オプション未使用
                 "print_size": "",  # オプション未使用
