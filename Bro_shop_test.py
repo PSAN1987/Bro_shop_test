@@ -296,11 +296,23 @@ def flex_usage_date():
 
 from datetime import datetime
 
-def versioned_image(url: str) -> str:
-    version = datetime.now().strftime("%Y%m%d%H%M%S")
-    return f"{url}?v={version}"
+def _env_force_update() -> bool:
+    v = os.getenv("IMAGE_FORCE_UPDATE", "0").strip().lower()
+    return v in ("1", "true", "yes", "on")
 
-def flex_item_select():
+def versioned_image(url: str, force_update: bool | None = None) -> str:
+    """
+    画像URLに ?v=timestamp を付与するかを制御。
+    force_update: True なら付与、False なら付与しない、None なら環境変数で判定。
+    """
+    if force_update is None:
+        force_update = _env_force_update()
+    if force_update:
+        ts = datetime.now().strftime("%Y%m%d%H%M%S")
+        return f"{url}?v={ts}"
+    return url
+
+def flex_item_select(*, force_update: bool | None = None):
     def create_category_bubble(title, items):
         return {
             "type": "bubble",
@@ -322,15 +334,11 @@ def flex_item_select():
                                 "contents": [
                                     *[{
                                         "type": "image",
-                                        "url": url,
+                                        "url": versioned_image(url, force_update=force_update),
                                         "size": "lg",
                                         "aspectMode": "cover",
                                         "aspectRatio": "1:1",
-                                        "action": {
-                                            "type": "message",
-                                            "label": label,
-                                            "text": label
-                                        }
+                                        "action": {"type": "message", "label": label, "text": label}
                                     } for label, url in items[:2]]
                                 ]
                             },
@@ -341,15 +349,11 @@ def flex_item_select():
                                 "contents": [
                                     *[{
                                         "type": "image",
-                                        "url": url,
+                                        "url": versioned_image(url, force_update=force_update),
                                         "size": "lg",
                                         "aspectMode": "cover",
                                         "aspectRatio": "1:1",
-                                        "action": {
-                                            "type": "message",
-                                            "label": label,
-                                            "text": label
-                                        }
+                                        "action": {"type": "message", "label": label, "text": label}
                                     } for label, url in items[2:]]
                                 ]
                             }
@@ -359,51 +363,50 @@ def flex_item_select():
             }
         }
 
-    # 画像付きアイテムカテゴリ一覧
-    now = datetime.now().strftime("%Y%m%d%H%M%S")
+    # 固定URL（?v なし）
     categories = [
         ("Tシャツ系", [
-            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png?v={now}"),
-            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png?v={now}"),
-            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png?v={now}"),
-            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png?v={now}")
+            ("ドライTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_tshirt.png"),
+            ("ハイクオリティーTシャツ", "https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png"),
+            ("ドライロングTシャツ", "https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png"),
+            ("ドライポロシャツ", "https://catalog-bot-zf1t.onrender.com/dry_polo.png"),
         ]),
         ("スポーツ系", [
-            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png?v={now}"),
-            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png?v={now}"),
-            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png?v={now}"),
-            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png?v={now}")
+            ("ゲームシャツ", "https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
+            ("ベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/baseball_shirt.png"),
+            ("ストライプベースボールシャツ", "https://catalog-bot-zf1t.onrender.com/stripe_baseball.png"),
+            ("ストライプユニフォーム", "https://catalog-bot-zf1t.onrender.com/stripe_uniform.png"),
         ]),
         ("トレーナー系", [
-            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png?v={now}"),
-            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png?v={now}"),
-            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png?v={now}"),
-            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png?v={now}")
+            ("クールネックライトトレーナー", "https://catalog-bot-zf1t.onrender.com/crew_trainer.png"),
+            ("ジップアップライトトレーナー", "https://catalog-bot-zf1t.onrender.com/zip_trainer.png"),
+            ("フーディーライトトレーナー", "https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png"),
+            ("バスケシャツ", "https://catalog-bot-zf1t.onrender.com/basketball_shirt.png"),
         ])
     ]
-    # 各カテゴリごとのBubble生成
-    bubbles = [create_category_bubble(title, items) for title, items in categories]
 
+    bubbles = [create_category_bubble(title, items) for title, items in categories]
     return FlexSendMessage(
         alt_text="商品カテゴリーを選択してください",
-        contents={
-            "type": "carousel",
-            "contents": bubbles
-        }
+        contents={"type": "carousel", "contents": bubbles}
     )
+
 
 
 from datetime import datetime
 from linebot.models import FlexSendMessage
 
-def flex_pattern_select(product_name):
+def flex_pattern_select(product_name: str, *, force_update: bool | None = None):
     patterns = ["A", "B", "C", "D", "E", "F"]
     bubbles = []
 
     version = datetime.now().strftime("%Y%m%d%H%M%S")
 
     for p in patterns:
-        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png?v={version}"
+        iimage_url = versioned_image(
+            f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png",
+            force_update=force_update
+        )
         bubbles.append({
             "type": "bubble",
             "hero": {
@@ -489,14 +492,17 @@ def flex_quantity():
 from datetime import datetime
 from linebot.models import FlexSendMessage
 
-def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number):
+def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quote_number, *, force_update: bool | None = None):
     item_raw = estimate_data["item"]
     item = normalize_text(item_raw)
     pattern_raw = estimate_data.get("pattern", "")
     pattern = pattern_raw.replace("パターン", "").strip()
 
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png?v={timestamp}"
+    image_url = versioned_image(
+        f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png",
+        force_update=force_update
+    )
     alt_text = f"{item}の見積結果"
 
     flex = {
