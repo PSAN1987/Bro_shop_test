@@ -396,51 +396,110 @@ def flex_item_select(*, force_update: bool | None = None):
 from datetime import datetime
 from linebot.models import FlexSendMessage
 
-def flex_pattern_select(product_name: str, *, force_update: bool | None = None):
-    patterns = ["A", "B", "C", "D", "E", "F"]
-    bubbles = []
+from linebot.models import FlexSendMessage
 
-    version = datetime.now().strftime("%Y%m%d%H%M%S")
+def flex_estimate_result_with_image(
+    estimate_data,
+    total_price,
+    unit_price,
+    quote_number,
+    *,
+    force_update: bool | None = None
+):
+    """
+    概算見積の結果を画像付きで返す Flex Message を生成する。
+    - 現行仕様を維持（見出し/画像/明細/注意文/デザイン相談ボタン）
+    - 画像URLは通常キャッシュを利用し、必要時のみ cache-bust（?v=timestamp）
+      → versioned_image(..., force_update) を使用
+    """
+    # 現行仕様どおりの項目取得（KeyError防止のため get を使用。既存キーがある場合の挙動は不変）
+    user_type = estimate_data.get("user_type", "")
+    usage_date = estimate_data.get("usage_date", "")
+    discount_type = estimate_data.get("discount_type", "")
+    item_raw = estimate_data.get("item", "")
+    pattern_raw = estimate_data.get("pattern", "")
+    quantity = estimate_data.get("quantity", "")
 
-    for p in patterns:
-        iimage_url = versioned_image(
-            f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png",
-            force_update=force_update
-        )
-        bubbles.append({
-            "type": "bubble",
-            "hero": {
-                "type": "image",
-                "url": image_url,
-                "size": "full",
-                "aspectMode": "cover",
-                "aspectRatio": "1:1"
-            },
-            "footer": {
-                "type": "box",
-                "layout": "vertical",
-                "contents": [
-                    {
-                        "type": "button",
-                        "style": "primary",
-                        "color": "#000000",
-                        "action": {
-                            "type": "message",
-                            "label": f"パターン{p}で金額を確認",  # 表示用
-                            "text": f"パターン{p}"              # 実際に送るメッセージ
-                        }
-                    }
-                ]
-            }
-        })
+    # 既存の正規化とパターン抽出ロジックを踏襲
+    item = normalize_text(item_raw)
+    pattern = pattern_raw.replace("パターン", "").strip()
 
-    return FlexSendMessage(
-        alt_text="パターンを選択してください",
-        contents={
-            "type": "carousel",
-            "contents": bubbles
-        }
+    # 画像URL：通常はキャッシュ利用。差し替え直後など必要時のみ ?v= を付与
+    image_url = versioned_image(
+        f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png",
+        force_update=force_update
     )
+
+    alt_text = f"{item}の見積結果"
+
+    flex = {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "md",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": "概算見積",
+                    "weight": "bold",
+                    "size": "xl",
+                    "align": "center"
+                },
+                {
+                    "type": "image",
+                    "url": image_url,
+                    "size": "full",
+                    "aspectMode": "cover",
+                    "aspectRatio": "1:1"
+                },
+                {
+                    "type": "box",
+                    "layout": "baseline",
+                    "spacing": "sm",
+                    "contents": [
+                        {"type": "text", "text": "見積番号: ", "flex": 0},
+                        {"type": "text", "text": str(quote_number), "wrap": True, "color": "#0000FF"}
+                    ]
+                },
+                {"type": "text", "text": f"属性: {user_type}"},
+                {"type": "text", "text": f"使用日: {usage_date}（{discount_type}）"},
+                {"type": "text", "text": f"商品: {item_raw}"},
+                {"type": "text", "text": f"パターン: {pattern_raw}"},
+                {"type": "text", "text": f"枚数: {quantity}"},
+                {"type": "separator"},
+                {"type": "text", "text": f"【合計金額】{total_price:,}", "weight": "bold"},
+                {"type": "text", "text": f"【1枚あたり】{unit_price:,}"},
+                {"type": "separator"},
+                {
+                    "type": "text",
+                    "text": "※より正確な金額をご希望の方は、下記からデザイン相談へお進みください。",
+                    "wrap": True,
+                    "size": "sm"
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "primary",
+                    "color": "#000000",
+                    "action": {
+                        "type": "postback",
+                        "label": "デザイン相談",
+                        "data": "CONSULT_DESIGN"
+                    }
+                }
+            ]
+        }
+    }
+
+    return FlexSendMessage(alt_text=alt_text, contents=flex)
+
 
 
 def flex_quantity():
