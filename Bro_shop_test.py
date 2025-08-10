@@ -400,7 +400,7 @@ def flex_pattern_select(product_name):
     bubbles = []
 
     for p in patterns:
-        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png "
+        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png"
         bubbles.append({
             "type": "bubble",
             "hero": {
