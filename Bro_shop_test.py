@@ -362,22 +362,22 @@ def flex_item_select():
     # 画像付きアイテムカテゴリ一覧
     categories = [
         ("Tシャツ系", [
-            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png "),
-            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png "),
-            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png "),
-            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png ")
+            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png"),
+            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png"),
+            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png"),
+            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png")
         ]),
         ("スポーツ系", [
-            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png "),
-            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png "),
-            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png "),
-            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png ")
+            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
+            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png"),
+            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png"),
+            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png")
         ]),
         ("トレーナー系", [
-            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png "),
-            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png "),
-            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png "),
-            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png ")
+            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png"),
+            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png"),
+            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png"),
+            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png")
         ])
     ]
     # 各カテゴリごとのBubble生成
