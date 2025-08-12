@@ -360,24 +360,25 @@ def flex_item_select():
         }
 
     # 画像付きアイテムカテゴリ一覧
+    now = datetime.now().strftime("%Y%m%d%H%M%S")
     categories = [
         ("Tシャツ系", [
-            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png"),
-            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png"),
-            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png"),
-            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png")
+            ("ドライTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_tshirt.png?v={now}"),
+            ("ハイクオリティーTシャツ", f"https://catalog-bot-zf1t.onrender.com/high_quality_tshirt.png?v={now}"),
+            ("ドライロングTシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_long_tshirt.png?v={now}"),
+            ("ドライポロシャツ", f"https://catalog-bot-zf1t.onrender.com/dry_polo.png?v={now}")
         ]),
         ("スポーツ系", [
-            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png"),
-            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png"),
-            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png"),
-            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png")
+            ("ゲームシャツ", f"https://catalog-bot-zf1t.onrender.com/game_shirt.png?v={now}"),
+            ("ベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/baseball_shirt.png?v={now}"),
+            ("ストライプベースボールシャツ", f"https://catalog-bot-zf1t.onrender.com/stripe_baseball.png?v={now}"),
+            ("ストライプユニフォーム", f"https://catalog-bot-zf1t.onrender.com/stripe_uniform.png?v={now}")
         ]),
         ("トレーナー系", [
-            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png"),
-            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png"),
-            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png"),
-            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png")
+            ("クールネックライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/crew_trainer.png?v={now}"),
+            ("ジップアップライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/zip_trainer.png?v={now}"),
+            ("フーディーライトトレーナー", f"https://catalog-bot-zf1t.onrender.com/hoodie_trainer.png?v={now}"),
+            ("バスケシャツ", f"https://catalog-bot-zf1t.onrender.com/basketball_shirt.png?v={now}")
         ])
     ]
     # 各カテゴリごとのBubble生成
@@ -399,8 +400,10 @@ def flex_pattern_select(product_name):
     patterns = ["A", "B", "C", "D", "E", "F"]
     bubbles = []
 
+    version = datetime.now().strftime("%Y%m%d%H%M%S")
+
     for p in patterns:
-        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png"
+        image_url = f"https://catalog-bot-zf1t.onrender.com/{product_name}_{p}.png?v={version}"
         bubbles.append({
             "type": "bubble",
             "hero": {
@@ -492,7 +495,8 @@ def flex_estimate_result_with_image(estimate_data, total_price, unit_price, quot
     pattern_raw = estimate_data.get("pattern", "")
     pattern = pattern_raw.replace("パターン", "").strip()
 
-    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png"
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    image_url = f"https://catalog-bot-zf1t.onrender.com/{item}_{pattern}.png?v={timestamp}"
     alt_text = f"{item}の見積結果"
 
     flex = {
