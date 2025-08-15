@@ -824,6 +824,20 @@ def start_estimate_flow(event: MessageEvent):
         flex_user_type()
     )
 
+ITEM_TO_BODY_CODE = {
+    "ゲームシャツ": "5927-01",
+    "ドライベースボールシャツ": "5982-01",
+    "ストライプドライベースボールシャツ": "5982-01",
+    "ストライプユニフォーム": "ZD16",
+    "バスケシャツ": "5992-01",
+    "ドライTシャツ": "300-ACT",
+    "ハイクオリティTシャツ": "5001-01",
+    "ドライポロシャツ": "302-ADP",
+    "ドライロングスリーブTシャツ": "304-ALT",
+    "クルーネックライトトレーナー": "219-MLC",
+    "ジップアップライトパーカー": "217-MLZ"
+}
+
 
 def process_estimate_flow(event: MessageEvent, user_message: str):
     user_id = event.source.user_id
@@ -908,7 +922,9 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "print_size": "",  # オプション未使用
                 "print_design": "",  # オプション未使用
                 "form_url": form_url,
-                "body_name": est_data["item"]  # カンタン見積で選ばれた商品名
+                "body_name": est_data["item"],  # カンタン見積で選ばれた商品名
+                "body_name": est_data["item"],
+                "body_code": ITEM_TO_BODY_CODE.get(est_data["item"], ""),
             }
 
             # ▼ 統合スプレッドシート書き込み
