@@ -907,7 +907,8 @@ def process_estimate_flow(event: MessageEvent, user_message: str):
                 "print_color": "",  # オプション未使用
                 "print_size": "",  # オプション未使用
                 "print_design": "",  # オプション未使用
-                "form_url": form_url
+                "form_url": form_url,
+                "body_name": est_data["item"]  # カンタン見積で選ばれた商品名
             }
 
             # ▼ 統合スプレッドシート書き込み
